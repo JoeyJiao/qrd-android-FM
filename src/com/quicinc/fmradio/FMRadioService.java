@@ -1483,7 +1483,7 @@ public class FMRadioService extends Service
             if( ((pty  > 0) && (pty  <= 23)) || ((pty  >= 29) && (pty  <= 31)) )
             {
                bCommandSent = mReceiver.searchStations(FmReceiver.FM_RX_SRCHRDS_MODE_SCAN_PTY,
-                                                       FmReceiver.FM_RX_DWELL_PERIOD_7S,
+                                                       FmReceiver.FM_RX_DWELL_PERIOD_2S,
                                                        FmReceiver.FM_RX_SEARCHDIR_UP,
                                                        pty,
                                                        0);
@@ -1491,7 +1491,7 @@ public class FMRadioService extends Service
             else
             {
                bCommandSent = mReceiver.searchStations(FmReceiver.FM_RX_SRCH_MODE_SCAN,
-                                                FmReceiver.FM_RX_DWELL_PERIOD_7S,
+                                                FmReceiver.FM_RX_DWELL_PERIOD_2S,
                                                 FmReceiver.FM_RX_SEARCHDIR_UP);
             }
          }
@@ -1501,7 +1501,7 @@ public class FMRadioService extends Service
             if( (pty  > 0) && (pty  <= 31) )
             {
                bCommandSent = mReceiver.searchStations(FmReceiver.FM_RX_SRCHRDS_MODE_SCAN_PTY,
-                                                          FmReceiver.FM_RX_DWELL_PERIOD_7S,
+                                                          FmReceiver.FM_RX_DWELL_PERIOD_2S,
                                                           FmReceiver.FM_RX_SEARCHDIR_UP,
                                                           pty,
                                                           0);
@@ -1509,7 +1509,7 @@ public class FMRadioService extends Service
             else
             {
                bCommandSent = mReceiver.searchStations(FmReceiver.FM_RX_SRCH_MODE_SCAN,
-                                                FmReceiver.FM_RX_DWELL_PERIOD_7S,
+                                                FmReceiver.FM_RX_DWELL_PERIOD_2S,
                                                 FmReceiver.FM_RX_SEARCHDIR_UP);
             }
          }
