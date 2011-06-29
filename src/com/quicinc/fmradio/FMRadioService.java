@@ -1264,6 +1264,10 @@ public class FMRadioService extends Service
       {
           return (mService.get().getIntDet());
       }
+      public void setHiLoInj(int inj)
+      {
+          mService.get().setHiLoInj(inj);
+      }
       public void delayedStop(long duration, int nType)
       {
           mService.get().delayedStop(duration, nType);
@@ -2313,6 +2317,9 @@ public class FMRadioService extends Service
    }
    public int getMpxDcc(){
            return mReceiver.getMpxDcc();
+   }
+   public void setHiLoInj(int inj){
+           mReceiver.setHiLoInj(inj);
    }
    //handling the sleep and record stop when FM App not in focus
    private void delayedStop(long duration, int nType) {
