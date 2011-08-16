@@ -142,6 +142,7 @@ public class FMRadioService extends Service
    A2dpDeviceStatus mA2dpDeviceState = null;
    //on shutdown not to send start Intent to AudioManager
    private boolean mAppShutdown = false;
+   private boolean mSingleRecordingInstanceSupported = false;
 
    public FMRadioService() {
    }
@@ -175,6 +176,9 @@ public class FMRadioService extends Service
       // registering media button receiver seperately as we need to set
       // different priority for receiving media events
       registerMediaButtonReceiver();
+      if ( false == SystemProperties.getBoolean("ro.fm.multiinstance.recording.supported",true)) {
+           mSingleRecordingInstanceSupported = true;
+      }
       // If the service was idle, but got killed before it stopped itself, the
       // system will relaunch it. Make sure it gets stopped again in that case.
       Message msg = mDelayedStopHandler.obtainMessage();
@@ -542,27 +546,23 @@ public class FMRadioService extends Service
            mStoppedOnFocusLoss = false;
        }
 
+       if(mMuted) {
+            AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            audioManager.setStreamMute(AudioManager.STREAM_FM,true);
+       }
 
-       if ( (true == mA2dpDeviceState.isDeviceAvailable()) &&
-            (!isSpeakerEnabled()) && !isAnalogModeEnabled()) {
-           startA2dpPlayback();
-           mOverA2DP=true;
+       if ((true == mA2dpDeviceState.isDeviceAvailable()) &&
+           (!isSpeakerEnabled()) && !isAnalogModeEnabled() &&
+           (true == startA2dpPlayback())) {
+            mOverA2DP=true;
        } else {
            Log.d(LOGTAG, "FMRadio: sending the intent");
            //reason for resending the Speaker option is we are sending
            //ACTION_FM=1 to AudioManager, the previous state of Speaker we set
            //need not be retained by the Audio Manager.
            if (isSpeakerEnabled()) {
-               if(!isAnalogModeSupported()) {
-                   enableSpeaker(true);
-               } else {
                    mSpeakerPhoneOn = true;
                    AudioSystem.setForceUse(AudioSystem.FOR_MEDIA, AudioSystem.FORCE_SPEAKER);
-               }
-           }
-           if(mMuted) {
-                AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-                audioManager.setStreamMute(AudioManager.STREAM_FM,true);
            }
            Intent intent = new Intent(Intent.ACTION_FM);
            intent.putExtra("state", 1);
@@ -573,6 +573,10 @@ public class FMRadioService extends Service
 
    private void stopFM(){
        Log.d(LOGTAG, "In stopFM");
+       if(mMuted) {
+            AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            audioManager.setStreamMute(AudioManager.STREAM_FM,false);
+       }
        if (mOverA2DP==true){
            mOverA2DP=false;
            stopA2dpPlayback();
@@ -587,6 +591,13 @@ public class FMRadioService extends Service
 
    public boolean startRecording() {
         Log.d(LOGTAG, "In startRecording of Recorder");
+    if( (true == mSingleRecordingInstanceSupported) &&
+        (true == mOverA2DP )) {
+                Toast.makeText( this,
+                                "playback on BT in progress,can't record now",
+                                Toast.LENGTH_SHORT).show();
+                return false;
+       }
         stopRecording();
         mSampleFile = null;
         File sampleDir = Environment.getExternalStorageDirectory();
@@ -634,6 +645,13 @@ public class FMRadioService extends Service
 
    public boolean startA2dpPlayback() {
         Log.d(LOGTAG, "In startA2dpPlayback");
+    if( (true == mSingleRecordingInstanceSupported) &&
+        (true == mFmRecordingOn )) {
+                Toast.makeText(this,
+                               "Recording already in progress,can't play on BT",
+                               Toast.LENGTH_SHORT).show();
+                return false;
+       }
         stopA2dpPlayback();
         mA2dp = new MediaRecorder();
         try {
@@ -1489,11 +1507,10 @@ public class FMRadioService extends Service
        if (false == speakerOn) {
            if (analogmode) {
                 setAudioPath(true);
-                stopFM();
            }
+           stopFM();
            AudioSystem.setForceUse(AudioSystem.FOR_MEDIA, AudioSystem.FORCE_NONE);
-           if (analogmode)
-                startFM();
+           startFM();
        }
 
        //Need to turn off BT path when Speaker is set on vice versa.
@@ -1508,11 +1525,10 @@ public class FMRadioService extends Service
        if (speakerOn) {
            if (analogmode) {
                  setAudioPath(false);
-                  stopFM();
            }
+           stopFM();
            AudioSystem.setForceUse(AudioSystem.FOR_MEDIA, AudioSystem.FORCE_SPEAKER);
-           if (analogmode)
-                  startFM();
+           startFM();
        }
 
    }
