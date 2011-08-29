@@ -1463,6 +1463,7 @@ public class FMRadioService extends Service
 
       if (isAnalogModeEnabled()) {
               SystemProperties.set("hw.fm.isAnalog","false");
+              misAnalogPathEnabled = false;
       }
       // This will disable the FM radio device
       if (mReceiver != null)
