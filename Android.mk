@@ -1,4 +1,5 @@
 ifeq ($(BOARD_HAVE_QCOM_FM),true)
+ifeq (, $(filter msm7627a_sku1 msm7627a_sku3, $(QCOM_TARGET_PRODUCT)))
 
 LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
@@ -20,4 +21,5 @@ LOCAL_CERTIFICATE := platform
 
 include $(BUILD_PACKAGE)
 
+endif
 endif
