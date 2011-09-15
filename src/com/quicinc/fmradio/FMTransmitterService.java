@@ -840,7 +840,7 @@ public class FMTransmitterService extends Service
    public boolean setLowPowerMode(boolean bLowPower)
    {
       boolean bCommandSent=false;
-      if (mReceiver != null)
+      if (mReceiver != null && mTransmitter != null)
       {
          Log.d(LOGTAG, "setLowPowerMode: " + bLowPower);
          if(bLowPower)
