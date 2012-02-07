@@ -712,6 +712,10 @@ public class FmSharedPreferences
       return mFMConfiguration.getLowerLimit();
    }
 
+   public static int getFrequencyStepSize(){
+       return mFrequencyBand_Stepsize;
+   }
+
    public static void setLowerLimit(int lowLimit){
       mFMConfiguration.setLowerLimit(lowLimit);
    }
