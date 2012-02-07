@@ -228,6 +228,10 @@ public class Settings extends PreferenceActivity implements
                         FMTransmitterActivity.fmConfigure();
                         if (curList != null) {
                            curList.clear();
+                           SharedPreferences sp = getSharedPreferences(FMRadio.SCAN_STATION_PREFS_NAME,0);
+                           SharedPreferences.Editor editor = sp.edit();
+                           editor.clear();
+                           editor.commit();
                         }
                 } else {
                         if (mRxMode) {
