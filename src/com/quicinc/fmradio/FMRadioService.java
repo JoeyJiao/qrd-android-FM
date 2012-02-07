@@ -2376,7 +2376,7 @@ public class FMRadioService extends Service
             mFMRxRDSData = null;
             if(mCallbacks != null)
             {
-               mCallbacks.onTuneStatusChanged();
+               mCallbacks.onTuneStatusChanged(frequency);
             }
             /* Update the frequency in the StatusBar's Notification */
             startNotification();

@@ -33,7 +33,7 @@ interface IFMRadioServiceCallbacks
   void onEnabled();
   void onDisabled();
   void onRadioReset();
-  void onTuneStatusChanged();
+  void onTuneStatusChanged(int frequency);
   void onProgramServiceChanged();
   void onRadioTextChanged();
   void onAlternateFrequencyChanged();
