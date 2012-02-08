@@ -254,6 +254,8 @@ public class FMRadio extends Activity
 
    private  HorizontalNumberPicker mPicker;
    private int mFrequency;
+   private static int mDisplayWidth;
+   private static final int TEXTSIZE_PARAMETER_FOR_NUMBER_PICKER = 21;
    /** Called when the activity is first created. */
    @Override
    public void onCreate(Bundle savedInstanceState) {
@@ -265,11 +267,12 @@ public class FMRadio extends Activity
 
       Log.d(LOGTAG, "onCreate - Height : "+ getWindowManager().getDefaultDisplay().getHeight()
             + " - Width  : "+ getWindowManager().getDefaultDisplay().getWidth());
-
+      mDisplayWidth = getWindowManager().getDefaultDisplay().getWidth();
       setContentView(R.layout.fmradio);
 
       mPicker = (HorizontalNumberPicker)findViewById(R.id.fm_picker);
       if(mPicker !=null){
+          mPicker.setTextSize(mDisplayWidth/TEXTSIZE_PARAMETER_FOR_NUMBER_PICKER);
           mPicker.setOnScrollFinishedListener(new OnScrollFinishListener(){
             @Override
           public void onScrollFinish(int value) {

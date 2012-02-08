@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
- * Copyright (c) 2009, Code Aurora Forum. All rights reserved.
+ * Copyright (c) 2009-2012, Code Aurora Forum. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -47,7 +47,6 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
                 android:visibility="gone"/>
-
             <TextView android:id="@+id/prog_service_tv"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:layout_width="wrap_content"
@@ -82,7 +81,7 @@
             android:layout_alignWithParentIfMissing="true"
             android:gravity="center">
 
-            <TextView android:id="@+id/call_sign_tv"
+           <TextView android:id="@+id/call_sign_tv"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -93,7 +92,7 @@
                 android:paddingLeft="2dp"
                 android:text="@string/station_id_string" />
             
-            <TextView android:id="@+id/pty_tv"
+           <TextView android:id="@+id/pty_tv"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -102,7 +101,7 @@
                 android:paddingRight="2dp"
                 android:paddingBottom="2dp"
                 android:paddingLeft="2dp"
-                android:text="@string/pty_string" />
+               android:text="@string/pty_string" />
         </LinearLayout>
     <RelativeLayout android:id="@+id/second_layout"
         android:layout_width="fill_parent" android:layout_height="wrap_content"
@@ -131,20 +130,41 @@
             android:layout_alignParentRight="true" android:visibility="visible"
             android:layout_alignWithParentIfMissing="true" android:src="@drawable/btn_arrow_right" />
     </RelativeLayout>
-
         <!-- Station Radio Text information display -->
         <TextView android:id="@+id/radio_text_tv"
            android:layout_width="fill_parent"
            android:layout_height="wrap_content"
            android:textAppearance="?android:attr/textAppearanceMedium"
-           android:textSize="20sp"
+           android:textSize="15sp"
            android:singleLine="true"
            android:textStyle="bold"
-           android:paddingLeft="2px"
-           android:paddingRight="2px"
-           android:paddingBottom="5px"
+           android:paddingLeft="2dp"
+           android:paddingRight="2dp"
+           android:paddingBottom="5dp"
            android:gravity="center_horizontal"
            android:text="@string/radio_text_string"
            />
+	<RelativeLayout android:id="@+id/second_layout"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:layout_marginTop="2dp" android:layout_marginBottom="30dp"
+		android:layout_marginLeft="3dp" android:layout_marginRight="5dp">
+
+		<com.quicinc.fmradio.HorizontalNumberPicker
+			android:id="@+id/fm_picker" android:layout_width="fill_parent"
+			android:layout_height="50dp" android:layout_centerVertical="true"
+			android:layout_toRightOf="@+id/btn_back" android:layout_toLeftOf="@+id/btn_forward" />
+
+		<ImageView android:id="@+id/btn_back" android:clickable="true"
+			android:focusable="true" android:layout_width="wrap_content"
+			android:layout_height="50dp" android:paddingLeft="2dp"
+			android:layout_alignParentLeft="true" android:visibility="visible"
+			android:layout_alignWithParentIfMissing="true" android:src="@drawable/btn_arrow_left" />
+
+		<ImageView android:id="@+id/btn_forward" android:clickable="true"
+			android:focusable="true" android:layout_width="wrap_content"
+			android:layout_height="50dp" android:paddingRight="2dp"
+			android:layout_alignParentRight="true" android:visibility="visible"
+			android:layout_alignWithParentIfMissing="true" android:src="@drawable/btn_arrow_right" />
+	</RelativeLayout>
     </LinearLayout>
 </merge>

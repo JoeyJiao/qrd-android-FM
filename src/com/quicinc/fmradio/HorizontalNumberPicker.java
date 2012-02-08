@@ -255,8 +255,7 @@ public class HorizontalNumberPicker extends LinearLayout {
     /**
      * The height of the text.
      */
-    private final int mTextSize;
-
+    private int mTextSize = 20;
     /**
      * The height of the gap between text elements if the selector wheel.
      */
@@ -318,6 +317,19 @@ public class HorizontalNumberPicker extends LinearLayout {
     private final int[] mSelectorIndices = new int[] { Integer.MIN_VALUE,
             Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE,
             Integer.MIN_VALUE };
+    /**
+     * The offset to middle of selector.
+     */
+    private static final int SELECTOR_OFFSET_ZERO = 0;
+    private static final int SELECTOR_OFFSET_ONE = 1;
+    private static final int SELECTOR_OFFSET_TWO = 2; 
+
+    /**
+     * The colors alpha of selector text.
+     */
+    private static final int SELECTOR_TEXT_ALPHA_TRANSPARENT = 54;
+    private static final int SELECTOR_TEXT_ALPHA_TRANSPARENT_HALF = 128;
+    private static final int SELECTOR_TEXT_ALPHA_TRANSPARENT_NONE = 255;
 
     /**
      * The {@link Paint} for drawing the selector.
@@ -643,8 +655,6 @@ public class HorizontalNumberPicker extends LinearLayout {
         mMaximumFlingVelocity = configuration.getScaledMaximumFlingVelocity()
                 / SELECTOR_MAX_FLING_VELOCITY_ADJUSTMENT;
 //        mTextSize = (int) mInputText.getTextSize();
-        mTextSize = 25;
-
         // create the selector wheel paint
         Paint paint = new Paint();
         paint.setAntiAlias(true);
@@ -689,7 +699,12 @@ public class HorizontalNumberPicker extends LinearLayout {
         }
         setVerticalFadingEdgeEnabled(false);
     }
-
+    public void setTextSize(int textSize){
+        if(textSize > 0 ){
+            mTextSize = textSize;
+            mSelectorWheelPaint.setTextSize(textSize);
+        }
+    }
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
@@ -1384,12 +1399,14 @@ public class HorizontalNumberPicker extends LinearLayout {
             // value intermixed with the new one.
             if (/*i != SELECTOR_MIDDLE_ITEM_INDEX
                     || mInputText.getVisibility() != VISIBLE*/true) {
-                if(Math.abs(i - SELECTOR_MIDDLE_ITEM_INDEX) == 1){
-                    mSelectorWheelPaint.setAlpha(128);
-                }else if(Math.abs(i - SELECTOR_MIDDLE_ITEM_INDEX) == 2){
-                    mSelectorWheelPaint.setAlpha(54);
-                }else if(Math.abs(i - SELECTOR_MIDDLE_ITEM_INDEX) == 0){
-                    mSelectorWheelPaint.setAlpha(255);
+                if(Math.abs(i - SELECTOR_MIDDLE_ITEM_INDEX) == 
+                    SELECTOR_OFFSET_ONE){
+                    mSelectorWheelPaint.setAlpha(SELECTOR_TEXT_ALPHA_TRANSPARENT_HALF);
+                }else if(Math.abs(i - SELECTOR_MIDDLE_ITEM_INDEX) == 
+                    SELECTOR_OFFSET_TWO){
+                    mSelectorWheelPaint.setAlpha(SELECTOR_TEXT_ALPHA_TRANSPARENT);
+                }else if(Math.abs(i - SELECTOR_MIDDLE_ITEM_INDEX) == SELECTOR_OFFSET_ZERO){
+                    mSelectorWheelPaint.setAlpha(SELECTOR_TEXT_ALPHA_TRANSPARENT_NONE);
                 }
                 canvas.drawText(scrollSelectorValue, x, y, mSelectorWheelPaint);
             }
