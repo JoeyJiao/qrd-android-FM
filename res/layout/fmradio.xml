@@ -68,48 +68,86 @@
        <!-- This included layout contains Station Information to display -->
        <include layout="@layout/station_info" />
     </LinearLayout>
- <LinearLayout  android:id="@+id/favorite_list"
+
+    <HorizontalScrollView
         android:layout_width="fill_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal"
+        android:layout_height="60dip"
         android:layout_alignParentBottom="true"
-        >
-<Button android:id="@+id/presets_button_1"
-        style="@style/ButtonStripLeft"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/add_station"
-        android:textSize="15sp"
-        android:singleLine="true"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"/>
+        android:scrollbars="none">
 
-<Button android:id="@+id/presets_button_2"
-    style="@style/ButtonStripMiddle"
-        android:text="@string/add_station"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textSize="15sp"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"/>
-<Button android:id="@+id/presets_button_3"
-    style="@style/ButtonStripMiddle"
-        android:text="@string/add_station"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textSize="15sp"
-        android:singleLine="true"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"/>
+        <LinearLayout  android:id="@+id/favorite_list"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="horizontal">
 
-<Button android:id="@+id/presets_button_4"
-    style="@style/ButtonStripMiddle"
-        android:text="@string/add_station"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textSize="15sp"
-        android:singleLine="true"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"/>
-</LinearLayout>
+            <Button android:id="@+id/presets_button_1"
+                style="@style/ButtonStripLeft"
+                android:text="@string/add_station"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="15sp"
+                android:layout_width="80dip"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"/>
+
+            <Button android:id="@+id/presets_button_2"
+                style="@style/ButtonStripMiddle"
+                android:text="@string/add_station"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="15sp"
+                android:singleLine="true"
+                android:layout_width="80dip"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"/>
+
+            <Button android:id="@+id/presets_button_3"
+                style="@style/ButtonStripMiddle"
+                android:text="@string/add_station"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="15sp"
+                android:singleLine="true"
+                android:layout_width="80dip"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"/>
+
+            <Button android:id="@+id/presets_button_4"
+                style="@style/ButtonStripMiddle"
+                android:text="@string/add_station"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="15sp"
+                android:singleLine="true"
+                android:layout_width="80dip"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"/>
+
+            <Button android:id="@+id/presets_button_5"
+                style="@style/ButtonStripMiddle"
+                android:text="@string/add_station"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="15sp"
+                android:singleLine="true"
+                android:layout_width="80dip"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"/>
+
+            <Button android:id="@+id/presets_button_6"
+                style="@style/ButtonStripMiddle"
+                android:text="@string/add_station"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="15sp"
+                android:singleLine="true"
+                android:layout_width="80dip"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"/>
+
+            <Button android:id="@+id/presets_button_7"
+                style="@style/ButtonStripRight"
+                android:text="@string/add_station"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="15sp"
+                android:singleLine="true"
+                android:layout_width="80dip"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </HorizontalScrollView>
 </RelativeLayout>
