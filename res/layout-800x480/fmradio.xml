@@ -69,7 +69,6 @@
     <!-- This included layout contains Station Information to display -->
         <include layout="@layout/station_info" />
     </LinearLayout>
-
     <com.quicinc.fmradio.HorizontalNumberPicker
         android:id="@+id/fm_picker"
         android:layout_width="fill_parent"

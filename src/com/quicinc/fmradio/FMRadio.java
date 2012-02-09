@@ -134,7 +134,7 @@ public class FMRadio extends Activity
    private static final int ACTIVITY_RESULT_SETTINGS = 1;
 
    /* Activity Return ResultIdentifiers */
-   private static final int MAX_PRESETS_PER_PAGE = 5;
+   private static final int MAX_PRESETS_PER_PAGE = 7;
 
 
    /* Station's Audio is Stereo */
@@ -194,7 +194,7 @@ public class FMRadio extends Activity
    /* Button to navigate Preset pages */
    private ImageButton mPresetPageButton;
    /* 6 Preset Buttons */
-   private Button[] mPresetButtons = { null, null, null, null, null};
+   private Button[] mPresetButtons = { null, null, null, null, null, null, null };
    private Button mPresetListButton;
    // private ImageButton mSearchButton;
    private ImageView mForwardButton;
@@ -276,14 +276,9 @@ public class FMRadio extends Activity
           mPicker.setOnScrollFinishedListener(new OnScrollFinishListener(){
             @Override
           public void onScrollFinish(int value) {
-                // TODO Auto-generated method stub
-//                tuneRadio(valueToFrequency(value));
 //                Log.d(LOGTAG,"onScrollFinish.........");
                   valueToFrequency(value);
-//                Log.d(LOGTAG,"mFrequency is : " + mFrequency);
-//                Log.d(LOGTAG,"time before : " + System.currentTimeMillis());
                   mHandler.post(mRadioChangeFrequency);
-//                Log.d(LOGTAG,"time after: " + System.currentTimeMillis());
             }
           });
       }else{
@@ -344,6 +339,8 @@ public class FMRadio extends Activity
       mPresetButtons[2] = (Button) findViewById(R.id.presets_button_3);
       mPresetButtons[3] = (Button) findViewById(R.id.presets_button_4);
       mPresetButtons[4] = (Button) findViewById(R.id.presets_button_5);
+      mPresetButtons[5] = (Button) findViewById(R.id.presets_button_6);
+      mPresetButtons[6] = (Button) findViewById(R.id.presets_button_7);
       for (int nButton = 0; nButton < MAX_PRESETS_PER_PAGE; nButton++)
       {
          if (mPresetButtons[nButton] != null)
