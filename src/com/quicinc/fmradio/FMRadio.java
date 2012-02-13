@@ -188,9 +188,9 @@ public class FMRadio extends Activity
    private static FmSharedPreferences mPrefs;
 
    /* Button Resources */
-   private ImageButton mOnOffButton;
+   private ImageView mOnOffButton;
    private ImageButton mMuteButton;
-   private ImageButton mSpeakerButton;
+   private ImageView mSpeakerButton;
    /* Button to navigate Preset pages */
    private ImageButton mPresetPageButton;
    /* 6 Preset Buttons */
@@ -293,12 +293,12 @@ public class FMRadio extends Activity
 //         mMuteButton.setOnClickListener(mMuteModeClickListener);
 //      }
 
-      mSpeakerButton = (ImageButton)findViewById(R.id.btn_silent);
+      mSpeakerButton = (ImageView)findViewById(R.id.btn_speaker_earphone);
       if(mSpeakerButton != null){
           mSpeakerButton.setOnClickListener(mSpeakerClickListener); 
       }
 
-      mOnOffButton = (ImageButton) findViewById(R.id.btn_onoff);
+      mOnOffButton = (ImageView) findViewById(R.id.btn_onoff);
       if (mOnOffButton != null)
       {
          mOnOffButton.setOnClickListener(mTurnOnOffClickListener);
@@ -803,9 +803,11 @@ public class FMRadio extends Activity
            try {
                if(bSpeakerPhoneOn){  // as Speaker is already on turn it off.
                    mService.enableSpeaker(false);
+                   mSpeakerButton.setImageResource(R.drawable.ic_btn_earphone_select);
                    Log.d(LOGTAG, "Speaker phone is  turned off");
                }else{ // as Speaker is off turn it on.
                    mService.enableSpeaker(true);
+                   mSpeakerButton.setImageResource(R.drawable.ic_btn_spaker_select);
                    Log.d(LOGTAG, "Speaker phone is turned on");
                }
            } catch (RemoteException e)
@@ -1998,7 +2000,7 @@ public class FMRadio extends Activity
       } else
       {
          /* Find a icon to indicate off */
-         mOnOffButton.setImageResource(R.drawable.ic_btn_onoff);
+         mOnOffButton.setImageResource(R.drawable.ic_btn_onoff_normal);
       }
    }
 
@@ -2267,6 +2269,7 @@ public class FMRadio extends Activity
          {
             mRecordingMsgTV.setText("");
          }
+
       } else
       {
 //         if (mTuneStationFrequencyTV != null) {
@@ -2326,6 +2329,7 @@ public class FMRadio extends Activity
          }
          if (mOnOffButton != null) {
             mOnOffButton.setEnabled(false);
+            mOnOffButton.setImageResource(R.drawable.ic_btn_onoff_normal);
          }
       }
       else if (isCallActive())
@@ -2335,6 +2339,7 @@ public class FMRadio extends Activity
          }
          if (mOnOffButton != null) {
             mOnOffButton.setEnabled(false);
+            mOnOffButton.setImageResource(R.drawable.ic_btn_onoff_normal);
          }
       }
       else
@@ -2344,6 +2349,7 @@ public class FMRadio extends Activity
          }
          if (mOnOffButton != null) {
             mOnOffButton.setEnabled(true);
+            mOnOffButton.setImageResource(R.drawable.ic_btn_onoff);
          }
       }
 
@@ -2367,6 +2373,12 @@ public class FMRadio extends Activity
 //         mPresetPageButton.setEnabled(bEnable &&
 //                                   (FmSharedPreferences.getListStationCount() >= MAX_PRESETS_PER_PAGE));
 //      }
+        mSpeakerButton.setEnabled(bEnable);
+        if(bEnable)
+            mSpeakerButton.setImageResource(R.drawable.ic_btn_earphone_select);
+        else{
+           mSpeakerButton.setImageResource(R.drawable.ic_btn_earphone);
+        }
    }
 
    private void updateSearchProgress() {
