@@ -352,6 +352,15 @@ public class HorizontalNumberPicker extends LinearLayout {
     private int mInitialScrollOffset = Integer.MIN_VALUE;
 
     /**
+     * The initial offset for horizontal  scroll selector .
+     */
+    private static final int INIT_SCROLL_OFFSET_HORIZONTAL = 5;
+
+    /**
+     * The initial offset for vertical  scroll selector .
+     */
+    private static final int INIT_SCROLL_OFFSET_VERTICAL = 0;
+    /**
      * The current offset of the scroll selector.
      */
     private int mCurrentScrollOffset;
@@ -587,7 +596,6 @@ public class HorizontalNumberPicker extends LinearLayout {
      */
     public HorizontalNumberPicker(Context context) {
         this(context, null);
-//        Log.d(TAG,"Constructor first.........");
     }
 
     /**
@@ -600,7 +608,6 @@ public class HorizontalNumberPicker extends LinearLayout {
      */
     public HorizontalNumberPicker(Context context, AttributeSet attrs) {
         this(context, attrs, R.attr.numberPickerStyle);
-//        Log.d(TAG,"Constructor second.........");
     }
 
     /**
@@ -616,7 +623,6 @@ public class HorizontalNumberPicker extends LinearLayout {
     public HorizontalNumberPicker(Context context, AttributeSet attrs,
             int defStyle) {
         super(context, attrs, defStyle);
-//        Log.d(TAG,"Constructor third.........");
 
         // process style attributes
         TypedArray attributesArray = context.obtainStyledAttributes(attrs,
@@ -625,36 +631,7 @@ public class HorizontalNumberPicker extends LinearLayout {
                 R.styleable.NumberPicker_solidColor, 0);
         mFlingable = attributesArray.getBoolean(
                 R.styleable.NumberPicker_flingable, true);
-//        mSelectionDivider = attributesArray
-//                .getDrawable(R.styleable.NumberPicker_selectionDivider);
-//        int defSelectionDividerHeight = (int) TypedValue.applyDimension(
-//                TypedValue.COMPLEX_UNIT_DIP,
-//                UNSCALED_DEFAULT_SELECTION_DIVIDER_HEIGHT, getResources()
-//                        .getDisplayMetrics());
-//        mSelectionDividerHeight = attributesArray.getDimensionPixelSize(
-//                R.styleable.NumberPicker_selectionDividerHeight,
-//                defSelectionDividerHeight);
-//        mMinHeight = attributesArray.getDimensionPixelSize(
-//                R.styleable.NumberPicker_minHeight, SIZE_UNSPECIFIED);
-//        mMaxHeight = attributesArray.getDimensionPixelSize(
-//                R.styleable.NumberPicker_maxHeight, SIZE_UNSPECIFIED);
-//        Log.d(TAG, "mMinHeight is :" + mMinHeight);
-//        Log.d(TAG, "mMaxHeight is :" + mMaxHeight);
-//        mMinHeight = -1;
-//        mMaxHeight = 50;
-//        if (mMinHeight != SIZE_UNSPECIFIED && mMaxHeight != SIZE_UNSPECIFIED
-//                && mMinHeight > mMaxHeight) {
-//            throw new IllegalArgumentException("minHeight > maxHeight");
-//        }
-//        mMinWidth = attributesArray.getDimensionPixelSize(
-//                R.styleable.NumberPicker_minWidth, SIZE_UNSPECIFIED);
-//        mMaxWidth = attributesArray.getDimensionPixelSize(
-//                R.styleable.NumberPicker_maxWidth, SIZE_UNSPECIFIED);
-//        mMaxWidth = 300;
-//        if (mMinWidth != SIZE_UNSPECIFIED && mMaxWidth != SIZE_UNSPECIFIED
-//                && mMinWidth > mMaxWidth) {
-//            throw new IllegalArgumentException("minWidth > maxWidth");
-//        }
+
         mComputeMaxWidth = (mMaxWidth == Integer.MAX_VALUE);
         attributesArray.recycle();
 
@@ -669,71 +646,6 @@ public class HorizontalNumberPicker extends LinearLayout {
         setWillNotDraw(false);
         setSelectorWheelState(SELECTOR_WHEEL_STATE_NONE);
 
-//        LayoutInflater inflater = (LayoutInflater) getContext()
-//                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        inflater.inflate(R.layout.number_picker, this, true);
-
-//        OnClickListener onClickListener = new OnClickListener() {
-//            public void onClick(View v) {
-//                InputMethodManager inputMethodManager = InputMethodManager
-//                        .peekInstance();
-//                if (inputMethodManager != null
-//                        && inputMethodManager.isActive(mInputText)) {
-//                    inputMethodManager.hideSoftInputFromWindow(
-//                            getWindowToken(), 0);
-//                }
-//                mInputText.clearFocus();
-//                if (v.getId() == R.id.increment) {
-//                    changeCurrentByOne(true);
-//                } else {
-//                    changeCurrentByOne(false);
-//                }
-//            }
-//        };
-
-//        OnLongClickListener onLongClickListener = new OnLongClickListener() {
-//            public boolean onLongClick(View v) {
-//                mInputText.clearFocus();
-//                if (v.getId() == R.id.increment) {
-//                    postChangeCurrentByOneFromLongPress(true);
-//                } else {
-//                    postChangeCurrentByOneFromLongPress(false);
-//                }
-//                return true;
-//            }
-//        };
-
-        // increment button
-        // mIncrementButton = (ImageButton) findViewById(R.id.increment);
-        // mIncrementButton.setOnClickListener(onClickListener);
-        // mIncrementButton.setOnLongClickListener(onLongClickListener);
-
-        // decrement button
-        // mDecrementButton = (ImageButton) findViewById(R.id.decrement);
-        // mDecrementButton.setOnClickListener(onClickListener);
-        // mDecrementButton.setOnLongClickListener(onLongClickListener);
-
-        // input text
-        //mInputText = (EditText) findViewById(R.id.numberpicker_input);
-//        mInputText.setEnabled(false);
-//        mInputText.setOnFocusChangeListener(new OnFocusChangeListener() {
-//            public void onFocusChange(View v, boolean hasFocus) {
-//                if (hasFocus) {
-//                    mInputText.selectAll();
-//                    InputMethodManager inputMethodManager = InputMethodManager
-//                            .peekInstance();
-//                    if (inputMethodManager != null) {
-//                        inputMethodManager.showSoftInput(mInputText, 0);
-//                    }
-//                } else {
-//                    mInputText.setSelection(0, 0);
-//                    validateInputTextView(v);
-//                }
-//            }
-//        });
-//        mInputText.setFilters(new InputFilter[] { new InputTextFilter() });
-//
-//         mInputText.setRawInputType(InputType.TYPE_CLASS_NUMBER);
 
         // initialize constants
         mTouchSlop = ViewConfiguration.getTapTimeout();
@@ -748,53 +660,14 @@ public class HorizontalNumberPicker extends LinearLayout {
         paint.setAntiAlias(true);
         paint.setTextAlign(Align.CENTER);
         paint.setTextSize(mTextSize);
-//        paint.setTypeface(mInputText.getTypeface());
-//        ColorStateList colors = mInputText.getTextColors();
-//        Log.d(TAG,"ColorStateList " + colors);
-//        int color = colors.getColorForState(ENABLED_STATE_SET, Color.WHITE);
         paint.setColor(Color.WHITE);
         mSelectorWheelPaint = paint;
 
-        // create the animator for showing the input controls
-//        mDimSelectorWheelAnimator = ObjectAnimator.ofInt(this,
-//                PROPERTY_SELECTOR_PAINT_ALPHA, SELECTOR_WHEEL_BRIGHT_ALPHA,
-//                SELECTOR_WHEEL_DIM_ALPHA);
-//        final ObjectAnimator showIncrementButton = ObjectAnimator.ofFloat(
-//                mIncrementButton, PROPERTY_BUTTON_ALPHA,
-//                BUTTON_ALPHA_TRANSPARENT, BUTTON_ALPHA_OPAQUE);
-//        final ObjectAnimator showDecrementButton = ObjectAnimator.ofFloat(
-//                mDecrementButton, PROPERTY_BUTTON_ALPHA,
-//                BUTTON_ALPHA_TRANSPARENT, BUTTON_ALPHA_OPAQUE);
-//        mShowInputControlsAnimator = new AnimatorSet();
-//        mShowInputControlsAnimator.playTogether(mDimSelectorWheelAnimator,
-//                showIncrementButton, showDecrementButton);
-        
-//        mShowInputControlsAnimator.play(mDimSelectorWheelAnimator);
-//        mShowInputControlsAnimator.addListener(new AnimatorListenerAdapter() {
-//            private boolean mCanceled = false;
-//
-//            @Override
-//            public void onAnimationEnd(Animator animation) {
-//                if (!mCanceled) {
-//                    // if canceled => we still want the wheel drawn
-//                    setSelectorWheelState(SELECTOR_WHEEL_STATE_SMALL);
-//                }
-//                mCanceled = false;
-//            }
-//
-//            @Override
-//            public void onAnimationCancel(Animator animation) {
-//                if (mShowInputControlsAnimator.isRunning()) {
-//                    mCanceled = true;
-//                }
-//            }
-//        });
 
         // create the fling and adjust scrollers
         mFlingScroller = new Scroller(getContext(), null, true);
         mAdjustScroller = new Scroller(getContext(),
                 new DecelerateInterpolator(2.5f));
-        Log.d(TAG, "constructor..........");
 //        updateInputTextView();
 
          updateIncrementAndDecrementButtonsVisibilityState();
@@ -808,13 +681,8 @@ public class HorizontalNumberPicker extends LinearLayout {
                 // visible hide the selector and fade-in the controls to suggest
                 // fling interaction.
                 setSelectorWheelState(SELECTOR_WHEEL_STATE_LARGE);
-//                hideInputControls();
             }
         }
-        // mark....
-        // mIncrementButton.setVisibility(INVISIBLE);
-        // mDecrementButton.setVisibility(INVISIBLE);
-//        mInputText.setVisibility(INVISIBLE);
     }
 
     @Override
@@ -823,44 +691,12 @@ public class HorizontalNumberPicker extends LinearLayout {
         final int msrdWdth = getMeasuredWidth();
         final int msrdHght = getMeasuredHeight();
 
-        // // Increment button at the top.
-        // final int inctBtnMsrdWdth = mIncrementButton.getMeasuredWidth();
-        // final int incrBtnLeft = (msrdWdth - inctBtnMsrdWdth) / 2;
-        // final int incrBtnTop = 0;
-        // final int incrBtnRight = incrBtnLeft + inctBtnMsrdWdth;
-        // final int incrBtnBottom = incrBtnTop +
-        // mIncrementButton.getMeasuredHeight();
-        // mIncrementButton.layout(incrBtnLeft, incrBtnTop, incrBtnRight,
-        // incrBtnBottom);
-
-        // Input text centered horizontally.
-//        final int inptTxtMsrdWdth = mInputText.getMeasuredWidth();
-//        final int inptTxtMsrdHght = mInputText.getMeasuredHeight();
-//        final int inptTxtLeft = (msrdWdth - inptTxtMsrdWdth) / 2;
-//        final int inptTxtTop = (msrdHght - inptTxtMsrdHght) / 2;
-//        final int inptTxtRight = inptTxtLeft + inptTxtMsrdWdth;
-//        final int inptTxtBottom = inptTxtTop + inptTxtMsrdHght;
-//        Log.d(TAG, "mInputText is :(" + inptTxtLeft + "," + inptTxtTop + ","
-//                + inptTxtRight + "," + inptTxtBottom);
-//        mInputText.layout(inptTxtLeft, inptTxtTop, inptTxtRight, inptTxtBottom);
-
-        // // Decrement button at the top.
-        // final int decrBtnMsrdWdth = mIncrementButton.getMeasuredWidth();
-        // final int decrBtnLeft = (msrdWdth - decrBtnMsrdWdth) / 2;
-        // final int decrBtnTop = msrdHght -
-        // mDecrementButton.getMeasuredHeight();
-        // final int decrBtnRight = decrBtnLeft + decrBtnMsrdWdth;
-        // final int decrBtnBottom = msrdHght;
-        // mDecrementButton.layout(decrBtnLeft, decrBtnTop, decrBtnRight,
-        // decrBtnBottom);
-
         if (!mScrollWheelAndFadingEdgesInitialized) {
             mScrollWheelAndFadingEdgesInitialized = true;
             // need to do all this when we know our size
             initializeSelectorWheel();
             initializeFadingEdges();
         }
-        // add test
         setVerticalFadingEdgeEnabled(false);
     }
     public void setTextSize(int textSize){
@@ -871,9 +707,7 @@ public class HorizontalNumberPicker extends LinearLayout {
     }
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        // Try greedily to fit the max width and height.
-//        Log.d(TAG, "onMeasure:mMaxWidth is :" + mMaxWidth);
-//        Log.d(TAG, "onMeasure:mMaxHeight is :" + mMaxHeight);
+
         final int newWidthMeasureSpec = makeMeasureSpec(widthMeasureSpec,
                 mMaxWidth);
         final int newHeightMeasureSpec = makeMeasureSpec(heightMeasureSpec,
@@ -885,8 +719,6 @@ public class HorizontalNumberPicker extends LinearLayout {
                 getMeasuredWidth(), widthMeasureSpec);
         final int heightSize = resolveSizeAndStateRespectingMinSize(mMinHeight,
                 getMeasuredHeight(), heightMeasureSpec);
-        Log.d(TAG, "widthSize : " + widthSize);
-        Log.d(TAG, "heightSize: " + heightSize);
         setMeasuredDimension(widthSize, heightSize);
     }
 
@@ -900,8 +732,7 @@ public class HorizontalNumberPicker extends LinearLayout {
             mLastMotionEventY = mLastDownEventY = event.getY();
             mLastMotionEventX = mLastDownEventX = event.getX();
             removeAllCallbacks();
-//             mShowInputControlsAnimator.cancel();
-//             mDimSelectorWheelAnimator.cancel();
+
             mBeginEditOnUpEvent = false;
             mAdjustScrollerOnUpEvent = true;
             if (mSelectorWheelState == SELECTOR_WHEEL_STATE_LARGE) {
@@ -918,10 +749,7 @@ public class HorizontalNumberPicker extends LinearLayout {
                 hideInputControls();
                 return true;
             }
-            // if (isEventInVisibleViewHitRect(event, mIncrementButton)
-            // || isEventInVisibleViewHitRect(event, mDecrementButton)) {
-            // return false;
-            // }
+
             mAdjustScrollerOnUpEvent = false;
             setSelectorWheelState(SELECTOR_WHEEL_STATE_LARGE);
             hideInputControls();
@@ -981,7 +809,6 @@ public class HorizontalNumberPicker extends LinearLayout {
                     }
                 }
                 int deltaMoveX = (int) (currentMoveX - mLastMotionEventX);
-//                Log.d(TAG, "deltMoveX is :" + deltaMoveX);
                 scrollBy(deltaMoveX, 0);
                 invalidate();
                 mLastMotionEventX = currentMoveX;
@@ -990,8 +817,6 @@ public class HorizontalNumberPicker extends LinearLayout {
         case MotionEvent.ACTION_UP:
             if (mBeginEditOnUpEvent) {
                 setSelectorWheelState(SELECTOR_WHEEL_STATE_SMALL);
-//                 showInputControls(mShowInputControlsAnimimationDuration);
-//                mInputText.requestFocus();
                 return true;
             }
             VelocityTracker velocityTracker = mVelocityTracker;
@@ -1077,15 +902,11 @@ public class HorizontalNumberPicker extends LinearLayout {
 
         if (mHorizontal) {
             int currentScrollerX = scroller.getCurrX();
-//            Log.d(TAG, "currentScroolerX is :" + currentScrollerX);
             if (mPreviousScrollerX == 0) {
                 mPreviousScrollerX = scroller.getStartX();
-                Log.d(TAG, "mPreviousScrollerX  getStartX () is :"
-                        + mPreviousScrollerX);
+
             }
-//            Log.d(TAG, "mPreviousScrollerX is :" + mPreviousScrollerX);
-//            Log.d(TAG, "computescroll : "
-//                    + (currentScrollerX - mPreviousScrollerX));
+
             scrollBy(currentScrollerX - mPreviousScrollerX, 0);
             mPreviousScrollerX = currentScrollerX;
 
@@ -1096,7 +917,6 @@ public class HorizontalNumberPicker extends LinearLayout {
             }
             scrollBy(0, currentScrollerY - mPreviousScrollerY);
             mPreviousScrollerY = currentScrollerY;
-
         }
 
         if (scroller.isFinished()) {
@@ -1109,14 +929,10 @@ public class HorizontalNumberPicker extends LinearLayout {
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
-        // mIncrementButton.setEnabled(enabled);
-        // mDecrementButton.setEnabled(enabled);
-//        mInputText.setEnabled(enabled);
     }
 
     @Override
     public void scrollBy(int x, int y) {
-        Log.d(TAG, "scrollBy :(" + x + "," + y + ")");
         if (mSelectorWheelState == SELECTOR_WHEEL_STATE_NONE) {
             return;
         }
@@ -1134,10 +950,6 @@ public class HorizontalNumberPicker extends LinearLayout {
             }
             mCurrentScrollOffset += y;
             while (mCurrentScrollOffset - mInitialScrollOffset > mSelectorTextGapHeight) {
-//                Log.d(TAG, "mCurrentScrollOffset is :" + mCurrentScrollOffset);
-//                Log.d(TAG, "mInitialScrollOffset is :" + mInitialScrollOffset);
-//                Log.d(TAG, "mSelectorTextGapHeight is :"
-//                        + mSelectorTextGapHeight);
                 mCurrentScrollOffset -= mSelectorElementHeight;
                 decrementSelectorIndices(selectorIndices);
                 changeCurrent(selectorIndices[SELECTOR_MIDDLE_ITEM_INDEX]);
@@ -1147,13 +959,7 @@ public class HorizontalNumberPicker extends LinearLayout {
                 }
             }
             while (mCurrentScrollOffset - mInitialScrollOffset < -mSelectorTextGapHeight) {
-                Log.d(TAG, "mSelectorElementHeight is "
-                        + mSelectorElementHeight);
                 mCurrentScrollOffset += mSelectorElementHeight;
-//                Log.d(TAG, "mCurrentScrollOffset2 is :" + mCurrentScrollOffset);
-//                Log.d(TAG, "mInitialScrollOffset2 is :" + mInitialScrollOffset);
-//                Log.d(TAG, "mSelectorTextGapHeight2 is :"
-//                        + mSelectorTextGapHeight);
                 incrementSelectorIndices(selectorIndices);
                 changeCurrent(selectorIndices[SELECTOR_MIDDLE_ITEM_INDEX]);
                 if (!mWrapSelectorWheel
@@ -1164,11 +970,7 @@ public class HorizontalNumberPicker extends LinearLayout {
         } else {
             if (!mWrapSelectorWheel && x > 0
                     && selectorIndices[SELECTOR_MIDDLE_ITEM_INDEX] <= mMinValue) {
-                Log.d(TAG, "mCurrentScrollOffset before x>0  is :"
-                        + mCurrentScrollOffset);
                 mCurrentScrollOffset = mInitialScrollOffset;
-                Log.d(TAG, "mCurrentScrollOffset after x>0 is :"
-                        + mCurrentScrollOffset);
                 return;
             }
             if (!mWrapSelectorWheel && x < 0
@@ -1176,16 +978,8 @@ public class HorizontalNumberPicker extends LinearLayout {
                 mCurrentScrollOffset = mInitialScrollOffset;
                 return;
             }
-            Log.d(TAG, "mCurrentScrollOffset before x  is :"
-                    + mCurrentScrollOffset);
             mCurrentScrollOffset += x;
-            Log.d(TAG, "mCurrentScrollOffset after x is :"
-                    + mCurrentScrollOffset);
             while (mCurrentScrollOffset - mInitialScrollOffset > mSelectorTextGapWidth) {
-//                Log.d(TAG, "mCurrentScrollOffset is :" + mCurrentScrollOffset);
-//                Log.d(TAG, "mInitialScrollOffset is :" + mInitialScrollOffset);
-//                Log.d(TAG, "mSelectorTextGapHeight is :"
-//                        + mSelectorTextGapHeight);
                 mCurrentScrollOffset -= mSelectorElementWidth;
                 decrementSelectorIndices(selectorIndices);
                 changeCurrent(selectorIndices[SELECTOR_MIDDLE_ITEM_INDEX]);
@@ -1195,12 +989,7 @@ public class HorizontalNumberPicker extends LinearLayout {
                 }
             }
             while (mCurrentScrollOffset - mInitialScrollOffset < -mSelectorTextGapWidth) {
-                Log.d(TAG, "mSelectorTextGapWidth is " + mSelectorTextGapWidth);
                 mCurrentScrollOffset += mSelectorElementWidth;
-//                Log.d(TAG, "mCurrentScrollOffset2 is :" + mCurrentScrollOffset);
-//                Log.d(TAG, "mInitialScrollOffset2 is :" + mInitialScrollOffset);
-//                Log.d(TAG, "mSelectorTextGapHeight2 is :"
-//                        + mSelectorTextGapHeight);
                 incrementSelectorIndices(selectorIndices);
                 changeCurrent(selectorIndices[SELECTOR_MIDDLE_ITEM_INDEX]);
                 if (!mWrapSelectorWheel
@@ -1444,7 +1233,6 @@ public class HorizontalNumberPicker extends LinearLayout {
         boolean wrapSelectorWheel = mMaxValue - mMinValue > mSelectorIndices.length;
         setWrapSelectorWheel(wrapSelectorWheel);
         initializeSelectorWheelIndices();
-//        Log.d(TAG, "setMinValue..........");
         updateInputTextView();
         tryComputeMaxWidth();
     }
@@ -1478,8 +1266,6 @@ public class HorizontalNumberPicker extends LinearLayout {
         boolean wrapSelectorWheel = mMaxValue - mMinValue > mSelectorIndices.length;
         setWrapSelectorWheel(wrapSelectorWheel);
         initializeSelectorWheelIndices();
-//        Log.d(TAG, "setMaxValue..........");
-//        updateInputTextView();
         tryComputeMaxWidth();
     }
 
@@ -1510,7 +1296,6 @@ public class HorizontalNumberPicker extends LinearLayout {
         } else {
 //            mInputText.setRawInputType(InputType.TYPE_CLASS_NUMBER);
         }
-//        Log.d(TAG, "setDispalyValue..........");
 //        updateInputTextView();
         initializeSelectorWheelIndices();
         tryComputeMaxWidth();
@@ -1585,12 +1370,9 @@ public class HorizontalNumberPicker extends LinearLayout {
         if (!mHorizontal) {
             x = (mRight - mLeft) / 2;
             y = mCurrentScrollOffset;
-//            Log.d(TAG, "x y :" + x + "," + y);
         } else {
-            
             x = mCurrentScrollOffset;
             y = (mBottom - mTop) / 2 + mTextSize/2;
-            Log.d(TAG, "x y :" + x + "," + y);
         }
 
 
@@ -1635,27 +1417,6 @@ public class HorizontalNumberPicker extends LinearLayout {
             }
             
         }
-
-        // draw the selection dividers (only if scrolling and drawable
-        // specified)
-//         if (mSelectionDivider != null) {
-//         // draw the top divider
-//         int topOfTopDivider =
-//         (getHeight() - mSelectorElementHeight - mSelectionDividerHeight) / 2;
-//         int bottomOfTopDivider = topOfTopDivider + mSelectionDividerHeight;
-//         mSelectionDivider.setBounds(0, topOfTopDivider, mRight,
-//         bottomOfTopDivider);
-//         //mSelectionDivider.draw(canvas);
-//        
-//         // draw the bottom divider
-//         int topOfBottomDivider = topOfTopDivider + mSelectorElementHeight;
-//         int bottomOfBottomDivider = bottomOfTopDivider +
-//         mSelectorElementHeight;
-//         mSelectionDivider.setBounds(0, topOfBottomDivider, mRight,
-//         bottomOfBottomDivider);
-//         //mSelectionDivider.draw(canvas);
-//         }
-
         canvas.restoreToCount(restoreCount);
     }
 
@@ -1752,7 +1513,6 @@ public class HorizontalNumberPicker extends LinearLayout {
             current = getWrappedSelectorIndex(current);
         }
         int previous = mValue;
-        Log.d(TAG, "changeCurrent............");
         setValue(current);
         notifyChange(previous, current);
     }
@@ -1765,10 +1525,7 @@ public class HorizontalNumberPicker extends LinearLayout {
      *            True to increment, false to decrement.
      */
     private void changeCurrentByOne(boolean increment) {
-        Log.d(TAG, "changeCurrentByOne======================");
         if (mFlingable) {
-            // mDimSelectorWheelAnimator.cancel();
-//            mInputText.setVisibility(View.INVISIBLE);
             mSelectorWheelPaint.setAlpha(SELECTOR_WHEEL_BRIGHT_ALPHA);
             mPreviousScrollerY = 0;
             mPreviousScrollerX = 0;
@@ -1815,7 +1572,6 @@ public class HorizontalNumberPicker extends LinearLayout {
                 final int xBeforeAbort = scroller.getCurrX();
                 scroller.abortAnimation();
                 final int xDelta = scroller.getCurrX() - xBeforeAbort;
-                Log.d(TAG, "xDelta is :" + xDelta);
                 scrollBy(xDelta, 0);
             } else {
                 final int yBeforeAbort = scroller.getCurrY();
@@ -1862,10 +1618,6 @@ public class HorizontalNumberPicker extends LinearLayout {
             AccessibilityManager.getInstance(mContext).interrupt();
             String text = mContext
                     .getString(R.string.number_picker_increment_scroll_action);
-//            mInputText.setContentDescription(text);
-//            mInputText
-//                    .sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_SELECTED);
-//            mInputText.setContentDescription(null);
         }
     }
 
@@ -1881,29 +1633,14 @@ public class HorizontalNumberPicker extends LinearLayout {
         if (mHorizontal) {
             mSelectorTextGapWidth = (int) (totalTextGapWidth / textGapCount + 0.5f);
             mSelectorElementWidth = mTextSize + mSelectorTextGapWidth;
-            
-            Log.d(TAG, "mSelectorElementWidth is :" + mSelectorElementWidth);
-            // Ensure that the middle item is positioned the same as the text in
-            // mInputText
-            // int editTextTextPosition = mInputText.getBaseline() +
-            // mInputText.getTop();
-            // mInitialScrollOffset = editTextTextPosition -
-            // (mSelectorElementWidth * SELECTOR_MIDDLE_ITEM_INDEX);
-            mInitialScrollOffset = 0;
+            mInitialScrollOffset = INIT_SCROLL_OFFSET_HORIZONTAL;
         } else {
             mSelectorTextGapHeight = (int) (totalTextGapHeight / textGapCount + 0.5f);
-            Log.d(TAG, "mSelectorTextGapHeight: " + mSelectorTextGapHeight);
             mSelectorElementHeight = mTextSize + mSelectorTextGapHeight;
-            // Ensure that the middle item is positioned the same as the text in
-            // mInputText
-//            int editTextTextPosition = mInputText.getBaseline()
-//                    + mInputText.getTop();
-//            mInitialScrollOffset = editTextTextPosition
-//                    - (mSelectorElementHeight * SELECTOR_MIDDLE_ITEM_INDEX);
-            mInitialScrollOffset = 0;
+            mInitialScrollOffset = INIT_SCROLL_OFFSET_VERTICAL;
         }
         mCurrentScrollOffset = mInitialScrollOffset;
-//         updateInputTextView();
+
     }
 
     private void initializeFadingEdges() {
@@ -1915,8 +1652,7 @@ public class HorizontalNumberPicker extends LinearLayout {
      * Callback invoked upon completion of a given <code>scroller</code>.
      */
     private void onScrollerFinished(Scroller scroller) {
-//        Log.d(TAG,"onScrollerFinished...");
-//        Log.d(TAG,"currentValue is :" + this.getValue());
+
         if(mOnScrollFinishListener != null){
             mOnScrollFinishListener.onScrollFinish(mValue);
         }
@@ -1941,10 +1677,9 @@ public class HorizontalNumberPicker extends LinearLayout {
         if (mScrollState == scrollState) {
             return;
         }
-        Log.d(TAG,"mScrollState change : " +scrollState);
         mScrollState = scrollState;
         if (mOnScrollListener != null) {
-//            Log.d();
+
             mOnScrollListener.onScrollStateChange(this, scrollState);
         }
     }
@@ -2110,12 +1845,10 @@ public class HorizontalNumberPicker extends LinearLayout {
         String str = String.valueOf(((TextView) v).getText());
         if (TextUtils.isEmpty(str)) {
             // Restore to the old value as we don't allow empty values
-//            Log.d(TAG, "validateInputTextView..........");
             updateInputTextView();
         } else {
             // Check the new value and ensure it's in range
             int current = getSelectedPos(str.toString());
-//            Log.d(TAG, "validateInputTextView==================");
             changeCurrent(current);
         }
     }
@@ -2134,7 +1867,6 @@ public class HorizontalNumberPicker extends LinearLayout {
          */
         // mark this 2
         if (mDisplayedValues == null) {
-            Log.d("HorizontalNumberPicker............", "mValue is :" + mValue);
 //            mInputText.setText(TWO_DIGIT_FORMATTER.format(mValue));
         } else {
 //            mInputText.setText(mDisplayedValues[mValue - mMinValue]);
@@ -2155,7 +1887,6 @@ public class HorizontalNumberPicker extends LinearLayout {
      * NumberPicker.
      */
     private void notifyChange(int previous, int current) {
-        Log.d(TAG,"notifyChange current is :" + current);
         if (mOnValueChangeListener != null) {
             mOnValueChangeListener.onValueChange(this, previous, mValue);
         }
@@ -2343,7 +2074,6 @@ public class HorizontalNumberPicker extends LinearLayout {
             mPreviousScrollerY = 0;
             mPreviousScrollerX = 0;
             if (mInitialScrollOffset == mCurrentScrollOffset) {
-                Log.d(TAG, "AdjustScrollerCommand.........");
                 updateInputTextView();
                  showInputControls(mShowInputControlsAnimimationDuration);
                 return;
@@ -2383,7 +2113,6 @@ public class HorizontalNumberPicker extends LinearLayout {
         }
 
         public void run() {
-            Log.d(TAG, "if you run , please run...");
             changeCurrentByOne(mIncrement);
             postDelayed(this, mLongPressUpdateInterval);
         }
