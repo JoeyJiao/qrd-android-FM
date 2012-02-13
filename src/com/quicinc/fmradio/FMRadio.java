@@ -52,6 +52,7 @@ import android.os.Message;
 import android.os.RemoteException;
 import android.os.SystemClock;
 import android.os.SystemProperties;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -2374,8 +2375,13 @@ public class FMRadio extends Activity
 //                                   (FmSharedPreferences.getListStationCount() >= MAX_PRESETS_PER_PAGE));
 //      }
         mSpeakerButton.setEnabled(bEnable);
-        if(bEnable)
-            mSpeakerButton.setImageResource(R.drawable.ic_btn_earphone_select);
+        if(bEnable){
+            if(isSpeakerEnabled()){
+                mSpeakerButton.setImageResource(R.drawable.ic_btn_spaker_select);
+            }else{
+                mSpeakerButton.setImageResource(R.drawable.ic_btn_earphone_select);
+            }
+        }
         else{
            mSpeakerButton.setImageResource(R.drawable.ic_btn_earphone);
         }
