@@ -645,7 +645,7 @@ public class FMRadioService extends Service
                     .createTempFile("FMRecording", ".3gpp", sampleDir);
         } catch (IOException e) {
             Log.e(LOGTAG, "Not able to access SD Card");
-            Toast.makeText(this, "Not able to access SD Card", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.error_sdcard_access), Toast.LENGTH_SHORT).show();
             return false;
         }
         mRecorder = new MediaRecorder();
@@ -713,7 +713,7 @@ public class FMRadioService extends Service
                     .createTempFile("FMRecording", ".3gpp", sampleDir);
             } catch (IOException e) {
                 Log.e(LOGTAG, "Not able to access SD Card");
-                Toast.makeText(this, "Not able to access SD Card", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.error_sdcard_access), Toast.LENGTH_SHORT).show();
                 return false;
             }
             mA2dp.setOutputFile(mA2DPSampleFile.getAbsolutePath());
