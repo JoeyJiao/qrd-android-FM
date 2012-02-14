@@ -1300,6 +1300,22 @@ public class HorizontalNumberPicker extends LinearLayout {
         initializeSelectorWheelIndices();
         tryComputeMaxWidth();
     }
+    /**
+     * Sets the values to be displayed.If autoCalMinMax passed true, will calculate
+     * and set min value and max value.
+     *
+     * @param displayedValues
+     *            The displayed values.
+     * @param autoCalMinMax
+     *            Whether auto calculate and set the min value and max value.
+     */
+    public void setDisplayedValues(String[] displayeValues , boolean autoCalculateMinMax) {
+        if(autoCalculateMinMax){
+            mMinValue = 0;
+            mMaxValue = displayeValues.length - 1;
+        }
+        setDisplayedValues(displayeValues);
+    }
 
     @Override
     protected float getTopFadingEdgeStrength() {

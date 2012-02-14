@@ -408,10 +408,10 @@ public class FMRadio extends Activity
            //Log.d(TAG,"String.value is z :" + String.valueOf(min+i*step));
            displayValues[i] = String.valueOf((min+i*step)/1000.0f);
        }
-       mPicker.setDisplayedValues(displayValues);
-       mPicker.setMinValue(0);
-       mPicker.setMaxValue(channels);
+       mPicker.setDisplayedValues(displayValues,true);
+       mPicker.setWrapSelectorWheel(true);
 //       mPicker.setValue(0);
+       mPicker.invalidate();
    }
    protected int valueToFrequency(int value){
 //       Log.d(LOGTAG,"LowerLimit: " +mPrefs.getLowerLimit() );
