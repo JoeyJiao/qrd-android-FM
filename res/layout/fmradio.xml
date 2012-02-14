@@ -55,6 +55,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     </RelativeLayout>
+    <LinearLayout android:id="@+id/preset_full_layout"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      android:layout_alignParentLeft="true"
+      android:layout_below="@+id/stationinfo_layout"
+      android:layout_weight="1"
+       android:gravity="center">
+   <!-- Layout contains the Next/Previous Presets and Tune buttons and status msg text-->
+   <include layout="@layout/navigate" />
+   </LinearLayout>
 
     <LinearLayout android:id="@+id/stationinfo_layout"
         android:layout_width="fill_parent"
