@@ -257,6 +257,27 @@ public class FMRadio extends Activity
    private int mFrequency;
    private static int mDisplayWidth;
    private static final int TEXTSIZE_PARAMETER_FOR_NUMBER_PICKER = 21;
+   //whether is the first headset plug event
+   private boolean isFirst = true;
+
+   private  BroadcastReceiver mHeadsetReceiver =  new BroadcastReceiver(){
+    @Override
+    public void onReceive(Context context, Intent intent) {
+
+        String action = intent.getAction();
+        if (action.equals(Intent.ACTION_HEADSET_PLUG)) {
+            //ignore the first headset event when start up
+            if(isFirst){
+                isFirst = false;
+                return;
+            }
+            boolean mHeadsetPlugged = (intent.getIntExtra("state", 0) == 1);
+            if(!mHeadsetPlugged){
+                finish();
+            }
+        }
+    }
+   };
    /** Called when the activity is first created. */
    @Override
    public void onCreate(Bundle savedInstanceState) {
@@ -394,6 +415,9 @@ public class FMRadio extends Activity
             Log.d(LOGTAG, "onCreate: Start Service completed successfully");
          }
       }
+      IntentFilter filter = new IntentFilter();
+      filter.addAction(Intent.ACTION_HEADSET_PLUG);
+      registerReceiver(mHeadsetReceiver, filter);
    }
 
    /**
@@ -563,6 +587,7 @@ public class FMRadio extends Activity
       mService = null;
       Log.d(LOGTAG, "onDestroy: unbindFromService completed");
       mIsHomeKeyPressed = false;
+      unregisterReceiver(mHeadsetReceiver);
       super.onDestroy();
    }
 

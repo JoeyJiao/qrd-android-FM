@@ -34,10 +34,12 @@ import java.util.HashMap;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -101,6 +103,18 @@ public class StationListActivity extends Activity implements
         public void onServiceDisconnected(ComponentName classname) {
         }
     };
+    private BroadcastReceiver mHeadsetReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(Intent.ACTION_HEADSET_PLUG)) {
+                boolean mHeadsetPlugged = (intent.getIntExtra("state", 0) == 1);
+                if (!mHeadsetPlugged) {
+                    finish();
+                }
+            }
+        }
+    };
     ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
     HashMap<Integer, Integer> mIndex = new HashMap<Integer, Integer>();
 
@@ -135,6 +149,9 @@ public class StationListActivity extends Activity implements
                 }
             }
         });
+      IntentFilter filter = new IntentFilter();
+      filter.addAction(Intent.ACTION_HEADSET_PLUG);
+      registerReceiver(mHeadsetReceiver, filter);
     }
 
     @Override
@@ -319,6 +336,12 @@ public class StationListActivity extends Activity implements
                         R.id.freq });
 
         mStationList.setAdapter(mAdapter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(mHeadsetReceiver);
+        super.onDestroy();
     }
 
 }

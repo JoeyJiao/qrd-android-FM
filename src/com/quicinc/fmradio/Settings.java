@@ -30,7 +30,10 @@ package com.quicinc.fmradio;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.Intent;
@@ -69,6 +72,18 @@ public class Settings extends PreferenceActivity implements
         private FmSharedPreferences mPrefs = null;
         private boolean mRxMode = false;
 
+    private BroadcastReceiver mHeadsetReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(Intent.ACTION_HEADSET_PLUG)) {
+                boolean mHeadsetPlugged = (intent.getIntExtra("state", 0) == 1);
+                if (!mHeadsetPlugged) {
+                    finish();
+                }
+            }
+        }
+    };
         @Override
         protected void onCreate(Bundle savedInstanceState) {
                 super.onCreate(savedInstanceState);
@@ -80,6 +95,10 @@ public class Settings extends PreferenceActivity implements
                 if (mPrefs != null) {
                         setPreferenceScreen(createPreferenceHierarchy());
                 }
+
+                IntentFilter filter = new IntentFilter();
+                filter.addAction(Intent.ACTION_HEADSET_PLUG);
+                registerReceiver(mHeadsetReceiver, filter);
         }
 
         private PreferenceScreen createPreferenceHierarchy() {
@@ -387,6 +406,12 @@ public class Settings extends PreferenceActivity implements
                 if (sharedPreferences != null) {
                    sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
                 }
+        }
+
+        @Override
+        protected void onDestroy() {
+            unregisterReceiver(mHeadsetReceiver);
+            super.onDestroy();
         }
 
 }
