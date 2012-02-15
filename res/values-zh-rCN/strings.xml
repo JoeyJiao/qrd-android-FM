@@ -91,4 +91,6 @@
         <string name="fm_cmd_failed_call_on">FM 操作失败。通话期间禁止FM音频 </string>
 
     <string name="station_name">电台</string>
+    <string name="station_exists">此频率已存在!</string>
+    <string name="stat_notif_frequency">FM 收音机 "<xliff:g id="frequency">%1$s</xliff:g>" MHz</string>
 </resources>

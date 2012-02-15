@@ -1323,12 +1323,16 @@ public class FMRadio extends Activity
                    case PRESETS_OPTIONS_REPLACE:
                       {
                          // Replace preset Station with currently tuned station
-                         Log.d(LOGTAG, "station - " + mPresetButtonStation.getName() + " ("
-                               + mPresetButtonStation.getFrequency() + ")");
-                         mPresetButtonStation.Copy(mTunedStation);
-                         mPresetButtonStation = null;
-                         setupPresetLayout();
-                         mPrefs.Save();
+//                         Log.d(LOGTAG, "station - " + mPresetButtonStation.getName() + " ("
+//                               + mPresetButtonStation.getFrequency() + ")");
+                         if(!stationExists(mTunedStation.getFrequency(),
+                                 mPrefs.getCurrentListIndex())){
+                             mPresetButtonStation.Copy(mTunedStation);
+                             mPresetButtonStation = null;
+                             setupPresetLayout();
+                             mPrefs.Save();
+                         }
+
                          break;
                       }
                    case PRESETS_OPTIONS_RENAME:
@@ -2255,12 +2259,22 @@ public class FMRadio extends Activity
       return(speakerEnabled);
    }
 
+   private boolean stationExists(int freq , int index){
+       boolean exists = FmSharedPreferences.stationExists(freq , index);
+       if(exists){
+           Toast t = Toast.makeText(this, getString(R.string.station_exists), Toast.LENGTH_SHORT);
+           t.show();
+       }
+       return exists;
+   }
    private void addToPresets() {
       int currentList = FmSharedPreferences.getCurrentListIndex();
       PresetStation selectedStation = getCurrentTunedStation();
-      FmSharedPreferences.addStation(selectedStation.getName(), selectedStation
-                        .getFrequency(), currentList);
-      setupPresetLayout();
+      if(!stationExists(selectedStation.getFrequency(),currentList)){
+          FmSharedPreferences.addStation(selectedStation.getName(), selectedStation
+                  .getFrequency(), currentList);
+          setupPresetLayout();
+      }
    }
 
    private void enableRadioOnOffUI() {
