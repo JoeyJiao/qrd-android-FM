@@ -38,6 +38,7 @@ import android.content.SharedPreferences;
 import android.hardware.fmradio.FmReceiver;
 import android.hardware.fmradio.FmConfig;
 import android.util.Log;
+import android.widget.Toast;
 
 public class FmSharedPreferences
 {
@@ -280,7 +281,19 @@ public class FmSharedPreferences
          createPresetList("FM");
       }
    }
-
+   public static boolean stationExists(int freq , int listIndex){
+       PresetList list = mListOfPlists.get(listIndex);
+       PresetStation ps;
+       boolean alreadyHas = false;
+       for (int i = 0; i < list.getStationCount(); i++) {
+           ps = list.getStationFromIndex(i);
+           if(ps.getFrequency() == freq){
+               alreadyHas = true;
+               break;
+           }
+       }
+       return alreadyHas;
+   }
    public static void addStation(String name, int freq, int listIndex){
       /* If no lists exists and a new station is added, add a new Preset List
        * if "listIndex" requested was "0"
