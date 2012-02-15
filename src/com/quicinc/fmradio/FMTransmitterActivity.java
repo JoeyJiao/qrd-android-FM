@@ -699,10 +699,10 @@ public class FMTransmitterActivity extends Activity {
 
         private void setTurnOnOffButtonImage() {
                 if (isFmOn() == true) {
-                        mOnOffButton.setImageResource(R.drawable.ic_btn_onoff);
+                        mOnOffButton.setImageResource(R.drawable.btn_onoff);
                 } else {
                         /* Find a icon to indicate off */
-                        mOnOffButton.setImageResource(R.drawable.ic_btn_onoff);
+                        mOnOffButton.setImageResource(R.drawable.btn_onoff);
                 }
         }
 

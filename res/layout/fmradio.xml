@@ -42,14 +42,14 @@
         android:layout_weight="0">
 
     <ImageView android:id="@+id/btn_onoff"
-        android:src="@drawable/ic_btn_onoff"
+        android:src="@drawable/btn_onoff"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="5dip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <ImageView android:id="@+id/btn_speaker_earphone"
-        android:src="@drawable/ic_btn_earphone"
+        android:src="@drawable/btn_earphone"
         android:layout_alignParentRight="true"
         android:layout_marginRight="5dip"
         android:layout_width="wrap_content"

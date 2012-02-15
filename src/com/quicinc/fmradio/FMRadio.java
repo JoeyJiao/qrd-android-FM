@@ -829,11 +829,11 @@ public class FMRadio extends Activity
            try {
                if(bSpeakerPhoneOn){  // as Speaker is already on turn it off.
                    mService.enableSpeaker(false);
-                   mSpeakerButton.setImageResource(R.drawable.ic_btn_earphone_select);
+                   mSpeakerButton.setImageResource(R.drawable.btn_earphone);
                    Log.d(LOGTAG, "Speaker phone is  turned off");
                }else{ // as Speaker is off turn it on.
                    mService.enableSpeaker(true);
-                   mSpeakerButton.setImageResource(R.drawable.ic_btn_spaker_select);
+                   mSpeakerButton.setImageResource(R.drawable.btn_speaker);
                    Log.d(LOGTAG, "Speaker phone is turned on");
                }
            } catch (RemoteException e)
@@ -2026,11 +2026,13 @@ public class FMRadio extends Activity
    private void setTurnOnOffButtonImage() {
       if (isFmOn() == true)
       {
-         mOnOffButton.setImageResource(R.drawable.ic_btn_onoff);
+         //mOnOffButton.setImageResource(R.drawable.ic_btn_onoff);
+          mOnOffButton.setEnabled(true);
       } else
       {
          /* Find a icon to indicate off */
-         mOnOffButton.setImageResource(R.drawable.ic_btn_onoff_normal);
+         //mOnOffButton.setImageResource(R.drawable.ic_btn_onoff_normal);
+          mOnOffButton.setEnabled(false);
       }
    }
 
@@ -2369,7 +2371,7 @@ public class FMRadio extends Activity
          }
          if (mOnOffButton != null) {
             mOnOffButton.setEnabled(false);
-            mOnOffButton.setImageResource(R.drawable.ic_btn_onoff_normal);
+//            mOnOffButton.setImageResource(R.drawable.ic_btn_onoff_normal);
          }
       }
       else if (isCallActive())
@@ -2379,7 +2381,7 @@ public class FMRadio extends Activity
          }
          if (mOnOffButton != null) {
             mOnOffButton.setEnabled(false);
-            mOnOffButton.setImageResource(R.drawable.ic_btn_onoff_normal);
+//            mOnOffButton.setImageResource(R.drawable.ic_btn_onoff_normal);
          }
       }
       else
@@ -2389,7 +2391,7 @@ public class FMRadio extends Activity
          }
          if (mOnOffButton != null) {
             mOnOffButton.setEnabled(true);
-            mOnOffButton.setImageResource(R.drawable.ic_btn_onoff);
+//            mOnOffButton.setImageResource(R.drawable.ic_btn_onoff);
          }
       }
 
@@ -2416,13 +2418,13 @@ public class FMRadio extends Activity
         mSpeakerButton.setEnabled(bEnable);
         if(bEnable){
             if(isSpeakerEnabled()){
-                mSpeakerButton.setImageResource(R.drawable.ic_btn_spaker_select);
+                mSpeakerButton.setImageResource(R.drawable.btn_speaker);
             }else{
-                mSpeakerButton.setImageResource(R.drawable.ic_btn_earphone_select);
+                mSpeakerButton.setImageResource(R.drawable.btn_earphone);
             }
         }
         else{
-           mSpeakerButton.setImageResource(R.drawable.ic_btn_earphone);
+           mSpeakerButton.setImageResource(R.drawable.btn_earphone);
         }
    }
 
