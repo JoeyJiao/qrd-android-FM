@@ -113,7 +113,7 @@
     <string name="preset_search">Search for "<xliff:g id="preset_pi">%1$s</xliff:g>"
         </string>
 
-    <string name="stat_notif_frequency">FM Radio Station "<xliff:g id="frequency">%1$s</xliff:g>"</string>
+    <string name="stat_notif_frequency">FM Radio Station "<xliff:g id="frequency">%1$s</xliff:g>" MHz</string>
     <string name="stat_notif_tx_frequency">FM Transmitting at: "<xliff:g id="frequency">%1$s</xliff:g>"</string>
 
 
@@ -233,4 +233,5 @@
     <string name="enter_rssi">Enter RMSSI Delta</string>
     <string name="enter_sigth">Enter Signal Th</string>
     <string name="station_name">Station</string>
+    <string name="station_exists">This frequency already exists!</string>
 </resources>
