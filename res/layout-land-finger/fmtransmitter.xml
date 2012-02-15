@@ -142,7 +142,7 @@
 			<ImageButton android:id="@+id/btn_onoff"
 				android:layout_width="70px" 
 				android:layout_height="60px"
-				android:src="@drawable/ic_btn_onoff" 
+				android:src="@drawable/btn_onoff" 
 				android:layout_marginBottom="15px" />
 		</LinearLayout>
 
