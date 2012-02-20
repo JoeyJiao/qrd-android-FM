@@ -476,7 +476,9 @@ public class FMRadio extends Activity
       }
       if(isRecordTimerActive() ) {
           try {
-               mRecordUpdateHandlerThread.interrupt();
+               if ( null != mRecordUpdateHandlerThread) {
+                    mRecordUpdateHandlerThread.interrupt();
+               }
           } catch (NullPointerException e) {
                e.printStackTrace();
           }
