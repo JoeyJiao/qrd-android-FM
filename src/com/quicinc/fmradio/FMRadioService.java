@@ -462,19 +462,20 @@ public class FMRadioService extends Service
             if(!isAntennaAvailable())
             {
                 /* Disable FM and let the UI know */
-                fmOff();
-                try
-                {
-                    /* Notify the UI/Activity, only if the service is "bound"
-                  by an activity and if Callbacks are registered
-                     */
-                    if((mServiceInUse) && (mCallbacks != null) )
-                    {
-                        mCallbacks.onDisabled();
+                if (isFmOn()) {
+                    fmOff();
+                    try {
+                        /*
+                         * Notify the UI/Activity, only if the service is
+                         * "bound" by an activity and if Callbacks are
+                         * registered
+                         */
+                        if ((mServiceInUse) && (mCallbacks != null)) {
+                            mCallbacks.onDisabled();
+                        }
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
                     }
-                } catch (RemoteException e)
-                {
-                    e.printStackTrace();
                 }
             }
             else
@@ -1023,6 +1024,7 @@ public class FMRadioService extends Service
                   case AudioManager.AUDIOFOCUS_LOSS:
                       Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_LOSS");
                       //intentional fall through.
+                      fmOff();
                   case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                       Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_LOSS_TRANSIENT");
                       if (mSpeakerPhoneOn) {
@@ -1538,6 +1540,8 @@ public class FMRadioService extends Service
          mReceiver = null;
       }
       stop();
+      Intent intent = new Intent(FMRadio.ACTION_EXIT_FM);
+      sendBroadcast(intent);
       return(bStatus);
    }
    /* Returns whether FM hardware is ON.
