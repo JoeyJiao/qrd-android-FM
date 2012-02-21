@@ -93,7 +93,6 @@ public class StationListActivity extends Activity implements
                 // {
                 // e.printStackTrace();
                 // }
-
                 return;
             } else {
                 Log.e(LOGTAG, "IFMRadioService onServiceConnected failed");
@@ -103,15 +102,13 @@ public class StationListActivity extends Activity implements
         public void onServiceDisconnected(ComponentName classname) {
         }
     };
-    private BroadcastReceiver mHeadsetReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (action.equals(Intent.ACTION_HEADSET_PLUG)) {
-                boolean mHeadsetPlugged = (intent.getIntExtra("state", 0) == 1);
-                if (!mHeadsetPlugged) {
-                    finish();
-                }
+            if (FMRadio.isHeadsetPlugOut(intent)) {
+                finish();
+            } else if (FMRadio.isFmOff(intent)) {
+                finish();
             }
         }
     };
@@ -151,7 +148,8 @@ public class StationListActivity extends Activity implements
         });
       IntentFilter filter = new IntentFilter();
       filter.addAction(Intent.ACTION_HEADSET_PLUG);
-      registerReceiver(mHeadsetReceiver, filter);
+      filter.addAction(FMRadio.ACTION_EXIT_FM);
+      registerReceiver(mReceiver, filter);
     }
 
     @Override
@@ -340,7 +338,7 @@ public class StationListActivity extends Activity implements
 
     @Override
     protected void onDestroy() {
-        unregisterReceiver(mHeadsetReceiver);
+        unregisterReceiver(mReceiver);
         super.onDestroy();
     }
 
