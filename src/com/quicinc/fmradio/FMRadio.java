@@ -258,11 +258,13 @@ public class FMRadio extends Activity
    private static final int TEXTSIZE_PARAMETER_FOR_NUMBER_PICKER = 21;
    //whether is the first headset plug event
    private boolean isFirst = true;
-
-   private  BroadcastReceiver mHeadsetReceiver =  new BroadcastReceiver(){
+   public static final int ACTION_HEADSET_PLUG_HEADSET_PLUG_EXTRA_STATE_VALUE_IN = 1;
+   public static final int ACTION_HEADSET_PLUG_HEADSET_PLUG_EXTRA_STATE_VALUE_OUT = 0;
+   public static final String ACTION_HEADSET_PLUG_EXTRA_STATE_NAME = "state";
+   public static final String ACTION_EXIT_FM = "com.quicinc.fmradio.exit";
+   private  BroadcastReceiver mReceiver =  new BroadcastReceiver(){
     @Override
     public void onReceive(Context context, Intent intent) {
-
         String action = intent.getAction();
         if (action.equals(Intent.ACTION_HEADSET_PLUG)) {
             //ignore the first headset event when start up
@@ -270,10 +272,11 @@ public class FMRadio extends Activity
                 isFirst = false;
                 return;
             }
-            boolean mHeadsetPlugged = (intent.getIntExtra("state", 0) == 1);
-            if(!mHeadsetPlugged){
+            if(isHeadsetPlugOut(intent)){
                 finish();
             }
+        }else if(isFmOff(intent)){
+                finish();
         }
     }
    };
@@ -416,7 +419,8 @@ public class FMRadio extends Activity
       }
       IntentFilter filter = new IntentFilter();
       filter.addAction(Intent.ACTION_HEADSET_PLUG);
-      registerReceiver(mHeadsetReceiver, filter);
+      filter.addAction(ACTION_EXIT_FM);
+      registerReceiver(mReceiver, filter);
    }
 
    /**
@@ -551,7 +555,6 @@ public class FMRadio extends Activity
    @Override
    public void onResume() {
       super.onResume();
-      Log.d(LOGTAG, "FMRadio: onResume =============================================");
       if(mPicker !=null){
           setDisplayvalue();
       }
@@ -584,7 +587,7 @@ public class FMRadio extends Activity
       unbindFromService(this);
       mService = null;
       Log.d(LOGTAG, "onDestroy: unbindFromService completed");
-      unregisterReceiver(mHeadsetReceiver);
+      unregisterReceiver(mReceiver);
       super.onDestroy();
    }
 
@@ -895,6 +898,22 @@ public class FMRadio extends Activity
       mRecordingMsgTV.setVisibility(vis);
    }
 
+   public static boolean isHeadsetPlugOut(Intent intent){
+       if(null == intent || !Intent.ACTION_HEADSET_PLUG.equals(intent.getAction())){
+           return false;
+       }
+       if (intent.getIntExtra(ACTION_HEADSET_PLUG_EXTRA_STATE_NAME,
+               ACTION_HEADSET_PLUG_HEADSET_PLUG_EXTRA_STATE_VALUE_OUT) != ACTION_HEADSET_PLUG_HEADSET_PLUG_EXTRA_STATE_VALUE_OUT) {
+           return false;
+       }
+       return true;
+   }
+   public static boolean isFmOff(Intent intent){
+       if(null == intent || !ACTION_EXIT_FM.equals(intent.getAction())){
+           return false;
+       }
+       return true;
+   }
    /* Recorder Thread processing */
    private Runnable doRecordProcessing = new Runnable() {
       public void run() {
@@ -2397,7 +2416,6 @@ public class FMRadio extends Activity
          }
          if (mOnOffButton != null) {
             mOnOffButton.setEnabled(false);
-//            mOnOffButton.setImageResource(R.drawable.ic_btn_onoff_normal);
          }
       }
       else if (isCallActive())
@@ -2407,7 +2425,6 @@ public class FMRadio extends Activity
          }
          if (mOnOffButton != null) {
             mOnOffButton.setEnabled(false);
-//            mOnOffButton.setImageResource(R.drawable.ic_btn_onoff_normal);
          }
       }
       else
@@ -2417,7 +2434,6 @@ public class FMRadio extends Activity
          }
          if (mOnOffButton != null) {
             mOnOffButton.setEnabled(true);
-//            mOnOffButton.setImageResource(R.drawable.ic_btn_onoff);
          }
       }
 
