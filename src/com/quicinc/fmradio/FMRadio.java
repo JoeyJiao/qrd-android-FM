@@ -480,7 +480,9 @@ public class FMRadio extends Activity
       }
       if(isRecordTimerActive() ) {
           try {
-               mRecordUpdateHandlerThread.interrupt();
+               if ( null != mRecordUpdateHandlerThread) {
+                    mRecordUpdateHandlerThread.interrupt();
+               }
           } catch (NullPointerException e) {
                e.printStackTrace();
           }
@@ -2152,6 +2154,32 @@ public class FMRadio extends Activity
       }
    }
 
+   private void resetRadio() {
+      boolean bSpeakerPhoneOn = isSpeakerEnabled();
+      resetSearch();
+      endSleepTimer();
+      if(mRecording)
+      {
+         //Stop if there is an ongoing Record
+         stopRecording();
+      }
+      if(mService != null)
+      {
+         try
+         {
+            if(bSpeakerPhoneOn)
+            {
+                mService.enableSpeaker(false);
+            }
+            mService.fmRadioReset();
+            enableRadioOnOffUI(false);
+         } catch (RemoteException e)
+         {
+            e.printStackTrace();
+         }
+      }
+   }
+
    public static boolean fmConfigure() {
       boolean bStatus = true;
       if(mService != null)
@@ -2444,6 +2472,12 @@ public class FMRadio extends Activity
         }
    }
 
+   private void resetSearchProgress() {
+      Message msg = new Message();
+      msg.what = END_PROGRESS_DLG;
+      mSearchProgressHandler.sendMessage(msg);
+   }
+
    private void updateSearchProgress() {
       boolean searchActive = isScanActive() || isSeekActive() || isSearchActive();
       if(searchActive)
@@ -2693,6 +2727,13 @@ public class FMRadio extends Activity
          }
       }
       updateSearchProgress();
+   }
+
+   private void resetSearch() {
+      mIsScaning = false;
+      mIsSeeking = false;
+      mIsSearching = false;
+      resetSearchProgress();
    }
 
    private void cancelSearch() {
@@ -3090,6 +3131,12 @@ public class FMRadio extends Activity
          stopRecording();
          cancelSearch();
          enableRadioOnOffUI(false);
+      }
+   };
+   final Runnable mRadioReset = new Runnable() {
+      public void run() {
+         /* Update UI to FM Reset (Off) State */
+         resetRadio();
       }
    };
 
@@ -3539,6 +3586,11 @@ public class FMRadio extends Activity
       {
          Log.d(LOGTAG, "mServiceCallbacks.onDisabled :");
          mHandler.post(mRadioDisabled);
+      }
+      public void onRadioReset()
+      {
+         Log.d(LOGTAG, "mServiceCallbacks.onRadioReset :");
+         mHandler.post(mRadioReset);
       }
 
       public void onTuneStatusChanged(int frequency)
