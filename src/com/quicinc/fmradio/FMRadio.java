@@ -1346,8 +1346,7 @@ public class FMRadio extends Activity
                          // Replace preset Station with currently tuned station
 //                         Log.d(LOGTAG, "station - " + mPresetButtonStation.getName() + " ("
 //                               + mPresetButtonStation.getFrequency() + ")");
-                         if(!stationExists(mTunedStation.getFrequency(),
-                                 mPrefs.getCurrentListIndex())){
+                         if(!stationExists(mTunedStation)){
                              mPresetButtonStation.Copy(mTunedStation);
                              mPresetButtonStation = null;
                              setupPresetLayout();
@@ -2308,8 +2307,8 @@ public class FMRadio extends Activity
       return(speakerEnabled);
    }
 
-   private boolean stationExists(int freq , int index){
-       boolean exists = FmSharedPreferences.stationExists(freq , index);
+   private boolean stationExists(PresetStation station ){
+       boolean exists = FmSharedPreferences.sameStationExists(station);
        if(exists){
            Toast t = Toast.makeText(this, getString(R.string.station_exists), Toast.LENGTH_SHORT);
            t.show();
@@ -2319,7 +2318,7 @@ public class FMRadio extends Activity
    private void addToPresets() {
       int currentList = FmSharedPreferences.getCurrentListIndex();
       PresetStation selectedStation = getCurrentTunedStation();
-      if(!stationExists(selectedStation.getFrequency(),currentList)){
+      if(!stationExists(selectedStation)){
           FmSharedPreferences.addStation(selectedStation.getName(), selectedStation
                   .getFrequency(), currentList);
           setupPresetLayout();
