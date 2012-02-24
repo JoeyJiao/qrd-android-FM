@@ -109,6 +109,7 @@ public class FMRadioService extends Service
    private boolean mFMOn = false;
    private boolean mFmRecordingOn = false;
    private boolean mSpeakerPhoneOn = false;
+   private int mCallStatus = 0;
    private static boolean mRadioState = true;
    private BroadcastReceiver mScreenOnOffReceiver = null;
    final Handler mHandler = new Handler();
@@ -982,6 +983,7 @@ public class FMRadioService extends Service
    //if Call Status is non IDLE we need to Mute FM as well stop recording if
    //any. Similarly once call is ended FM should be unmuted.
        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+       mCallStatus = state;
 
        if((TelephonyManager.CALL_STATE_OFFHOOK == state)||
           (TelephonyManager.CALL_STATE_RINGING == state)) {
@@ -993,6 +995,7 @@ public class FMRadioService extends Service
            }
        boolean bTempSpeaker = mSpeakerPhoneOn; //need to restore SpeakerPhone
        boolean bTempMute    = mMuted;// need to restore Mute status
+       int bTempCall = mCallStatus;//need to restore call status
        fmOff();
        try
            {
@@ -1008,6 +1011,7 @@ public class FMRadioService extends Service
             }
            mResumeAfterCall = true;
            mSpeakerPhoneOn = bTempSpeaker;
+           mCallStatus = bTempCall;
            mMuted = bTempMute;
        }
        else if (state == TelephonyManager.CALL_STATE_IDLE) {
@@ -2302,8 +2306,7 @@ public class FMRadioService extends Service
    }
    public int getCallState()
    {
-       TelephonyManager tmgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-       return tmgr.getCallState();
+       return mCallStatus;
    }
 
    /* Receiver callbacks back from the FM Stack */
