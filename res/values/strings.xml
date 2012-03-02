@@ -234,4 +234,5 @@
     <string name="enter_sigth">Enter Signal Th</string>
     <string name="station_name">Station</string>
     <string name="station_exists">This frequency already exists!</string>
+    <string name="cannot_startup_during_call">Can not start FM during call!</string>
 </resources>

@@ -370,7 +370,7 @@ public class Settings extends PreferenceActivity implements
             {
                mRecordDurPreference.setValueIndex(0);
             }
-                                mAfPref.setChecked(false);
+                                mAfPref.setChecked(true);
                                 FmSharedPreferences.SetDefaults();
                         }
                         else
