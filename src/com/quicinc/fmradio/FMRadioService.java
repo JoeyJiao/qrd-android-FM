@@ -988,6 +988,7 @@ public class FMRadioService extends Service
        boolean bTempSpeaker = mSpeakerPhoneOn; //need to restore SpeakerPhone
        boolean bTempMute    = mMuted;// need to restore Mute status
        int bTempCall = mCallStatus;//need to restore call status
+       mResumeAfterCall = true;
        fmOff();
        try
            {
@@ -1001,7 +1002,7 @@ public class FMRadioService extends Service
             {
                 e.printStackTrace();
             }
-           mResumeAfterCall = true;
+           //mResumeAfterCall = true;
            mSpeakerPhoneOn = bTempSpeaker;
            mCallStatus = bTempCall;
            mMuted = bTempMute;
@@ -1673,8 +1674,10 @@ public class FMRadioService extends Service
          mReceiver = null;
       }
       stop();
-      Intent intent = new Intent(FMRadio.ACTION_EXIT_FM);
-      sendBroadcast(intent);
+      if(!mResumeAfterCall){
+          Intent intent = new Intent(FMRadio.ACTION_EXIT_FM);
+          sendBroadcast(intent);
+      }
       return(bStatus);
    }
 
