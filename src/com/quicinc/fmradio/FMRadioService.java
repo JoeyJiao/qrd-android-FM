@@ -143,6 +143,7 @@ public class FMRadioService extends Service
    private boolean mSingleRecordingInstanceSupported = false;
 
    private static final String IOBUSY_UNVOTE = "com.android.server.CpuGovernorService.action.IOBUSY_UNVOTE";
+   private PhoneStateListener[] mPhoneStateListeners;
 
    public FMRadioService() {
    }
@@ -150,12 +151,18 @@ public class FMRadioService extends Service
    @Override
    public void onCreate() {
       super.onCreate();
-
       mPrefs = new FmSharedPreferences(this);
       mCallbacks = null;
       TelephonyManager tmgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-      tmgr.listen(mPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE |
-                                       PhoneStateListener.LISTEN_DATA_ACTIVITY);
+      //listen to double sims
+      int phoneCount = TelephonyManager.getDefault().getPhoneCount();
+      mPhoneStateListeners = new PhoneStateListener[phoneCount];
+      for (int i = 0; i < phoneCount; i++) {
+          mPhoneStateListeners[i] = getPhoneStateListener(i);
+          tmgr.listen(mPhoneStateListeners[i],
+                  PhoneStateListener.LISTEN_CALL_STATE |
+                  PhoneStateListener.LISTEN_DATA_ACTIVITY);
+      }
       PowerManager pm = (PowerManager)getSystemService(Context.POWER_SERVICE);
       mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, this.getClass().getName());
       mWakeLock.setReferenceCounted(false);
@@ -181,7 +188,6 @@ public class FMRadioService extends Service
       msg.what = FM_STOP;
       mDelayedStopHandler.sendMessageDelayed(msg, IDLE_DELAY);
    }
-
    @Override
    public void onDestroy() {
       Log.d(LOGTAG, "onDestroy");
@@ -222,7 +228,9 @@ public class FMRadioService extends Service
       fmOff();
 
       TelephonyManager tmgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-      tmgr.listen(mPhoneStateListener, 0);
+        for (int i = 0; i < TelephonyManager.getDefault().getPhoneCount(); i++) {
+            tmgr.listen(mPhoneStateListeners[i], 0);
+        }
 
       Log.d(LOGTAG, "onDestroy: unbindFromService completed");
 
@@ -1042,39 +1050,42 @@ public class FMRadioService extends Service
    }
 
     /* Handle Phone Call + FM Concurrency */
-   private PhoneStateListener mPhoneStateListener = new PhoneStateListener() {
-      @Override
-      public void onCallStateChanged(int state, String incomingNumber) {
-          Log.d(LOGTAG, "onCallStateChanged: State - " + state );
-          Log.d(LOGTAG, "onCallStateChanged: incomingNumber - " + incomingNumber );
-          fmActionOnCallState(state );
-      }
+   private PhoneStateListener getPhoneStateListener(int sub) {
+       PhoneStateListener phoneStateListener = new PhoneStateListener(sub) {
+           public void onCallStateChanged(int state, String incomingNumber) {
+               Log.d(LOGTAG,"mSubscription:" + mSubscription);
+               Log.d(LOGTAG, "onCallStateChanged mSubscription: State - " + state);
+               Log.d(LOGTAG, "onCallStateChanged: incomingNumber - "
+                       + incomingNumber);
+               fmActionOnCallState(state);
+           }
+           @Override
+           public void onDataActivity (int direction) {
+               Log.d(LOGTAG, "onDataActivity - " + direction );
+               if (direction == TelephonyManager.DATA_ACTIVITY_NONE ||
+                   direction == TelephonyManager.DATA_ACTIVITY_DORMANT) {
+                      if (mReceiver != null) {
+                            Message msg = mDelayedStopHandler.obtainMessage(RESET_NOTCH_FILTER);
+                            mDelayedStopHandler.sendMessageDelayed(msg, 10000);
+                      }
+              } else {
+                    if (mReceiver != null) {
+                        if( true == mNotchFilterSet )
+                        {
+                            mDelayedStopHandler.removeMessages(RESET_NOTCH_FILTER);
+                        }
+                        else
+                        {
+                            mReceiver.setNotchFilter(true);
+                            mNotchFilterSet = true;
+                        }
+                    }
+              }
+           }
+      };
 
-      @Override
-      public void onDataActivity (int direction) {
-          Log.d(LOGTAG, "onDataActivity - " + direction );
-          if (direction == TelephonyManager.DATA_ACTIVITY_NONE ||
-              direction == TelephonyManager.DATA_ACTIVITY_DORMANT) {
-                 if (mReceiver != null) {
-                       Message msg = mDelayedStopHandler.obtainMessage(RESET_NOTCH_FILTER);
-                       mDelayedStopHandler.sendMessageDelayed(msg, 10000);
-                 }
-         } else {
-               if (mReceiver != null) {
-                   if( true == mNotchFilterSet )
-                   {
-                       mDelayedStopHandler.removeMessages(RESET_NOTCH_FILTER);
-                   }
-                   else
-                   {
-                       mReceiver.setNotchFilter(true);
-                       mNotchFilterSet = true;
-                   }
-               }
-         }
-      }
- };
-
+ return phoneStateListener;
+}
    private Handler mDelayedStopHandler = new Handler() {
       @Override
       public void handleMessage(Message msg) {
