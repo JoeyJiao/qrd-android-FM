@@ -301,7 +301,6 @@ public class FMRadio extends Activity
       mPrefs = new FmSharedPreferences(this);
       mCommandActive = CMD_NONE;
       mCommandFailed = CMD_NONE;
-
       Log.d(LOGTAG, "onCreate - Height : "+ getWindowManager().getDefaultDisplay().getHeight()
             + " - Width  : "+ getWindowManager().getDefaultDisplay().getWidth());
       mDisplayWidth = getWindowManager().getDefaultDisplay().getWidth();
@@ -403,9 +402,13 @@ public class FMRadio extends Activity
          mRadioTextScroller = new ScrollerText(mRadioTextTV);
       }
 
-      //listen call status
-      mTmgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-      mTmgr.listen(mPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+        mTmgr = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+        if (TelephonyManager.getDefault().getCallState() == TelephonyManager.CALL_STATE_OFFHOOK
+                || TelephonyManager.getDefault().getCallState() == TelephonyManager.CALL_STATE_RINGING) {
+            Toast.makeText(FMRadio.this, R.string.cannot_startup_during_call,
+                    Toast.LENGTH_SHORT).show();
+            finish();
+        }
 //      enableRadioOnOffUI(false);
       //HDMI and FM concurrecny is not supported.
       if (isHdmiOn())
@@ -460,6 +463,7 @@ public class FMRadio extends Activity
        mFrequency = mPrefs.getLowerLimit() + value*mPrefs.getFrequencyStepSize();
        return mFrequency;
    }
+
    @Override
    public void onRestart() {
       Log.d(LOGTAG, "FMRadio: onRestart");
@@ -602,7 +606,6 @@ public class FMRadio extends Activity
       mService = null;
       Log.d(LOGTAG, "onDestroy: unbindFromService completed");
       mIsHomeKeyPressed = false;
-      mTmgr.listen(mPhoneStateListener, 0);
       super.onDestroy();
    }
 
@@ -3087,15 +3090,6 @@ public class FMRadio extends Activity
       mUpdatePickerValue = true;
       updateStationInfoToUI();
    }
-   private PhoneStateListener mPhoneStateListener = new PhoneStateListener() {
-       @Override
-       public void onCallStateChanged(int state, String incomingNumber) {
-           if(state ==  TelephonyManager.CALL_STATE_OFFHOOK){
-               Toast.makeText(FMRadio.this, R.string.cannot_startup_during_call, Toast.LENGTH_SHORT).show();
-               finish();
-           }
-       }
-   };
    final Runnable mRadioEnabled = new Runnable() {
       public void run() {
          /* Update UI to FM On State */
