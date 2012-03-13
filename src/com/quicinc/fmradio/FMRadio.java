@@ -238,6 +238,7 @@ public class FMRadio extends Activity
    private static boolean mIsScaning = false;
    private static boolean mIsSeeking = false;
    private static boolean mIsSearching = false;
+   private static boolean mIsHomeKeyPressed = false;
    private static int mScanPty = 0;
 
    private Animation mAnimation = null;
@@ -513,6 +514,7 @@ public class FMRadio extends Activity
             }
           }
       }
+      mIsHomeKeyPressed = true;
       super.onStop();
    }
 
@@ -604,9 +606,18 @@ public class FMRadio extends Activity
       mService = null;
       Log.d(LOGTAG, "onDestroy: unbindFromService completed");
       unregisterReceiver(mReceiver);
+      mIsHomeKeyPressed = false;
       super.onDestroy();
    }
 
+   public void onActivityFinish() {
+      Log.d(LOGTAG, "onActivityFinish:");
+      if (!hasWindowFocus() && (mService != null) && mIsHomeKeyPressed) {
+         mIsHomeKeyPressed = false;
+         unbindFromService(this);
+         finish();
+      }
+   }
    @Override
    public boolean onCreateOptionsMenu(Menu menu) {
       super.onCreateOptionsMenu(menu);
@@ -2385,6 +2396,7 @@ public class FMRadio extends Activity
          if (mRadioTextTV != null) {
             mRadioTextTV.setVisibility(View.VISIBLE);
             mRadioTextTV.setText(getString(R.string.msg_noantenna));
+            mRadioTextScroller.mOriginalString = getString(R.string.msg_noantenna);
          }
          if (mOnOffButton != null) {
             mOnOffButton.setEnabled(false);
@@ -2394,6 +2406,7 @@ public class FMRadio extends Activity
       {
          if (mRadioTextTV != null) {
             mRadioTextTV.setText("");
+            mRadioTextScroller.mOriginalString = "";
          }
          if (mOnOffButton != null) {
             mOnOffButton.setEnabled(false);
@@ -2403,6 +2416,7 @@ public class FMRadio extends Activity
       {
          if (mRadioTextTV != null) {
             mRadioTextTV.setText("");
+            mRadioTextScroller.mOriginalString = "";
          }
          if (mOnOffButton != null) {
             mOnOffButton.setEnabled(true);
@@ -2523,6 +2537,7 @@ public class FMRadio extends Activity
       mStationCallSignTV.setText(mTunedStation.getPIString());
       mProgramTypeTV.setText(mTunedStation.getPtyString());
       mRadioTextTV.setText("");
+      mRadioTextScroller.mOriginalString = "";
       mProgramServiceTV.setText("");
       mStereoTV.setText("");
       setupPresetLayout();
@@ -3068,6 +3083,7 @@ public class FMRadio extends Activity
       //mTunedStation.setPI(20942);
       mTunedStation.setPty(0);
       mRadioTextTV.setText("");
+      mRadioTextScroller.mOriginalString = "";
       mProgramServiceTV.setText("");
       mRadioTextScroller.stopScroll();
       mUpdatePickerValue = true;
@@ -3227,11 +3243,13 @@ public class FMRadio extends Activity
                {
                   Log.d(LOGTAG, "mUpdateRadioText: Updatable string: [" + str + "]");
                   mRadioTextTV.setText(str);
+                  mRadioTextScroller.mOriginalString = str;
                }
                /* Rest the string to empty*/
                else if (TextUtils.isEmpty(str))
                {
                   mRadioTextTV.setText("");
+                  mRadioTextScroller.mOriginalString = "";
                } else
                {
                   //Log.d(LOGTAG, "mUpdateRadioText: Leaving old string " + mRadioTextTV.getText());
@@ -3659,6 +3677,11 @@ public class FMRadio extends Activity
       {
          Log.d(LOGTAG, "mServiceCallbacks.onRecordingStopped:");
          stopRecording();
+      }
+      public void onFinishActivity()
+      {
+         Log.d(LOGTAG, "mServiceCallbacks.onFinish:");
+         onActivityFinish();
       }
    };
 }
