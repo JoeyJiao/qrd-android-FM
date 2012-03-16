@@ -307,6 +307,9 @@ public class FMRadioService extends Service
                           mReceiver = null;
                           stop();
                        }
+                       if(mHeadsetPlugged == false
+                               && isCallActive())
+                           FMRadioService.this.stopSelf();
                        mHandler.post(mHeadsetPluginHandler);
                     } else if(mA2dpDeviceState.isA2dpStateChange(action) ) {
                         boolean  bA2dpConnected =
@@ -1043,7 +1046,16 @@ public class FMRadioService extends Service
                             e.printStackTrace();
                         }
                     }
-                 }
+                 //activity is destroyed.....
+                } else if((isAntennaAvailable())
+                        && mRadioState) {
+                    if (true != fmOn()) {
+                        Log.d(LOGTAG, "fmOn failed.......");
+                    } else {
+                        tune(mPrefs.getTunedFrequency());
+                    }
+                    mResumeAfterCall = false;
+                }
           }
        }//idle
    }
@@ -1227,12 +1239,13 @@ public class FMRadioService extends Service
 
    private void stop() {
       Log.d(LOGTAG,"in stop");
-      try {
-           if (mFMOn && (mCallbacks != null))
-               mCallbacks. onFinishActivity();
-      } catch (RemoteException e) {
-           e.printStackTrace();
-      }
+      //will exit in fmoff , no need exit here.
+//      try {
+//           if (mFMOn && (mCallbacks != null))
+//               mCallbacks. onFinishActivity();
+//      } catch (RemoteException e) {
+//           e.printStackTrace();
+//      }
       if (!mServiceInUse) {
           Log.d(LOGTAG,"calling unregisterMediaButtonEventReceiver in stop");
           mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
