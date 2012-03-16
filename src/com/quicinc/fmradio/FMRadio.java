@@ -274,6 +274,7 @@ public class FMRadio extends Activity
    private static final int FREQUENCY_STEP_MEDIUM = 100;
    private static final int FREQUENCY_STEP_LARGE = 200;
    private  boolean mIsFirstStationSearched = false;
+   private  boolean mStartInCall = false;
    private TelephonyManager mTmgr;
    private  BroadcastReceiver mReceiver =  new BroadcastReceiver(){
     @Override
@@ -324,7 +325,6 @@ public class FMRadio extends Activity
       }
       mAnimation = AnimationUtils.loadAnimation(this,
                                                 R.anim.preset_select);
-
 //      mMuteButton = (ImageButton) findViewById(R.id.btn_silent);
 
 //      if (mMuteButton != null)
@@ -403,32 +403,34 @@ public class FMRadio extends Activity
       }
 
         mTmgr = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
-        if (TelephonyManager.getDefault().getCallState() == TelephonyManager.CALL_STATE_OFFHOOK
-                || TelephonyManager.getDefault().getCallState() == TelephonyManager.CALL_STATE_RINGING) {
+        if (mTmgr.getCallState() == TelephonyManager.CALL_STATE_OFFHOOK
+                || mTmgr.getCallState() == TelephonyManager.CALL_STATE_RINGING) {
             Toast.makeText(FMRadio.this, R.string.cannot_startup_during_call,
                     Toast.LENGTH_SHORT).show();
+            mStartInCall = true;
             finish();
+        }else{
+            mStartInCall = false;
         }
-//      enableRadioOnOffUI(false);
-      //HDMI and FM concurrecny is not supported.
-      if (isHdmiOn())
-      {
-         showDialog(DIALOG_CMD_FAILED_HDMI_ON);
-      }
-      else {
+        if (!mStartInCall) {
+            // enableRadioOnOffUI(false);
+            // HDMI and FM concurrecny is not supported.
+            if (isHdmiOn()) {
+                showDialog(DIALOG_CMD_FAILED_HDMI_ON);
+            } else {
 
-         if (false == bindToService(this, osc))
-         {
-            Log.d(LOGTAG, "onCreate: Failed to Start Service");
-         } else
-         {
-            Log.d(LOGTAG, "onCreate: Start Service completed successfully");
-         }
-      }
-      IntentFilter filter = new IntentFilter();
-      filter.addAction(Intent.ACTION_HEADSET_PLUG);
-      filter.addAction(ACTION_EXIT_FM);
-      registerReceiver(mReceiver, filter);
+                if (false == bindToService(this, osc)) {
+                    Log.d(LOGTAG, "onCreate: Failed to Start Service");
+                } else {
+                    Log.d(LOGTAG,
+                            "onCreate: Start Service completed successfully");
+                }
+            }
+        }
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_HEADSET_PLUG);
+        filter.addAction(ACTION_EXIT_FM);
+        registerReceiver(mReceiver, filter);
    }
 
    /**
@@ -557,7 +559,6 @@ public class FMRadio extends Activity
               initiateRecordThread();
           }
       }
-
    }
 
    @Override
@@ -3429,6 +3430,8 @@ public class FMRadio extends Activity
          final TextView textView = mView.get();
          if (textView != null)
          {
+            // update length before use.
+            mStringlength = mOriginalString.length();
             String szStr2 = "";
             if (mStringlength > 0)
             {
