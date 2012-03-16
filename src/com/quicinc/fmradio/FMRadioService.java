@@ -310,6 +310,9 @@ public class FMRadioService extends Service
                           if(!isFmRecordingOn())
                              stop();
                        }
+                       if(mHeadsetPlugged == false
+                               && isCallActive())
+                           FMRadioService.this.stopSelf();
                        mHandler.post(mHeadsetPluginHandler);
                     } else if(mA2dpDeviceState.isA2dpStateChange(action) ) {
                         boolean  bA2dpConnected =
@@ -1021,22 +1024,33 @@ public class FMRadioService extends Service
           {
              // resume playback only if FM Radio was playing
              // when the call was answered
-              if ((isAntennaAvailable()) && (!isFmOn())
-                   && (mServiceInUse) && (mCallbacks != null))
-              {
-                   Log.d(LOGTAG, "Resuming after call:" );
-                   if( true != fmOn() ) {
-                       return;
-                   }
-                   mResumeAfterCall = false;
-                   try
-                   {
-                       mCallbacks.onEnabled();
-                   } catch (RemoteException e)
-                   {
-                       e.printStackTrace();
-                   }
-              }
+              if ( (isAntennaAvailable())
+                        && (!isFmOn())
+                        && (mServiceInUse)
+                        && (mCallbacks != null))
+                {
+                        if( true != fmOn() ) {
+                            return;
+                        }
+                        mResumeAfterCall = false;
+                        try
+                        {
+                            mCallbacks.onEnabled();
+                        } catch (RemoteException e)
+                        {
+                            e.printStackTrace();
+                        }
+                    
+                 //activity is destroyed.....
+                } else if((isAntennaAvailable())
+                         ) {
+                    if (true != fmOn()) {
+                        Log.d(LOGTAG, "fmOn failed.......");
+                    } else {
+                        tune(mPrefs.getTunedFrequency());
+                    }
+                    mResumeAfterCall = false;
+                }
           }
        }//idle
    }
@@ -1220,12 +1234,13 @@ public class FMRadioService extends Service
 
    private void stop() {
       Log.d(LOGTAG,"in stop");
-      try {
-           if (mFMOn && (mCallbacks != null))
-               mCallbacks. onFinishActivity();
-      } catch (RemoteException e) {
-           e.printStackTrace();
-      }
+      //will exit in fmoff , no need exit here.
+//      try {
+//           if (mFMOn && (mCallbacks != null))
+//               mCallbacks. onFinishActivity();
+//      } catch (RemoteException e) {
+//           e.printStackTrace();
+//      }
       if (!mServiceInUse) {
           Log.d(LOGTAG,"calling unregisterMediaButtonEventReceiver in stop");
           mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
