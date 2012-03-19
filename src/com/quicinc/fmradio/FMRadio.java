@@ -325,13 +325,6 @@ public class FMRadio extends Activity
       }
       mAnimation = AnimationUtils.loadAnimation(this,
                                                 R.anim.preset_select);
-//      mMuteButton = (ImageButton) findViewById(R.id.btn_silent);
-
-//      if (mMuteButton != null)
-//      {
-//         mMuteButton.setOnClickListener(mMuteModeClickListener);
-//      }
-
       mSpeakerButton = (ImageView)findViewById(R.id.btn_speaker_earphone);
       if(mSpeakerButton != null){
           mSpeakerButton.setOnClickListener(mSpeakerClickListener); 
@@ -377,10 +370,7 @@ public class FMRadio extends Activity
       }
 
       mTuneStationFrequencyTV = (TextView) findViewById(R.id.prog_frequency_tv);
-//      if (mTuneStationFrequencyTV != null)
-//      {
-//         mTuneStationFrequencyTV.setOnLongClickListener(mFrequencyViewClickListener);
-//      }
+
       mProgramServiceTV = (TextView) findViewById(R.id.prog_service_tv);
       mStereoTV = (TextView) findViewById(R.id.stereo_text_tv);
 
