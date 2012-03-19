@@ -108,6 +108,7 @@ public class FmSharedPreferences
    private static final String PREF_LAST_TUNED_FREQUENCY = "last_frequency";
    private static final String LAST_RECORD_DURATION = "last_record_duration";
    private static String  LAST_AF_JUMP_VALUE = "last_af_jump_value";
+   private static final String AUDIO_OUTPUT_MODE = "audio_output_mode";
 
    private static Map<String, String> mNameMap = new HashMap<String, String>();
    private static List<PresetList> mListOfPlists = new ArrayList<PresetList>();
@@ -396,6 +397,7 @@ public class FmSharedPreferences
       mTunedFrequency = sp.getInt(PREF_LAST_TUNED_FREQUENCY, DEFAULT_NO_FREQUENCY);
       mRecordDuration = sp.getInt(LAST_RECORD_DURATION, RECORD_DUR_INDEX_0_VAL);
       mAFAutoSwitch = sp.getBoolean(LAST_AF_JUMP_VALUE, true);
+      mAudioOutputMode = sp.getBoolean(AUDIO_OUTPUT_MODE, true);
      /* Reset the Lists before reading the preferences */
       mListOfPlists.clear();
 
@@ -498,6 +500,7 @@ public class FmSharedPreferences
       ed.putInt(FMCONFIG_COUNTRY, mCountry);
       ed.putInt(LAST_RECORD_DURATION, mRecordDuration);
       ed.putBoolean(LAST_AF_JUMP_VALUE, mAFAutoSwitch);
+      ed.putBoolean(AUDIO_OUTPUT_MODE, mAudioOutputMode);
       ed.commit();
    }
 
