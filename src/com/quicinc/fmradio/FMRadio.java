@@ -325,13 +325,6 @@ public class FMRadio extends Activity
       }
       mAnimation = AnimationUtils.loadAnimation(this,
                                                 R.anim.preset_select);
-//      mMuteButton = (ImageButton) findViewById(R.id.btn_silent);
-
-//      if (mMuteButton != null)
-//      {
-//         mMuteButton.setOnClickListener(mMuteModeClickListener);
-//      }
-
       mSpeakerButton = (ImageView)findViewById(R.id.btn_speaker_earphone);
       if(mSpeakerButton != null){
           mSpeakerButton.setOnClickListener(mSpeakerClickListener); 
@@ -377,10 +370,7 @@ public class FMRadio extends Activity
       }
 
       mTuneStationFrequencyTV = (TextView) findViewById(R.id.prog_frequency_tv);
-//      if (mTuneStationFrequencyTV != null)
-//      {
-//         mTuneStationFrequencyTV.setOnLongClickListener(mFrequencyViewClickListener);
-//      }
+
       mProgramServiceTV = (TextView) findViewById(R.id.prog_service_tv);
       mStereoTV = (TextView) findViewById(R.id.stereo_text_tv);
 
@@ -606,6 +596,7 @@ public class FMRadio extends Activity
       unbindFromService(this);
       mService = null;
       Log.d(LOGTAG, "onDestroy: unbindFromService completed");
+      unregisterReceiver(mReceiver);
       mIsHomeKeyPressed = false;
       super.onDestroy();
    }
@@ -1961,13 +1952,6 @@ public class FMRadio extends Activity
       }
    };
 
-   final FrequencyPickerDialog.OnFrequencySetListener mFrequencyChangeListener
-   = new FrequencyPickerDialog.OnFrequencySetListener() {
-      public void onFrequencySet(FrequencyPicker view, int frequency) {
-         Log.d(LOGTAG, "mFrequencyChangeListener: onFrequencyChanged to : "+frequency);
-         tuneRadio(frequency);
-      }
-   };
 
     private View.OnClickListener mSpeakerClickListener = new View.OnClickListener() {
 
@@ -2164,12 +2148,14 @@ public class FMRadio extends Activity
          }
       }
    }
+
    private void resetRadio() {
       boolean bSpeakerPhoneOn = isSpeakerEnabled();
       resetSearch();
       endSleepTimer();
       if(mRecording)
       {
+         //Stop if there is an ongoing Record
          stopRecording();
       }
       if(mService != null)
@@ -2475,6 +2461,8 @@ public class FMRadio extends Activity
         else{
            mSpeakerButton.setImageResource(R.drawable.btn_earphone);
         }
+   }
+
    private void resetSearchProgress() {
       Message msg = new Message();
       msg.what = END_PROGRESS_DLG;
@@ -2739,6 +2727,7 @@ public class FMRadio extends Activity
       mIsSearching = false;
       resetSearchProgress();
    }
+
    private void cancelSearch() {
       synchronized (this)
       {
@@ -3565,7 +3554,6 @@ public class FMRadio extends Activity
             try
             {
                mService.registerCallbacks(mServiceCallbacks);
-
                enableRadio();
             } catch (RemoteException e)
             {
@@ -3610,7 +3598,7 @@ public class FMRadio extends Activity
          Log.d(LOGTAG, "mServiceCallbacks.onRadioReset :");
          mHandler.post(mRadioReset);
       }
-	  
+
       public void onTuneStatusChanged(int frequency)
       {
          Log.d(LOGTAG, "mServiceCallbacks.onTuneStatusChanged :");

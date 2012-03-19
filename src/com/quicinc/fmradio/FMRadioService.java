@@ -552,7 +552,6 @@ public class FMRadioService extends Service
       AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
       audioManager.requestAudioFocus(mAudioFocusListener, AudioManager.STREAM_FM,
               AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
-
       // make sure the service will shut down on its own if it was
       // just started but not bound to and nothing is playing
       mDelayedStopHandler.removeCallbacksAndMessages(null);
@@ -575,7 +574,6 @@ public class FMRadioService extends Service
          // an in-progress call ends, so don't stop the service now.
          return true;
       }
-
       stopSelf(mServiceStartId);
       return true;
    }
