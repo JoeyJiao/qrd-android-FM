@@ -93,6 +93,7 @@ public class FMRadioService extends Service
    private BroadcastReceiver mHeadsetReceiver = null;
    private BroadcastReceiver mSdcardUnmountReceiver = null;
    private BroadcastReceiver mMusicCommandListener = null;
+   private BroadcastReceiver mAirplaneModeChangeListener = null;
    private boolean mOverA2DP = false;
    private BroadcastReceiver mFmMediaButtonListener;
    private IFMRadioServiceCallbacks mCallbacks;
@@ -174,6 +175,7 @@ public class FMRadioService extends Service
       registerScreenOnOffListener();
       registerHeadsetListener();
       registerExternalStorageListener();
+      registerAirplaneModeChangeListener();
       // registering media button receiver seperately as we need to set
       // different priority for receiving media events
       registerFmMediaButtonReceiver();
@@ -225,7 +227,10 @@ public class FMRadioService extends Service
           unregisterReceiver(mFmMediaButtonListener);
           mFmMediaButtonListener = null;
       }
-
+      if(mAirplaneModeChangeListener != null){
+          unregisterReceiver(mAirplaneModeChangeListener);
+          mAirplaneModeChangeListener = null;
+      }
       /* Since the service is closing, disable the receiver */
       fmOff();
 
@@ -279,6 +284,32 @@ public class FMRadioService extends Service
          }
      }
 
+    /**
+     * Register an intent to listen for airplane mode change.
+     */
+    public void registerAirplaneModeChangeListener(){
+        if(mAirplaneModeChangeListener == null){
+            mAirplaneModeChangeListener = new BroadcastReceiver(){
+
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    // TODO Auto-generated method stub
+                    String action = intent.getAction();
+                    if(action.equals(Intent.ACTION_AIRPLANE_MODE_CHANGED)){
+                        boolean enabled = intent.getBooleanExtra("state", false);
+                        Log.d(LOGTAG,"airplane enable state is:" + enabled);
+                        if(enabled){
+                            //exit FM Radio
+                            fmOff();
+                        }
+                    }
+                }
+            };
+            IntentFilter iFilter = new IntentFilter();
+            iFilter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
+            registerReceiver(mAirplaneModeChangeListener, iFilter);
+        }
+    }
 
      /**
      * Registers an intent to listen for ACTION_HEADSET_PLUG

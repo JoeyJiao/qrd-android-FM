@@ -94,4 +94,5 @@
     <string name="station_exists">此频率已存在!</string>
     <string name="stat_notif_frequency">FM 收音机 "<xliff:g id="frequency">%1$s</xliff:g>" MHz</string>
     <string name="cannot_startup_during_call">通话中不能启动FM！</string>
+    <string name="cannot_startup_during_airplane">"飞行模式中不能启动FM！"</string>
 </resources>

@@ -276,6 +276,7 @@ public class FMRadio extends Activity
    private  boolean mIsFirstStationSearched = false;
    private  boolean mStartInCall = false;
    private TelephonyManager mTmgr;
+   private boolean mStartInAirplane = false;
    private  BroadcastReceiver mReceiver =  new BroadcastReceiver(){
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -402,7 +403,16 @@ public class FMRadio extends Activity
         }else{
             mStartInCall = false;
         }
-        if (!mStartInCall) {
+        //can not start up fm in airplane mode.
+        if(isAirplaneModeOn()){
+            Toast.makeText(FMRadio.this, R.string.cannot_startup_during_airplane,
+                    Toast.LENGTH_SHORT).show();
+            finish();
+            mStartInAirplane = true;
+        }else{
+            mStartInAirplane = false;
+        }
+        if (!mStartInCall && !mStartInAirplane) {
             // enableRadioOnOffUI(false);
             // HDMI and FM concurrecny is not supported.
             if (isHdmiOn()) {
@@ -3348,6 +3358,10 @@ public class FMRadio extends Activity
       Log.d(LOGTAG, "Debug:" + str);
    }
 
+   private boolean isAirplaneModeOn() {
+                return android.provider.Settings.System.getInt(getContentResolver(),
+                        android.provider.Settings.System.AIRPLANE_MODE_ON, 0) != 0;
+   }
    /**
     * This Handler will scroll the text view.
     * On startScroll, the scrolling starts after SCROLLER_START_DELAY_MS
