@@ -174,8 +174,8 @@ public class StationListActivity extends Activity implements
             ContextMenuInfo menuInfo) {
         // TODO Auto-generated method stub
         AdapterContextMenuInfo mi = (AdapterContextMenuInfo) menuInfo;
-        menu.add(0, CONTEXT_MENU_RENAME, 0, "Rename");
-        menu.add(0, CONTEXT_MENU_DELETE, 0, "Delete");
+        menu.add(0, CONTEXT_MENU_RENAME, 0, getString(R.string.preset_rename));
+        menu.add(0, CONTEXT_MENU_DELETE, 0, getString(R.string.preset_delete));
         mItemId = mi.position;
         // super.onCreateContextMenu(menu, v, menuInfo);
         // Log.d(LOGTAG,"mItemId is :" + mItemId);

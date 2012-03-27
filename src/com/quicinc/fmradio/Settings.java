@@ -28,6 +28,8 @@
 
 package com.quicinc.fmradio;
 
+import java.util.Locale;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
@@ -361,25 +363,35 @@ public class Settings extends PreferenceActivity implements
                 return null;
         }
 
-        private void restoreSettingsDefault() {
-                if (mPrefs != null) {
-                        mBandPreference.setValueIndex(0);
-                        if (mRxMode) {
-                                mAudioPreference.setValueIndex(0);
-            if(FMRadio.RECORDING_ENABLE)
-            {
-               mRecordDurPreference.setValueIndex(0);
+    private void restoreSettingsDefault() {
+        if (mPrefs != null) {
+            if (Locale.getDefault().equals(Locale.CHINA)) {
+                mBandPreference
+                        .setValueIndex(FmSharedPreferences.REGIONAL_BAND_CHINA);
+            } else {
+                mBandPreference
+                        .setValueIndex(FmSharedPreferences.REGIONAL_BAND_NORTH_AMERICA);
             }
-                                mAfPref.setChecked(true);
-                                FmSharedPreferences.SetDefaults();
-                        }
-                        else
-                        {
-                                FmSharedPreferences.setCountry(FmSharedPreferences.REGIONAL_BAND_NORTH_AMERICA);
-                        }
-                        mPrefs.Save();
-             }
+            if (mRxMode) {
+                mAudioPreference.setValueIndex(0);
+                if (FMRadio.RECORDING_ENABLE) {
+                    mRecordDurPreference.setValueIndex(0);
+                }
+                mAfPref.setChecked(true);
+                FmSharedPreferences.SetDefaults();
+            } else {
+                if (Locale.getDefault().equals(Locale.CHINA)) {
+                    FmSharedPreferences
+                    .setCountry(FmSharedPreferences.REGIONAL_BAND_CHINA);
+                }else{
+                    FmSharedPreferences
+                    .setCountry(FmSharedPreferences.REGIONAL_BAND_NORTH_AMERICA);
+                }
+
+            }
+            mPrefs.Save();
         }
+    }
 
         @Override
         protected void onResume() {

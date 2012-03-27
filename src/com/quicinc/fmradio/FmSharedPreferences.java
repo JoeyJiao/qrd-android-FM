@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Locale;
 import java.util.Map;
 
 import android.content.Context;
@@ -126,7 +127,7 @@ public class FmSharedPreferences
    private static int mTunedFrequency = 98100;
    private static int mFrequencyBand_Stepsize = 200;
 
-   private static int mCountry=0;
+   private static int mCountry = REGIONAL_BAND_NORTH_AMERICA;
    /* true = Stereo and false = "force Mono" even if Station is transmitting a
     * Stereo signal
     */
@@ -443,7 +444,11 @@ public class FmSharedPreferences
       }
 
       /* Load Configuration */
-      setCountry(sp.getInt(FMCONFIG_COUNTRY, 0));
+      if(Locale.getDefault().equals(Locale.CHINA)){
+          setCountry(sp.getInt(FMCONFIG_COUNTRY, REGIONAL_BAND_CHINA));
+      }else{
+         setCountry(sp.getInt(FMCONFIG_COUNTRY, REGIONAL_BAND_NORTH_AMERICA));
+      }
       /* Last list the user was navigating */
       mListIndex = sp.getInt(LAST_LIST_INDEX, 0);
       if(mListIndex >= num_lists)
@@ -507,13 +512,21 @@ public class FmSharedPreferences
    public static void SetDefaults() {
       mListIndex=0;
       mListOfPlists.clear();
-      setCountry(REGIONAL_BAND_NORTH_AMERICA);
       setRadioBand(0);
       setChSpacing(0);
       setEmphasis(0);
       setRdsStd(0);
-      mFMConfiguration.setLowerLimit(87500);
-      mFMConfiguration.setUpperLimit(107900);
+      //China
+      if(Locale.getDefault().equals(Locale.CHINA)){
+          mFMConfiguration.setLowerLimit(87000);
+          mFMConfiguration.setUpperLimit(107900);
+          setCountry(REGIONAL_BAND_CHINA);
+      //Others set north America.
+      }else{
+          mFMConfiguration.setLowerLimit(87500);
+          mFMConfiguration.setUpperLimit(107900);
+          setCountry(REGIONAL_BAND_NORTH_AMERICA);
+      }
    }
 
    public static void removeStationList(int listIndex) {
