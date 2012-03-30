@@ -332,11 +332,11 @@ public class FMRadioService extends Service
                        // audio policy manager switch audio to speaker.
                        if ((mHeadsetPlugged == false) && (mReceiver != null) &&
                            (mInternalAntennaAvailable == false) &&
-                           (isFmRecordingOn() == false) &&
                            (mOverA2DP == false)) {
                           mReceiver.disable();
                           mReceiver = null;
-                          stop();
+                          if(!isFmRecordingOn())
+                             stop();
                        }
                        if(mHeadsetPlugged == false
                                && isCallActive())
