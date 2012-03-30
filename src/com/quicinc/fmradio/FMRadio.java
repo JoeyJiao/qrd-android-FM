@@ -476,6 +476,7 @@ public class FMRadio extends Activity
       } catch (Exception e) {
          e.printStackTrace();
       }
+      mIsHomeKeyPressed = false;
       super.onRestart();
    }
 
