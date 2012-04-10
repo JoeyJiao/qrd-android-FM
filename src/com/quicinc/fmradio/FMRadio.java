@@ -689,6 +689,13 @@ public class FMRadio extends Activity
       }
       menu.add(0, MENU_STATION_LIST, 0, R.string.menu_all_channels);
 
+      if (!mSpeakerPhoneOn) {
+          item = menu.add(0, MENU_SPEAKER, 0, R.string.menu_speaker_on);
+      }
+      else {
+          item = menu.add(0, MENU_SPEAKER, 0, R.string.menu_speaker_off);
+      }
+
       return true;
    }
 
@@ -739,6 +746,31 @@ public class FMRadio extends Activity
       if (item != null)
       {
          item.setVisible(sleepActive && radioOn);
+      }
+
+      if (radioOn)
+      {
+          if (menu.findItem(MENU_SPEAKER) == null)
+          {
+              if (!mSpeakerPhoneOn) {
+                  item = menu.add(0, MENU_SPEAKER, 0, R.string.menu_speaker_on);
+              }
+              else {
+                  item = menu.add(0, MENU_SPEAKER, 0, R.string.menu_speaker_off);
+              }
+          }
+          else {
+              menu.removeItem(MENU_SPEAKER);
+              if (!mSpeakerPhoneOn) {
+                  item = menu.add(0, MENU_SPEAKER, 0, R.string.menu_speaker_on);
+              }
+              else {
+                  item = menu.add(0, MENU_SPEAKER, 0, R.string.menu_speaker_off);
+              }
+          }
+      } else
+      {
+         menu.removeItem(MENU_SPEAKER);
       }
       return true;
    }
