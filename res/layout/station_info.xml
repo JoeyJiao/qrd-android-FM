@@ -29,125 +29,108 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
 
     <LinearLayout android:id="@+id/station_info"
-           android:layout_width="fill_parent"
-           android:layout_height="wrap_content"
-            android:layout_weight="0"
-      android:orientation="vertical"
-           android:gravity="top"
-    >
-        <RelativeLayout android:id="@+id/top_most"
-          android:layout_width="fill_parent"
-          android:layout_height="wrap_content"
-          >
-            <ImageView android:id="@+id/signal_level"
-                    android:src="@drawable/ic_signal_2"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-                  android:paddingLeft="5px"
-              android:layout_alignParentTop="true"
-              android:layout_alignParentLeft="true"
-            />
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:orientation="vertical"
+        android:gravity="top">
 
-            <TextView android:id="@+id/prog_service_tv"
-                  android:textAppearance="?android:attr/textAppearanceMedium"
+        <RelativeLayout android:id="@+id/top_most"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView android:id="@+id/signal_level"
+                android:src="@drawable/ic_signal_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_alignBaseline="@id/signal_level"
-                  android:textSize="20sp"
+                android:paddingLeft="5dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:visibility="gone"/>
+
+            <TextView android:id="@+id/prog_service_tv"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignBaseline="@id/signal_level"
+                android:textSize="16sp"
                 android:singleLine="true"
-                  android:textStyle="bold"
+                android:textStyle="bold"
                 android:text="@string/prog_service_string"
                 />
 
             <TextView android:id="@+id/stereo_text_tv"
-                  android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textAppearance="?android:attr/textAppearanceSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingRight="5px"
-
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignBaseline="@id/signal_level"
-                      android:textSize="14sp"
-                android:text="@string/default_audio"
-                />
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignBaseline="@id/signal_level"
+                android:textSize="16sp"
+                android:text="@string/default_audio"/>
         </RelativeLayout>
 
         <LinearLayout android:id="@+id/station_frequency_row"
-          android:layout_width="fill_parent"
-          android:layout_height="wrap_content"
-              android:orientation="vertical"
-                  android:paddingTop="5px"
-                  android:paddingBottom="5px"
-              android:layout_alignWithParentIfMissing="true"
-              android:gravity="center"
-          >
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:layout_alignWithParentIfMissing="true"
+            android:gravity="center">
+
             <TextView android:id="@+id/call_sign_tv"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:paddingTop="2px"
-                    android:paddingRight="2px"
-                    android:paddingBottom="2px"
-                    android:paddingLeft="2px"
+                android:textSize="14sp"
+                android:paddingTop="2dp"
+                android:paddingRight="2dp"
+                android:paddingBottom="2dp"
+                android:paddingLeft="2dp"
                 android:text="@string/station_id_string" />
-
-            <RelativeLayout android:id="@+id/second_layout"
-              android:layout_width="fill_parent"
-              android:layout_height="wrap_content"
-              android:layout_marginTop="2px"
-              android:layout_marginBottom="2px"
-              android:layout_marginLeft="2px"
-              android:layout_marginRight="2px"
-              >
-                <TextView android:id="@+id/prog_frequency_tv"
-                          android:textAppearance="?android:attr/textAppearanceLarge"
-                      android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                          android:textSize="64px"
-                        android:layout_centerHorizontal="true"
-                      android:text="@string/frequency_string"/>
-
-                <ImageView android:id="@+id/btn_back"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="100px"
-                    android:paddingLeft="2px"
-                    android:layout_alignParentLeft="true"
-                    android:visibility="visible"
-                    android:layout_alignWithParentIfMissing="true"
-                    android:src="@drawable/btn_arrow_left"
-                />
-
-                <ImageView android:id="@+id/btn_forward"
-                 android:clickable="true"
-                 android:focusable="true"
-                 android:layout_width="wrap_content"
-                 android:layout_height="100px"
-                 android:paddingRight="2px"
-                 android:layout_alignParentRight="true"
-                 android:visibility="visible"
-                 android:layout_alignWithParentIfMissing="true"
-                 android:src="@drawable/btn_arrow_right"
-                 />
-            </RelativeLayout>
-
+            
             <TextView android:id="@+id/pty_tv"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:paddingTop="2px"
-                    android:paddingRight="2px"
-                    android:paddingBottom="2px"
-                    android:paddingLeft="2px"
+                android:textSize="14sp"
+                android:paddingTop="2dp"
+                android:paddingRight="2dp"
+                android:paddingBottom="2dp"
+                android:paddingLeft="2dp"
                 android:text="@string/pty_string" />
         </LinearLayout>
+    <RelativeLayout android:id="@+id/second_layout"
+        android:layout_width="fill_parent" android:layout_height="wrap_content"
+        android:layout_marginTop="2dp" android:layout_marginBottom="2dp"
+        android:layout_marginLeft="3dp" android:layout_marginRight="2dp">
 
+        <TextView android:id="@+id/prog_frequency_tv"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="40sp"
+            android:gravity="center"
+            android:text="@string/frequency_string"
+            android:layout_toLeftOf="@+id/btn_forward"
+            android:layout_toRightOf="@+id/btn_back"/>
+
+        <ImageView android:id="@+id/btn_back" android:clickable="true"
+            android:focusable="true" android:layout_width="wrap_content"
+            android:layout_height="50dp" android:paddingLeft="2dp"
+            android:layout_alignParentLeft="true" android:visibility="visible"
+            android:layout_alignWithParentIfMissing="true" android:src="@drawable/btn_arrow_left" />
+
+        <ImageView android:id="@+id/btn_forward" android:clickable="true"
+            android:focusable="true" android:layout_width="wrap_content"
+            android:layout_height="50dp" android:paddingRight="2dp"
+            android:layout_alignParentRight="true" android:visibility="visible"
+            android:layout_alignWithParentIfMissing="true" android:src="@drawable/btn_arrow_right" />
+    </RelativeLayout>
 
         <!-- Station Radio Text information display -->
         <TextView android:id="@+id/radio_text_tv"

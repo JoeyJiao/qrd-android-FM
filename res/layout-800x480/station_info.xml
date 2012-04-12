@@ -47,6 +47,7 @@
        android:paddingLeft="5dp"
        android:layout_alignParentTop="true"
        android:layout_alignParentLeft="true"
+       android:visibility="gone"
 />
 
     <TextView android:id="@+id/prog_service_tv"
@@ -54,8 +55,7 @@
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:layout_alignParentTop="true"
-       android:layout_centerHorizontal="true"
-       android:layout_alignBaseline="@id/signal_level"
+       android:layout_alignParentLeft="true"
        android:textSize="16sp"
        android:singleLine="true"
        android:textStyle="bold"
@@ -78,7 +78,7 @@
        android:layout_height="wrap_content"
        android:orientation="vertical"
        android:paddingTop="60dp"
-       android:paddingBottom="60dp"
+       android:paddingBottom="20dp"
        android:layout_alignWithParentIfMissing="true"
        android:gravity="center" >
 
@@ -105,66 +105,60 @@
        android:text="@string/pty_string" />
     </LinearLayout>
 
-    <TextView android:id="@+id/prog_frequency_tv"
-       android:textAppearance="?android:attr/textAppearanceLarge"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:textSize="50sp"
-       android:layout_gravity="center_horizontal"
-       android:text="@string/frequency_string"/>
+    <RelativeLayout android:id="@+id/second_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp">
 
-    <!-- Station Radio Text information display -->
-    <TextView android:id="@+id/radio_text_tv"
-       android:layout_width="fill_parent"
-       android:layout_height="wrap_content"
-       android:textAppearance="?android:attr/textAppearanceMedium"
-       android:textSize="16sp"
-       android:singleLine="true"
-       android:textStyle="bold"
-       android:paddingLeft="2dp"
-       android:paddingRight="2dp"
-       android:paddingBottom="5dp"
-       android:gravity="center_horizontal"
-       android:text="@string/radio_text_string" />
+        <TextView android:id="@+id/prog_frequency_tv"
+           android:textAppearance="?android:attr/textAppearanceLarge"
+           android:layout_width="fill_parent"
+           android:layout_height="wrap_content"
+           android:textSize="50sp"
+           android:gravity="center"
+           android:text="@string/frequency_string"
+           android:layout_toLeftOf="@+id/btn_forward"
+           android:layout_toRightOf="@+id/btn_back"/>
 
-   <RelativeLayout android:id="@+id/second_layout"
-       android:layout_width="fill_parent"
-       android:layout_height="wrap_content"
-       android:layout_marginTop="2dp"
-       android:layout_marginBottom="30dp"
-       android:layout_marginLeft="2dp"
-       android:layout_marginRight="2dp">
+        <ImageView android:id="@+id/btn_back"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="2dp"
+            android:layout_alignParentLeft="true"
+            android:visibility="visible"
+            android:layout_alignWithParentIfMissing="true"
+            android:src="@drawable/btn_arrow_left" />
 
-    <com.quicinc.fmradio.HorizontalNumberPicker
-    android:id="@+id/fm_picker"
-    android:layout_width="fill_parent"
-    android:layout_height="50dp"
-    android:layout_centerVertical="true"
-    android:layout_toRightOf="@+id/btn_back"
-    android:layout_toLeftOf="@+id/btn_forward"
-    />
-
-    <ImageView android:id="@+id/btn_back"
-       android:clickable="true"
-       android:focusable="true"
-       android:layout_width="wrap_content"
-       android:layout_height="100dp"
-       android:paddingLeft="2dp"
-       android:layout_alignParentLeft="true"
-       android:visibility="visible"
-       android:layout_alignWithParentIfMissing="true"
-       android:src="@drawable/btn_arrow_left" />
-
-    <ImageView android:id="@+id/btn_forward"
-       android:clickable="true"
-       android:focusable="true"
-       android:layout_width="wrap_content"
-       android:layout_height="100dp"
-       android:paddingRight="2dp"
-       android:layout_alignParentRight="true"
-       android:visibility="visible"
-       android:layout_alignWithParentIfMissing="true"
-       android:src="@drawable/btn_arrow_right" />
+        <ImageView android:id="@+id/btn_forward"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="2dp"
+            android:layout_alignParentRight="true"
+            android:visibility="visible"
+            android:layout_alignWithParentIfMissing="true"
+            android:src="@drawable/btn_arrow_right" />
     </RelativeLayout>
+
+
+        <TextView android:id="@+id/radio_text_tv"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="16sp"
+            android:singleLine="true"
+            android:textStyle="bold"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp"
+            android:paddingBottom="5dp"
+            android:paddingTop="20dp"
+            android:gravity="center_horizontal"
+            android:text="@string/radio_text_string" />
+
    </LinearLayout>
 </merge>
