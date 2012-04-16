@@ -266,6 +266,10 @@ public class FMRadioService extends Service
                                   if ((mServiceInUse) && (mCallbacks != null) ) {
                                        mCallbacks.onRecordingStopped();
                                   }
+                                  else
+                                  {
+                                       stopRecording();
+                                  }
                              } catch (RemoteException e) {
                                   e.printStackTrace();
                              }
@@ -875,10 +879,14 @@ public class FMRadioService extends Service
        mFmRecordingOn = false;
        if (mRecorder == null)
            return;
-       mRecorder.stop();
-       mRecorder.reset();
-       mRecorder.release();
-       mRecorder = null;
+       try {
+             mRecorder.stop();
+             mRecorder.reset();
+             mRecorder.release();
+             mRecorder = null;
+       } catch(Exception e) {
+             e.printStackTrace();
+       }
        int sampleLength = (int)((System.currentTimeMillis() - mSampleStart)/1000 );
        if (sampleLength == 0)
            return;
@@ -886,7 +894,12 @@ public class FMRadioService extends Service
        Log.d(LOGTAG, "storage state is " + state);
 
        if (Environment.MEDIA_MOUNTED.equals(state)) {
-           this.addToMediaDB(mSampleFile);
+          try {
+               this.addToMediaDB(mSampleFile);
+          }
+          catch(Exception e) {
+               e.printStackTrace();
+          }
        }
        else{
            Log.e(LOGTAG, "SD card must have removed during recording. ");
