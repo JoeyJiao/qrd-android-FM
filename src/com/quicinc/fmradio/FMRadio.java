@@ -404,14 +404,14 @@ public class FMRadio extends Activity
             mStartInCall = false;
         }
         //can not start up fm in airplane mode.
-        if(isAirplaneModeOn()){
+       /* if(isAirplaneModeOn()){
             Toast.makeText(FMRadio.this, R.string.cannot_startup_during_airplane,
                     Toast.LENGTH_SHORT).show();
             finish();
             mStartInAirplane = true;
         }else{
             mStartInAirplane = false;
-        }
+        }*/
         if (!mStartInCall && !mStartInAirplane) {
             // enableRadioOnOffUI(false);
             // HDMI and FM concurrecny is not supported.
