@@ -128,6 +128,9 @@ public class FMRadioService extends Service
    private boolean mStoppedOnFocusLoss = false;
    private File mSampleFile = null;
    long mSampleStart = 0;
+
+   private boolean resumeSpeaker = false;
+
    // Messages handled in FM Service
    private static final int FM_STOP =1;
    private static final int RESET_NOTCH_FILTER =2;
@@ -1216,6 +1219,7 @@ public class FMRadioService extends Service
                       Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_LOSS_TRANSIENT");
                       if (mSpeakerPhoneOn) {
                           mSpeakerPhoneOn = false;
+                          resumeSpeaker = true;
                           if (isAnalogModeSupported()) {
                               setAudioPath(true);
                           }
@@ -1229,8 +1233,15 @@ public class FMRadioService extends Service
                       break;
                   case AudioManager.AUDIOFOCUS_GAIN:
                       Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_GAIN");
-                      if(false == mPlaybackInProgress)
+                      if(false == mPlaybackInProgress){
                           startFM();
+                          if(resumeSpeaker){
+                                 setAudioPath(false);
+                                 AudioSystem.setForceUse(AudioSystem.FOR_MEDIA, AudioSystem.FORCE_SPEAKER);
+                                 mSpeakerPhoneOn = true;
+                                 resumeSpeaker = false;
+                          }
+                      }
                       mStoppedOnFocusLoss = false;
                       break;
                   case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
