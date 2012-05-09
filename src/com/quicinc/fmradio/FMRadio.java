@@ -689,13 +689,6 @@ public class FMRadio extends Activity
       }
       menu.add(0, MENU_STATION_LIST, 0, R.string.menu_all_channels);
 
-      if (!mSpeakerPhoneOn) {
-          item = menu.add(0, MENU_SPEAKER, 0, R.string.menu_speaker_on);
-      }
-      else {
-          item = menu.add(0, MENU_SPEAKER, 0, R.string.menu_speaker_off);
-      }
-
       return true;
    }
 
@@ -747,31 +740,6 @@ public class FMRadio extends Activity
       {
          item.setVisible(sleepActive && radioOn);
       }
-
-      if (radioOn)
-      {
-          if (menu.findItem(MENU_SPEAKER) == null)
-          {
-              if (!mSpeakerPhoneOn) {
-                  item = menu.add(0, MENU_SPEAKER, 0, R.string.menu_speaker_on);
-              }
-              else {
-                  item = menu.add(0, MENU_SPEAKER, 0, R.string.menu_speaker_off);
-              }
-          }
-          else {
-              menu.removeItem(MENU_SPEAKER);
-              if (!mSpeakerPhoneOn) {
-                  item = menu.add(0, MENU_SPEAKER, 0, R.string.menu_speaker_on);
-              }
-              else {
-                  item = menu.add(0, MENU_SPEAKER, 0, R.string.menu_speaker_off);
-              }
-          }
-      } else
-      {
-         menu.removeItem(MENU_SPEAKER);
-      }
       return true;
    }
 
@@ -817,11 +785,6 @@ public class FMRadio extends Activity
          DebugToasts("Sleep Cancelled", Toast.LENGTH_SHORT);
          endSleepTimer();
          return true;
-//remove speaker from menu...
-//      case MENU_SPEAKER:
-//         /* Call the mm interface to route the wired headset*/
-//          enableSpeaker();
-//          return true;
       case MENU_STATION_LIST:
           Intent stationListIntent = new Intent().setClass(this,
                   StationListActivity.class);

@@ -79,7 +79,8 @@ public class StationListActivity extends Activity implements
     // private static String mDialogTitle;
     private static String mDialogStationName;
     private static int mItemId;
-    private Dialog mDialog;
+    private Dialog mRenameDialog;
+    private Dialog mDeleteDialog;
     private ServiceConnection osc = new ServiceConnection() {
         public void onServiceConnected(ComponentName classname, IBinder obj) {
             mService = IFMRadioService.Stub.asInterface(obj);
@@ -187,7 +188,6 @@ public class StationListActivity extends Activity implements
         // TODO Auto-generated method stub
         load();
         super.onResume();
-
     }
 
     @Override
@@ -196,50 +196,50 @@ public class StationListActivity extends Activity implements
         // super.onPrepareDialog(id, dialog);
         switch (id) {
         case DIALOG_RENAME_ID:
-            mDialog.setTitle(getNameFromId(mItemId));
-            final EditText editText = (EditText) mDialog
+            mRenameDialog.setTitle(getNameFromId(mItemId));
+            final EditText editText = (EditText) mRenameDialog
                     .findViewById(R.id.name);
             editText.setText(getNameFromId(mItemId));
-            Button bOk = (Button) mDialog.findViewById(R.id.save);
+            Button bOk = (Button) mRenameDialog.findViewById(R.id.save);
 
             bOk.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // TODO Auto-generated method stub
                     saveStationName(mItemId, editText.getText().toString());
-                    mDialog.dismiss();
+                    mRenameDialog.dismiss();
                 }
 
             });
-            Button bCancel = (Button) mDialog.findViewById(R.id.cancel);
+            Button bCancel = (Button) mRenameDialog.findViewById(R.id.cancel);
             bCancel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // TODO Auto-generated method stub
-                    mDialog.dismiss();
+                    mRenameDialog.dismiss();
                 }
             });
             break;
         case DIALOG_DELETE_ID:
-            mDialog.setTitle("Delete:" + getNameFromId(mItemId));
-            TextView prompt = (TextView) mDialog.findViewById(R.id.prompt);
+            mDeleteDialog.setTitle("Delete:" + getNameFromId(mItemId));
+            TextView prompt = (TextView) mDeleteDialog.findViewById(R.id.prompt);
             prompt.setText("Are you sure to delete " + getNameFromId(mItemId));
-            Button bDelete = (Button) mDialog.findViewById(R.id.delete);
+            Button bDelete = (Button) mDeleteDialog.findViewById(R.id.delete);
 
             bDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // TODO Auto-generated method stub
                     deleteStation(mItemId);
-                    mDialog.dismiss();
+                    mDeleteDialog.dismiss();
                 }
             });
-            Button bCancelDelete = (Button) mDialog.findViewById(R.id.cancel);
+            Button bCancelDelete = (Button) mDeleteDialog.findViewById(R.id.cancel);
             bCancelDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // TODO Auto-generated method stub
-                    mDialog.dismiss();
+                    mDeleteDialog.dismiss();
                 }
             });
             break;
@@ -249,21 +249,22 @@ public class StationListActivity extends Activity implements
     @Override
     protected Dialog onCreateDialog(int id, Bundle b) {
         // TODO Auto-generated method stub
+        //should return different dialog 
         switch (id) {
         case DIALOG_RENAME_ID:
-            mDialog = new Dialog(this);
-            mDialog.setContentView(R.layout.rename_dialog);
+            mRenameDialog = new Dialog(this);
+            mRenameDialog.setContentView(R.layout.rename_dialog);
             // Log.d(LOGTAG, "mItemId is2 :" + mItemId);
-            break;
+            return mRenameDialog;
         case DIALOG_DELETE_ID:
-            mDialog = new Dialog(this);
-            mDialog.setContentView(R.layout.delete_dialog);
-            break;
+            mDeleteDialog = new Dialog(this);
+            mDeleteDialog.setContentView(R.layout.delete_dialog);
+            return mDeleteDialog;
         default:
-            mDialog = null;
+            ;
         }
         // return super.onCreateDialog(id);
-        return mDialog;
+        return null;
     }
 
     private void saveStationName(int id, String name) {
