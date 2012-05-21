@@ -3569,6 +3569,7 @@ public class FMRadio extends Activity
       }
    }
 
+
    private ServiceConnection osc = new ServiceConnection() {
       public void onServiceConnected(ComponentName classname, IBinder obj) {
          mService = IFMRadioService.Stub.asInterface(obj);
@@ -3594,6 +3595,9 @@ public class FMRadio extends Activity
                 }
                 mRecordDuration = 0;
             }
+            //after android 3.0 , onPrepareOptionMenu  will be first called since activity started,
+            //after service connected , call this to refresh menu.
+            invalidateOptionsMenu();
             return;
          } else
          {
