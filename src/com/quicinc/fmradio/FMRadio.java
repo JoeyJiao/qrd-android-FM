@@ -687,12 +687,7 @@ public class FMRadio extends Activity
           item = menu.add(0, MENU_STAT_TEST, 0,R.string.menu_stats).setIcon(
                                                                             android.R.drawable.ic_menu_info_details);
       }
-      if (item != null)
-      {
-          item.setCheckable(true);
-          item.setChecked(false);
-          item.setVisible(radioOn);
-      }
+
       menu.add(0, MENU_STATION_LIST, 0, R.string.menu_all_channels);
 
       return true;
@@ -700,7 +695,6 @@ public class FMRadio extends Activity
 
    @Override
    public boolean onPrepareOptionsMenu(Menu menu) {
-
       super.onPrepareOptionsMenu(menu);
 
       MenuItem item;
@@ -840,6 +834,9 @@ public class FMRadio extends Activity
                    mSpeakerButton.setImageResource(R.drawable.btn_speaker);
                    Log.d(LOGTAG, "Speaker phone is turned on");
                }
+               //after android 3.0 , onPrepareOptionMenu  will be first called since activity started,
+               //we need refresh menu here.
+               invalidateOptionsMenu();
            } catch (RemoteException e)
            {
                 e.printStackTrace();
