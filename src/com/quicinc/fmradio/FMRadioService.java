@@ -204,10 +204,6 @@ public class FMRadioService extends Service
       mDelayedStopHandler.removeCallbacksAndMessages(null);
       //release the audio focus listener
       AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-      if (isMuted()) {
-          mMuted = false;
-          audioManager.setStreamMute(AudioManager.STREAM_FM,false);
-      }
       audioManager.abandonAudioFocus(mAudioFocusListener);
       /* Remove the Screen On/off listener */
       if (mScreenOnOffReceiver != null) {
@@ -651,7 +647,7 @@ public class FMRadioService extends Service
          // an in-progress call ends, so don't stop the service now.
          return true;
       }
-      gotoIdleState();
+      stopSelf(mServiceStartId);
       return true;
    }
 
@@ -664,7 +660,7 @@ public class FMRadioService extends Service
            mResumeAfterCall = true;
            return;
        }
-       mResumeAfterCall = false;
+
        if ( true == mPlaybackInProgress ) // no need to resend event
            return;
        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
