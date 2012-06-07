@@ -236,4 +236,6 @@
     <string name="station_exists">This frequency already exists!</string>
     <string name="cannot_startup_during_call">Can not start FM during call!</string>
     <string name="cannot_startup_during_airplane">Can not start FM in AirPlane mode!</string>
+    <string name="station_list_delete_station">Delete:<xliff:g id="name">%s</xliff:g></string>
+    <string name="station_list_delete_station_prompt">Are you sure to delete <xliff:g id="name">%s</xliff:g> ？</string>
 </resources>

@@ -221,9 +221,9 @@ public class StationListActivity extends Activity implements
             });
             break;
         case DIALOG_DELETE_ID:
-            mDeleteDialog.setTitle("Delete:" + getNameFromId(mItemId));
+            mDeleteDialog.setTitle(getString(R.string.station_list_delete_station, getNameFromId(mItemId)));
             TextView prompt = (TextView) mDeleteDialog.findViewById(R.id.prompt);
-            prompt.setText("Are you sure to delete " + getNameFromId(mItemId));
+            prompt.setText(getString(R.string.station_list_delete_station_prompt,getNameFromId(mItemId)));
             Button bDelete = (Button) mDeleteDialog.findViewById(R.id.delete);
 
             bDelete.setOnClickListener(new View.OnClickListener() {

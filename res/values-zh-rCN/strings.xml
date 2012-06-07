@@ -95,4 +95,6 @@
     <string name="stat_notif_frequency">FM 收音机 "<xliff:g id="frequency">%1$s</xliff:g>" MHz</string>
     <string name="cannot_startup_during_call">通话中不能启动FM！</string>
     <string name="cannot_startup_during_airplane">"飞行模式中不能启动FM！"</string>
+    <string name="station_list_delete_station">删除:<xliff:g id="name">%s</xliff:g></string>
+    <string name="station_list_delete_station_prompt">要删除 <xliff:g id="name">%s</xliff:g> 吗？</string>
 </resources>
