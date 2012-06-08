@@ -33,7 +33,7 @@
     <string name="app_name">FM Radio</string>
     <string name="tx_app_name">FM Transmitter</string>
 
-    <string name="default_sleep">Sleep 12:34</string>
+    <string name="default_sleep"></string>
     <string name="menu_add_to_preset">Add to Presets</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_record_start">Start Recording</string>
