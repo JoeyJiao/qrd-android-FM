@@ -2346,26 +2346,12 @@ public class FMRadio extends Activity
       }
       if (bEnable)
       {
-//         if (mTuneStationFrequencyTV != null) {
-//            mTuneStationFrequencyTV.setOnLongClickListener(mFrequencyViewClickListener);
-//         }
          if (mRadioTextScroller != null) {
             mRadioTextScroller.startScroll();
-         }
-         if (mSleepMsgTV != null && !isSleepTimerActive())
-         {
-            mSleepMsgTV.setText("");
-         }
-         if (mRecordingMsgTV != null && !isRecording())
-         {
-            mRecordingMsgTV.setText("");
          }
 
       } else
       {
-//         if (mTuneStationFrequencyTV != null) {
-//            mTuneStationFrequencyTV.setOnLongClickListener(null);
-//         }
          if (mRadioTextScroller != null) {
             mRadioTextScroller.stopScroll();
          }
@@ -2395,14 +2381,21 @@ public class FMRadio extends Activity
          mProgramTypeTV.setVisibility(((bEnable == true) ? View.VISIBLE
                                     : View.INVISIBLE));
       }
-      if (mSleepMsgTV != null) {
-         mSleepMsgTV.setVisibility(((bEnable == true) ? View.VISIBLE
-                                 : View.INVISIBLE));
+
+      if ( bEnable && isSleepTimerActive())
+      {
+          mSleepMsgTV.setVisibility(View.VISIBLE);
+      }else{
+          mSleepMsgTV.setVisibility(View.INVISIBLE);
       }
-      if (mRecordingMsgTV != null) {
-         mRecordingMsgTV.setVisibility(((bEnable == true) ? View.VISIBLE
-                                     : View.INVISIBLE));
+
+      if ( bEnable && isRecording())
+      {
+          mRecordingMsgTV.setVisibility(View.VISIBLE);
+      }else{
+          mRecordingMsgTV.setVisibility(View.INVISIBLE);
       }
+
       if (mRadioTextTV != null) {
          mRadioTextTV.setVisibility(((bEnable == true) ? View.VISIBLE
                                   : View.INVISIBLE));
@@ -2935,7 +2928,7 @@ public class FMRadio extends Activity
                Log.d(LOGTAG, "mUIUpdateHandlerHandler - RECORDTIMER_EXPIRED");
                mRecordDuration = 0;
                //Clear the Recorder text
-               mRecordingMsgTV.setText("");
+               mRecordingMsgTV.setVisibility(View.INVISIBLE);
                if (mRecording != false)
                {
                   DebugToasts("Stop Recording", Toast.LENGTH_SHORT);

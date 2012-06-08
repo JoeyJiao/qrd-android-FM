@@ -54,22 +54,35 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
+                android:paddingLeft="15dp"
                 android:layout_alignBaseline="@id/signal_level"
                 android:textSize="16sp"
                 android:singleLine="true"
-                android:textStyle="bold"
+                android:textStyle="normal"
                 android:text="@string/prog_service_string"
                 />
+
+            <TextView android:id="@+id/record_msg_tv"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/recorder"
+                android:layout_below="@+id/prog_service_tv"
+                android:paddingLeft="15dp"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:visibility="invisible"
+                android:text="@string/default_record"/>
 
             <TextView android:id="@+id/stereo_text_tv"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingRight="5px"
+                android:paddingRight="16dp"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignBaseline="@id/signal_level"
-                android:textSize="16sp"
+                android:textSize="13sp"
                 android:text="@string/default_audio"/>
         </RelativeLayout>
 
@@ -108,7 +121,6 @@
         android:layout_width="fill_parent" android:layout_height="wrap_content"
         android:layout_marginTop="2dp" android:layout_marginBottom="2dp"
         android:layout_marginLeft="3dp" android:layout_marginRight="2dp">
-
         <TextView android:id="@+id/prog_frequency_tv"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:layout_width="wrap_content"
@@ -121,13 +133,13 @@
 
         <ImageView android:id="@+id/btn_back" android:clickable="true"
             android:focusable="true" android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:paddingLeft="2dp"
+            android:layout_height="wrap_content" android:paddingLeft="15dp"
             android:layout_alignParentLeft="true" android:visibility="visible"
             android:layout_alignWithParentIfMissing="true" android:src="@drawable/btn_arrow_left" />
 
         <ImageView android:id="@+id/btn_forward" android:clickable="true"
             android:focusable="true" android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:paddingRight="2dp"
+            android:layout_height="wrap_content" android:paddingRight="15dp"
             android:layout_alignParentRight="true" android:visibility="visible"
             android:layout_alignWithParentIfMissing="true" android:src="@drawable/btn_arrow_right" />
     </RelativeLayout>
@@ -140,6 +152,7 @@
            android:textSize="15sp"
            android:singleLine="true"
            android:textStyle="bold"
+           android:paddingTop="20dp"
            android:paddingLeft="2dp"
            android:paddingRight="2dp"
            android:paddingBottom="5dp"
