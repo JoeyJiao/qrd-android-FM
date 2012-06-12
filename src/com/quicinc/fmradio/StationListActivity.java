@@ -179,7 +179,7 @@ public class StationListActivity extends Activity implements
         mItemId = mi.position;
         // super.onCreateContextMenu(menu, v, menuInfo);
         // Log.d(LOGTAG,"mItemId is :" + mItemId);
-        menu.setHeaderTitle(getNameFromId(mItemId));
+        menu.setHeaderTitle(getString(R.string.station_name) + getNameFromId(mItemId));
     }
 
     @Override
@@ -196,7 +196,7 @@ public class StationListActivity extends Activity implements
         // super.onPrepareDialog(id, dialog);
         switch (id) {
         case DIALOG_RENAME_ID:
-            mDialog.setTitle(getNameFromId(mItemId));
+            mDialog.setTitle(getString(R.string.prompt_delete) + getNameFromId(mItemId));
             final EditText editText = (EditText) mDialog
                     .findViewById(R.id.name);
             editText.setText(getNameFromId(mItemId));
@@ -221,9 +221,9 @@ public class StationListActivity extends Activity implements
             });
             break;
         case DIALOG_DELETE_ID:
-            mDialog.setTitle("Delete:" + getNameFromId(mItemId));
+            mDialog.setTitle(getString(R.string.prompt_delete) + getString(R.string.station_name) + getNameFromId(mItemId));
             TextView prompt = (TextView) mDialog.findViewById(R.id.prompt);
-            prompt.setText("Are you sure to delete " + getNameFromId(mItemId));
+            prompt.setText(getString(R.string.prompt_delete_sure) + " " +getString(R.string.station_name) + getNameFromId(mItemId) + "?");
             Button bDelete = (Button) mDialog.findViewById(R.id.delete);
 
             bDelete.setOnClickListener(new View.OnClickListener() {

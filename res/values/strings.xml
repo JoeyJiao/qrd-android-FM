@@ -232,8 +232,10 @@
     <string name="srch_params_1">Configure Signal Th </string>
     <string name="enter_rssi">Enter RMSSI Delta</string>
     <string name="enter_sigth">Enter Signal Th</string>
-    <string name="station_name">Station</string>
+    <string name="station_name">Station:</string>
     <string name="station_exists">This frequency already exists!</string>
     <string name="cannot_startup_during_call">Can not start FM during call!</string>
     <string name="cannot_startup_during_airplane">Can not start FM in AirPlane mode!</string>
+    <string name="prompt_delete">Delete:</string>
+    <string name="prompt_delete_sure">Are you sure to delete </string>
 </resources>

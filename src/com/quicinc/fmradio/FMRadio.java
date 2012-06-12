@@ -3637,7 +3637,7 @@ public class FMRadio extends Activity
                  int station_number = sp.getInt(NUM_OF_STATIONS, 0);
                  station_number++;
                  editor.putInt(NUM_OF_STATIONS, station_number);
-                 editor.putString(STATION_NAME+station_number,getString(R.string.station_name)+" "+station_number);
+                 editor.putString(STATION_NAME+station_number,station_number+"");
                  editor.putInt(STATION_FREQUENCY+station_number,frequency);
                  editor.commit();
              }else{
