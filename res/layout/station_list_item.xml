@@ -34,23 +34,38 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical">
-   <TextView
-        android:id="@+id/name"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="30dp"
-        android:paddingTop="15dp"
-        android:singleLine="true"
-        android:ellipsize="marquee"
-        android:marqueeRepeatLimit="marquee_forever"
-        />
-    <TextView
-        android:id="@+id/freq"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="30dp"
-        android:paddingBottom="15dp"
-        android:textSize="20sp"
-        />
-
+   <TableLayout
+       android:id="@+id/TableLayout1"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:stretchColumns="1">
+       <TableRow>
+           <TextView
+               android:id="@+id/fixName"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:paddingLeft="30dp"
+               android:paddingTop="15dp"
+               android:text="@string/station_name"
+           />
+           <TextView
+               android:id="@+id/name"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:ellipsize="marquee"
+               android:marqueeRepeatLimit="marquee_forever"
+           />
+       </TableRow>
+       <TableRow >
+	       <TextView
+	           android:id="@+id/freq"
+	           android:layout_width="wrap_content"
+	           android:layout_height="wrap_content"
+	           android:paddingLeft="30dp"
+	           android:paddingBottom="15dp"
+	           android:textSize="20sp"
+	           android:layout_span="2"
+	      />
+       </TableRow>
+    </TableLayout>
 </LinearLayout>

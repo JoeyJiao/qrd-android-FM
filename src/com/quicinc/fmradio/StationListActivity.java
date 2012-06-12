@@ -180,7 +180,7 @@ public class StationListActivity extends Activity implements
         mItemId = mi.position;
         // super.onCreateContextMenu(menu, v, menuInfo);
         // Log.d(LOGTAG,"mItemId is :" + mItemId);
-        menu.setHeaderTitle(getNameFromId(mItemId));
+        menu.setHeaderTitle(getString(R.string.station_name)+getNameFromId(mItemId));
     }
 
     @Override
@@ -196,7 +196,7 @@ public class StationListActivity extends Activity implements
         // super.onPrepareDialog(id, dialog);
         switch (id) {
         case DIALOG_RENAME_ID:
-            mRenameDialog.setTitle(getNameFromId(mItemId));
+            mRenameDialog.setTitle(getString(R.string.station_name)+getNameFromId(mItemId));
             final EditText editText = (EditText) mRenameDialog
                     .findViewById(R.id.name);
             editText.setText(getNameFromId(mItemId));
