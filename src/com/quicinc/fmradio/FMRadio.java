@@ -835,6 +835,7 @@ public class FMRadio extends Activity
 
    private static final int RECORDTIMER_EXPIRED = 0x1003;
    private static final int RECORDTIMER_UPDATE = 0x1004;
+   private static final int RECORD_NOSPACE = 0x1005;
 
    private boolean hasRecordTimerExpired() {
       boolean expired = true;
@@ -924,10 +925,16 @@ public class FMRadio extends Activity
             {
                Thread.currentThread().interrupt();
             }
-            if( true == recordTimerExpired) {
+            if( true == recordTimerExpired || !hasSpaceOnExternal()) {
             Message finished = new Message();
             finished.what = RECORDTIMER_EXPIRED;
             mUIUpdateHandlerHandler.sendMessage(finished);
+            }
+            if(!hasSpaceOnExternal()){
+                //terminate this recording...
+                recordTimerExpired = true;
+                Message noSpaceMessage = mUIUpdateHandlerHandler.obtainMessage(RECORD_NOSPACE);
+                noSpaceMessage.sendToTarget();
             }
          }
       }
@@ -2240,7 +2247,28 @@ public class FMRadio extends Activity
       }
    }
 
+   private boolean isExternalStorageAvailable(){
+        return Environment.getExternalStorageState().equals(
+                android.os.Environment.MEDIA_MOUNTED);
+   }
+   private boolean hasSpaceOnExternal(){
+       File mSD = Environment.getExternalStorageDirectory();
+       android.os.StatFs fs = new android.os.StatFs(mSD.getAbsolutePath());
+       int blocks = fs.getAvailableBlocks();
+       if(blocks < 1){
+           return false;
+       }
+       return true;
+   }
+
    private void startRecording() {
+      if(!isExternalStorageAvailable()){
+          Toast.makeText(this, R.string.error_sdcard_access, Toast.LENGTH_SHORT).show();
+          return;
+      }else if(!hasSpaceOnExternal()){
+          Toast.makeText(this, R.string.sdcard_no_space_cannot_recording, Toast.LENGTH_SHORT).show();
+          return;
+      }
       if(mService != null)
       {
          try
@@ -2939,6 +2967,10 @@ public class FMRadio extends Activity
          case RECORDTIMER_UPDATE: {
                Log.d(LOGTAG, "mUIUpdateHandlerHandler - RECORDTIMER_UPDATE");
                updateExpiredRecordTime();
+               break;
+            }
+         case RECORD_NOSPACE: {
+               Toast.makeText(FMRadio.this, R.string.recording_stop_no_space, Toast.LENGTH_SHORT).show();
                break;
             }
          default:
