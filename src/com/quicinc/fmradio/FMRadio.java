@@ -835,8 +835,6 @@ public class FMRadio extends Activity
 
    private static final int RECORDTIMER_EXPIRED = 0x1003;
    private static final int RECORDTIMER_UPDATE = 0x1004;
-   private static final int RECORD_NOSPACE = 0x1005;
-
    private boolean hasRecordTimerExpired() {
       boolean expired = true;
 
@@ -929,12 +927,6 @@ public class FMRadio extends Activity
             Message finished = new Message();
             finished.what = RECORDTIMER_EXPIRED;
             mUIUpdateHandlerHandler.sendMessage(finished);
-            }
-            if(!hasSpaceOnExternal()){
-                //terminate this recording...
-                recordTimerExpired = true;
-                Message noSpaceMessage = mUIUpdateHandlerHandler.obtainMessage(RECORD_NOSPACE);
-                noSpaceMessage.sendToTarget();
             }
          }
       }
@@ -2960,17 +2952,19 @@ public class FMRadio extends Activity
                if (mRecording != false)
                {
                   DebugToasts("Stop Recording", Toast.LENGTH_SHORT);
+                    if (!hasSpaceOnExternal()) {
+                        Toast.makeText(FMRadio.this,
+                                R.string.recording_stop_no_space,
+                                Toast.LENGTH_SHORT).show();
+                    }
                   stopRecording();
+
                }
               return;
             }
          case RECORDTIMER_UPDATE: {
                Log.d(LOGTAG, "mUIUpdateHandlerHandler - RECORDTIMER_UPDATE");
                updateExpiredRecordTime();
-               break;
-            }
-         case RECORD_NOSPACE: {
-               Toast.makeText(FMRadio.this, R.string.recording_stop_no_space, Toast.LENGTH_SHORT).show();
                break;
             }
          default:
