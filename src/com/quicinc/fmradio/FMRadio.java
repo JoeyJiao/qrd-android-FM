@@ -277,6 +277,7 @@ public class FMRadio extends Activity
    private  boolean mStartInCall = false;
    private TelephonyManager mTmgr;
    private boolean mStartInAirplane = false;
+   public static Context mContext;
    private  BroadcastReceiver mReceiver =  new BroadcastReceiver(){
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -299,6 +300,10 @@ public class FMRadio extends Activity
    @Override
    public void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
+
+      if(mContext == null)
+          mContext = this.getApplicationContext();
+
       setVolumeControlStream(AudioManager.STREAM_FM);
       mPrefs = new FmSharedPreferences(this);
       mCommandActive = CMD_NONE;
@@ -431,6 +436,7 @@ public class FMRadio extends Activity
         filter.addAction(Intent.ACTION_HEADSET_PLUG);
         filter.addAction(ACTION_EXIT_FM);
         registerReceiver(mReceiver, filter);
+
    }
 
    /**

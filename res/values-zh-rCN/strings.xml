@@ -71,7 +71,7 @@
     <string name="auto_select_af_disabled">自动选择关闭</string>
     <string name="settings_revert_confirm_title">确定清除设置</string>
     <string name="settings_revert_confirm_msg">将删除所有设置</string>
-    <string name="settings_back_summary">Return to previous view</string>
+    <string name="settings_back_summary">退回到前一项</string>
     <string name="settings_revert_defaults_title">恢复出厂设置</string>
     <string name="settings_revert_defaults_summary">清除所有设置</string>
     <string name="audio_type_stereo">立体声</string>
@@ -97,4 +97,61 @@
     <string name="cannot_startup_during_airplane">"飞行模式中不能启动FM！"</string>
     <string name="prompt_delete">删除:</string>
     <string name="prompt_delete_sure">确定要删除 </string>
+
+    <!-- search category of rbds entries -->
+    <string name="All_Stations">"全部电台"</string>
+    <string name="Adult_Hits">成人点击</string>
+    <string name="Classical">古典</string>
+    <string name="Classic_Rock">经典摇滚</string>
+    <string name="College">校园</string>
+    <string name="Country">乡村</string>
+    <string name="Emergency">紧急</string>
+    <string name="Emergency_Test">紧急  测试</string>
+    <string name="Foreign_Language">外语频道</string>
+    <string name="Information">信息频道</string>
+    <string name="Jazz">爵士</string>
+    <string name="News">新闻</string>
+    <string name="Nostalgia">怀旧</string>
+    <string name="Oldies">老歌</string>
+    <string name="Personality">个性</string>
+    <string name="Public">公共频道</string>
+    <string name="Religious_Music">宗教音乐</string>
+    <string name="Religious_Talk">宗教交流</string>
+    <string name="Rhythm_and_Blues">节奏布鲁斯</string>
+    <string name="Rock">摇滚</string>
+    <string name="Soft">轻音乐</string>
+    <string name="Soft_Rock">轻摇滚</string>
+    <string name="Soft_Rhythm_and_Blues">轻节奏布鲁斯</string>
+    <string name="Sports">体育</string>
+    <string name="Talk">交流</string>
+    <string name="Top_40">前40</string>
+    <string name="Weather">天气</string>
+
+    <!-- search category of rds entries -->
+    <string name="Culture">文化</string>
+    <string name="Current_Affairs">新闻时事</string>
+    <string name="Children_programs">儿童节目</string>
+    <string name="Country_Music">乡村音乐</string>
+    <string name="Documentary">记录</string>
+    <string name="Drama">戏剧</string>
+    <string name="Easy_Listening_Music">轻音乐</string>
+    <string name="Education">教育</string>
+    <string name="Finance">经济</string>
+    <string name="Folk_Music">民族音乐</string>
+    <string name="Jazz_Music">爵士音乐</string>
+    <string name="Light_classical">轻古典音乐</string>
+    <string name="Leisure">休闲</string>
+    <string name="National_Music">民族音乐</string>
+    <string name="Other_Music">其他音乐</string>
+    <string name="Oldies_Music">怀旧</string>
+    <string name="Phone_In">听众来电</string>
+    <string name="Pop_Music">流行音乐</string>
+    <string name="Religion">宗教</string>
+    <string name="Rock_Music">摇滚音乐</string>
+    <string name="Science">科学</string>
+    <string name="Serious_classical">古典</string>
+    <string name="Social_Affairs">社会事务</string>
+    <string name="Sport">体育</string>
+    <string name="Travel">旅行</string>
+    <string name="Varied">变奏</string>
 </resources>

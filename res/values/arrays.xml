@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
- * Copyright (c) 2009, 2011 Code Aurora Forum. All rights reserved.
+ * Copyright (c) 2009, 2011-2012, Code Aurora Forum. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -69,33 +69,33 @@
   </string-array>
 
   <string-array name="search_category_rbds_entries">
-    <item>All Stations</item>
-    <item>Adult Hits</item>
-    <item>Classical</item>
-    <item>Classic Rock</item>
-    <item>College</item>
-    <item>Country</item>
-    <item>Emergency</item>
-    <item>Emergency Test</item>
-    <item>Foreign Language</item>
-    <item>Information</item>
-    <item>Jazz</item>
-    <item>News</item>
-    <item>Nostalgia</item>
-    <item>Oldies</item>
-    <item>Personality</item>
-    <item>Public</item>
-    <item>Religious Music</item>
-    <item>Religious Talk</item>
-    <item>Rhythm and Blues</item>
-    <item>Rock</item>
-    <item>Soft</item>
-    <item>Soft Rock</item>
-    <item>Soft Rhythm and Blues</item>
-    <item>Sports</item>
-    <item>Talk</item>
-    <item>Top 40</item>
-    <item>Weather</item>
+    <item>@string/All_Stations</item>
+    <item>@string/Adult_Hits</item>
+    <item>@string/Classical</item>
+    <item>@string/Classic_Rock</item>
+    <item>@string/College</item>
+    <item>@string/Country</item>
+    <item>@string/Emergency</item>
+    <item>@string/Emergency_Test</item>
+    <item>@string/Foreign_Language</item>
+    <item>@string/Information</item>
+    <item>@string/Jazz</item>
+    <item>@string/News</item>
+    <item>@string/Nostalgia</item>
+    <item>@string/Oldies</item>
+    <item>@string/Personality</item>
+    <item>@string/Public</item>
+    <item>@string/Religious_Music</item>
+    <item>@string/Religious_Talk</item>
+    <item>@string/Rhythm_and_Blues</item>
+    <item>@string/Rock</item>
+    <item>@string/Soft</item>
+    <item>@string/Soft_Rock</item>
+    <item>@string/Soft_Rhythm_and_Blues</item>
+    <item>@string/Sports</item>
+    <item>@string/Talk</item>
+    <item>@string/Top_40</item>
+    <item>@string/Weather</item>
   </string-array>
 
   <string-array name="search_category_rbds_values">
@@ -130,38 +130,38 @@
 
 
   <string-array name="search_category_rds_entries">
-    <item>All Stations</item>
-    <item>Culture</item>
-    <item>Current Affairs</item>
-    <item>Children programs</item>
-    <item>Country Music</item>
-    <item>Documentary</item>
-    <item>Drama</item>
-    <item>Easy Listening Music</item>
-    <item>Education</item>
-    <item>Emergency</item>
-    <item>Emergency Test</item>
-    <item>Finance</item>
-    <item>Folk Music</item>
-    <item>Information</item>
-    <item>Jazz Music</item>
-    <item>Light classical</item>
-    <item>Leisure</item>
-    <item>News</item>
-    <item>National Music</item>
-    <item>Other Music</item>
-    <item>Oldies Music</item>
-    <item>Phone In</item>
-    <item>Pop Music</item>
-    <item>Religion</item>
-    <item>Rock Music</item>
-    <item>Science</item>
-    <item>Serious classical</item>
-    <item>Social Affairs</item>
-    <item>Sport</item>
-    <item>Travel</item>
-    <item>Varied</item>
-    <item>Weather</item>
+    <item>@string/All_Stations</item>
+    <item>@string/Culture</item>
+    <item>@string/Current_Affairs</item>
+    <item>@string/Children_programs</item>
+    <item>@string/Country_Music</item>
+    <item>@string/Documentary</item>
+    <item>@string/Drama</item>
+    <item>@string/Easy_Listening_Music</item>
+    <item>@string/Education</item>
+    <item>@string/Emergency</item>
+    <item>@string/Emergency_Test</item>
+    <item>@string/Finance</item>
+    <item>@string/Folk_Music</item>
+    <item>@string/Information</item>
+    <item>@string/Jazz_Music</item>
+    <item>@string/Light_classical</item>
+    <item>@string/Leisure</item>
+    <item>@string/News</item>
+    <item>@string/National_Music</item>
+    <item>@string/Other_Music</item>
+    <item>@string/Oldies_Music</item>
+    <item>@string/Phone_In</item>
+    <item>@string/Pop_Music</item>
+    <item>@string/Religion</item>
+    <item>@string/Rock_Music</item>
+    <item>@string/Science</item>
+    <item>@string/Serious_classical</item>
+    <item>@string/Social_Affairs</item>
+    <item>@string/Sport</item>
+    <item>@string/Travel</item>
+    <item>@string/Varied</item>
+    <item>@string/Weather</item>
   </string-array>
 
   <string-array name="search_category_rds_values">

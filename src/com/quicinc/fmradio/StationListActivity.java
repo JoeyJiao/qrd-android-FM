@@ -196,7 +196,7 @@ public class StationListActivity extends Activity implements
         // super.onPrepareDialog(id, dialog);
         switch (id) {
         case DIALOG_RENAME_ID:
-            mDialog.setTitle(getString(R.string.prompt_delete) + getNameFromId(mItemId));
+            mDialog.setTitle(getString(R.string.station_name) + getNameFromId(mItemId));
             final EditText editText = (EditText) mDialog
                     .findViewById(R.id.name);
             editText.setText(getNameFromId(mItemId));

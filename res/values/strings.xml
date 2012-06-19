@@ -238,4 +238,61 @@
     <string name="cannot_startup_during_airplane">Can not start FM in AirPlane mode!</string>
     <string name="prompt_delete">Delete:</string>
     <string name="prompt_delete_sure">Are you sure to delete </string>
+
+    <!-- search category of rbds entries -->
+    <string name="All_Stations">All Stations</string>
+    <string name="Adult_Hits">Adult Hits</string>
+    <string name="Classical">Classical</string>
+    <string name="Classic_Rock">Classic Rock</string>
+    <string name="College">College</string>
+    <string name="Country">Country</string>
+    <string name="Emergency">Emergency</string>
+    <string name="Emergency_Test">Emergency Test</string>
+    <string name="Foreign_Language">Foreign Language</string>
+    <string name="Information">Information</string>
+    <string name="Jazz">Jazz</string>
+    <string name="News">News</string>
+    <string name="Nostalgia">Nostalgia</string>
+    <string name="Oldies">Oldies</string>
+    <string name="Personality">Personality</string>
+    <string name="Public">Public</string>
+    <string name="Religious_Music">Religious Music</string>
+    <string name="Religious_Talk">Religious Talk</string>
+    <string name="Rhythm_and_Blues">Rhythm and Blues</string>
+    <string name="Rock">Rock</string>
+    <string name="Soft">Soft</string>
+    <string name="Soft_Rock">Soft Rock</string>
+    <string name="Soft_Rhythm_and_Blues">Soft Rhythm and Blues</string>
+    <string name="Sports">Sports</string>
+    <string name="Talk">Talk</string>
+    <string name="Top_40">Top 40</string>
+    <string name="Weather">Weather</string>
+
+    <!-- search category of rds entries -->
+    <string name="Culture">Culture</string>
+    <string name="Current_Affairs">Current Affairs</string>
+    <string name="Children_programs">Children programs</string>
+    <string name="Country_Music">Country Music</string>
+    <string name="Documentary">Documentary</string>
+    <string name="Drama">Drama</string>
+    <string name="Easy_Listening_Music">Easy Listening Music</string>
+    <string name="Education">Education</string>
+    <string name="Finance">Finance</string>
+    <string name="Folk_Music">Folk Music</string>
+    <string name="Jazz_Music">Jazz Music</string>
+    <string name="Light_classical">Light classical</string>
+    <string name="Leisure">Leisure</string>
+    <string name="National_Music">National Music</string>
+    <string name="Other_Music">Other Music</string>
+    <string name="Oldies_Music">Oldies Music</string>
+    <string name="Phone_In">Phone In</string>
+    <string name="Pop_Music">Pop Music</string>
+    <string name="Religion">Religion</string>
+    <string name="Rock_Music">Rock Music</string>
+    <string name="Science">Science</string>
+    <string name="Serious_classical">Serious classical</string>
+    <string name="Social_Affairs">Social Affairs</string>
+    <string name="Sport">Sport</string>
+    <string name="Travel">Travel</string>
+    <string name="Varied">Varied</string>
 </resources>

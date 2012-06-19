@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /*
- * Copyright (C) 2012, Code Aurora Forum. All rights reserved.
+ * Copyright (c) 2009, 2011-2012, Code Aurora Forum. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -51,70 +51,69 @@
   </string-array>
 
   <string-array name="search_category_rbds_entries">
-    <item>全部电台</item>
-    <item>成人点击</item>
-    <item>古典</item>
-    <item>经典摇滚</item>
-    <item>校园</item>
-    <item>乡村</item>
-    <item>紧急</item>
-    <item>紧急  测试</item>
-    <item>外语频道</item>
-    <item>信息频道</item>
-    <item>爵士</item>
-    <item>新闻</item>
-    <item>怀旧</item>
-    <item>老歌</item>
-    <item>个性</item>
-    <item>公共频道</item>
-    <item>宗教音乐</item>
-    <item>宗教交流</item>
-    <item>节奏布鲁斯</item>
-    <item>摇滚</item>
-    <item>轻音乐</item>
-    <item>轻摇滚</item>
-    <item>轻节奏布鲁斯</item>
-    <item>体育</item>
-    <item>交流</item>
-    <item>前40</item>
-    <item>天气</item>
+    <item>@string/All_Stations</item>
+    <item>@string/Adult_Hits</item>
+    <item>@string/Classical</item>
+    <item>@string/Classic_Rock</item>
+    <item>@string/College</item>
+    <item>@string/Country</item>
+    <item>@string/Emergency</item>
+    <item>@string/Emergency_Test</item>
+    <item>@string/Foreign_Language</item>
+    <item>@string/Information</item>
+    <item>@string/Jazz</item>
+    <item>@string/News</item>
+    <item>@string/Nostalgia</item>
+    <item>@string/Oldies</item>
+    <item>@string/Personality</item>
+    <item>@string/Public</item>
+    <item>@string/Religious_Music</item>
+    <item>@string/Religious_Talk</item>
+    <item>@string/Rhythm_and_Blues</item>
+    <item>@string/Rock</item>
+    <item>@string/Soft</item>
+    <item>@string/Soft_Rock</item>
+    <item>@string/Soft_Rhythm_and_Blues</item>
+    <item>@string/Sports</item>
+    <item>@string/Talk</item>
+    <item>@string/Top_40</item>
+    <item>@string/Weather</item>
   </string-array>
 
   <string-array name="search_category_rds_entries">
-    <item>全部电台</item>
-    <item>文化</item>
-    <item>新闻时事</item>
-    <item>儿童节目</item>
-    <item>乡村音乐</item>
-    <item>记录</item>
-    <item>戏剧</item>
-    <item>轻音乐</item>
-    <item>教育</item>
-    <item>紧急</item>
-    <item>紧急测试</item>
-    <item>经济</item>
-    <item>民族音乐</item>
-    <item>信息</item>
-    <item>爵士音乐</item>
-    <item>轻古典音乐</item>
-    <item>休闲</item>
-    <item>新闻</item>
-    <item>民族音乐</item>
-    <item>其他音乐</item>
-    <item>怀旧</item>
-    <item>听众来电</item>
-    <item>流行音乐</item>
-    <item>宗教</item>
-    <item>摇滚音乐</item>
-    <item>科学</item>
-    <item>古典</item>
-    <item>社会事务</item>
-    <item>体育</item>
-    <item>旅行</item>
-    <item>变奏</item>
-    <item>天气</item>
+    <item>@string/All_Stations</item>
+    <item>@string/Culture</item>
+    <item>@string/Current_Affairs</item>
+    <item>@string/Children_programs</item>
+    <item>@string/Country_Music</item>
+    <item>@string/Documentary</item>
+    <item>@string/Drama</item>
+    <item>@string/Easy_Listening_Music</item>
+    <item>@string/Education</item>
+    <item>@string/Emergency</item>
+    <item>@string/Emergency_Test</item>
+    <item>@string/Finance</item>
+    <item>@string/Folk_Music</item>
+    <item>@string/Information</item>
+    <item>@string/Jazz_Music</item>
+    <item>@string/Light_classical</item>
+    <item>@string/Leisure</item>
+    <item>@string/News</item>
+    <item>@string/National_Music</item>
+    <item>@string/Other_Music</item>
+    <item>@string/Oldies_Music</item>
+    <item>@string/Phone_In</item>
+    <item>@string/Pop_Music</item>
+    <item>@string/Religion</item>
+    <item>@string/Rock_Music</item>
+    <item>@string/Science</item>
+    <item>@string/Serious_classical</item>
+    <item>@string/Social_Affairs</item>
+    <item>@string/Sport</item>
+    <item>@string/Travel</item>
+    <item>@string/Varied</item>
+    <item>@string/Weather</item>
   </string-array>
-
 
   <string-array name="presetlist_edit_category">
     <item>重命名</item>

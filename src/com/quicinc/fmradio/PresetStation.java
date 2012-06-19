@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009, Code Aurora Forum. All rights reserved.
+ * Copyright (c) 2009, 2012, Code Aurora Forum. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -29,6 +29,7 @@
 package com.quicinc.fmradio;
 
 import android.hardware.fmradio.FmReceiver;
+import android.content.res.Resources;
 
 import android.text.TextUtils;
 //import android.util.Log;
@@ -634,136 +635,138 @@ public class PresetStation
    public static String getRBDSPtyString(int pty)
    {
       String ptyStr = "";
+
+      Resources mResources = FMRadio.mContext.getResources();
       switch (pty)
       {
          case 1:
          {
-            ptyStr = "News";
+            ptyStr = mResources.getString(R.string.News);
             break;
          }
          case 2:
          {
-            ptyStr = "Information";
+            ptyStr = mResources.getString(R.string.Information);
             break;
          }
          case 3:
          {
-            ptyStr = "Sports";
+            ptyStr = mResources.getString(R.string.Sports);
             break;
          }
          case 4:
          {
-            ptyStr = "Talk";
+            ptyStr = mResources.getString(R.string.Talk);
             break;
          }
          case 5:
          {
-            ptyStr = "Rock";
+            ptyStr = mResources.getString(R.string.Rock);;
             break;
          }
          case 6:
          {
-            ptyStr = "Classic Rock";
+            ptyStr = mResources.getString(R.string.Classic_Rock);
             break;
          }
          case 7:
          {
-            ptyStr = "Adult Hits";
+            ptyStr = mResources.getString(R.string.Adult_Hits);
             break;
          }
          case 8:
          {
-            ptyStr = "Soft Rock";
+            ptyStr = mResources.getString(R.string.Soft_Rock);
             break;
          }
          case 9:
          {
-            ptyStr = "Top 40";
+            ptyStr = mResources.getString(R.string.Top_40);
             break;
          }
          case 10:
          {
-            ptyStr = "Country";
+            ptyStr = mResources.getString(R.string.Country);
             break;
          }
          case 11:
          {
-            ptyStr = "Oldies";
+            ptyStr = mResources.getString(R.string.Oldies);
             break;
          }
          case 12:
          {
-            ptyStr = "Soft";
+            ptyStr = mResources.getString(R.string.Soft);
             break;
          }
          case 13:
          {
-            ptyStr = "Nostalgia";
+            ptyStr = mResources.getString(R.string.Nostalgia);
             break;
          }
          case 14:
          {
-            ptyStr = "Jazz";
+            ptyStr = mResources.getString(R.string.Jazz);
             break;
          }
          case 15:
          {
-            ptyStr = "Classical";
+            ptyStr = mResources.getString(R.string.Classical);
             break;
          }
          case 16:
          {
-            ptyStr = "Rhythm and Blues";
+            ptyStr = mResources.getString(R.string.Rhythm_and_Blues);
             break;
          }
          case 17:
          {
-            ptyStr = "Soft Rhythm and Blues";
+            ptyStr = mResources.getString(R.string.Soft_Rhythm_and_Blues);
             break;
          }
          case 18:
          {
-            ptyStr = "Foreign Language";
+            ptyStr = mResources.getString(R.string.Foreign_Language);
             break;
          }
          case 19:
          {
-            ptyStr = "Religious Music";
+            ptyStr = mResources.getString(R.string.Religious_Music);
             break;
          }
          case 20:
          {
-            ptyStr = "Religious Talk";
+            ptyStr = mResources.getString(R.string.Religious_Talk);
             break;
          }
          case 21:
          {
-            ptyStr = "Personality";
+            ptyStr = mResources.getString(R.string.Personality);
             break;
          }
          case 22:
          {
-            ptyStr = "Public";
+            ptyStr = mResources.getString(R.string.Public);
             break;
          }
          case 23:
          {
-            ptyStr = "College";
+            ptyStr = mResources.getString(R.string.College);
             break;
          }
          case 29:
          {
-            ptyStr = "Weather";
+            ptyStr = mResources.getString(R.string.Weather);
             break;
          }
          case 30:
          {
-            ptyStr = "Emergency Test";
+            ptyStr = mResources.getString(R.string.Emergency_Test);
             break;
          }
          case 31:
          {
-            ptyStr = "Emergency";
+            ptyStr = mResources.getString(R.string.Emergency);
             break;
          }
          default:
@@ -780,161 +783,162 @@ public class PresetStation
    public static String getRDSPtyString(int pty)
    {
       String ptyStr = "";
+      Resources mResources = FMRadio.mContext.getResources();
       switch (pty)
       {
          case 1:
          {
-            ptyStr = "News";
+            ptyStr = mResources.getString(R.string.News);
             break;
          }
          case 2:
          {
-            ptyStr = "Current Affairs";
+            ptyStr = mResources.getString(R.string.Current_Affairs);
             break;
          }
          case 3:
          {
-            ptyStr = "Information";
+            ptyStr = mResources.getString(R.string.Information);
             break;
          }
          case 4:
          {
-            ptyStr = "Sport";
+            ptyStr = mResources.getString(R.string.Sport);
             break;
          }
          case 5:
          {
-            ptyStr = "Education";
+            ptyStr = mResources.getString(R.string.Education);
             break;
          }
          case 6:
          {
-            ptyStr = "Drama";
+            ptyStr = mResources.getString(R.string.Drama);
             break;
          }
          case 7:
          {
-            ptyStr = "Culture";
+            ptyStr = mResources.getString(R.string.Culture);
             break;
          }
          case 8:
          {
-            ptyStr = "Science";
+            ptyStr = mResources.getString(R.string.Science);
             break;
          }
          case 9:
          {
-            ptyStr = "Varied";
+            ptyStr = mResources.getString(R.string.Varied);
             break;
          }
          case 10:
          {
-            ptyStr = "Pop Music";
+            ptyStr = mResources.getString(R.string.Pop_Music);
             break;
          }
          case 11:
          {
-            ptyStr = "Rock Music";
+            ptyStr = mResources.getString(R.string.Rock_Music);
             break;
          }
          case 12:
          {
-            ptyStr = "Easy Listening Music";
+            ptyStr = mResources.getString(R.string.Easy_Listening_Music);
             break;
          }
          case 13:
          {
-            ptyStr = "Light classical";
+            ptyStr = mResources.getString(R.string.Light_classical);
             break;
          }
          case 14:
          {
-            ptyStr = "Serious classical";
+            ptyStr = mResources.getString(R.string.Serious_classical);
             break;
          }
          case 15:
          {
-            ptyStr = "Other Music";
+            ptyStr = mResources.getString(R.string.Other_Music);
             break;
          }
          case 16:
          {
-            ptyStr = "Weather";
+            ptyStr = mResources.getString(R.string.Weather);
             break;
          }
          case 17:
          {
-            ptyStr = "Finance";
+            ptyStr = mResources.getString(R.string.Finance);
             break;
          }
          case 18:
          {
-            ptyStr = "Children programs";
+            ptyStr = mResources.getString(R.string.Children_programs);
             break;
          }
          case 19:
          {
-            ptyStr = "Social Affairs";
+            ptyStr = mResources.getString(R.string.Social_Affairs);
             break;
          }
          case 20:
          {
-            ptyStr = "Religion";
+            ptyStr = mResources.getString(R.string.Religion);
             break;
          }
          case 21:
          {
-            ptyStr = "Phone In";
+            ptyStr = mResources.getString(R.string.Phone_In);
             break;
          }
          case 22:
          {
-            ptyStr = "Travel";
+            ptyStr = mResources.getString(R.string.Travel);
             break;
          }
          case 23:
          {
-            ptyStr = "Leisure";
+            ptyStr = mResources.getString(R.string.Leisure);
             break;
          }
          case 24:
          {
-            ptyStr = "Jazz Music";
+            ptyStr = mResources.getString(R.string.Jazz_Music);
             break;
          }
          case 25:
          {
-            ptyStr = "Country Music";
+            ptyStr = mResources.getString(R.string.Country_Music);
             break;
          }
          case 26:
          {
-            ptyStr = "National Music";
+            ptyStr = mResources.getString(R.string.National_Music);
             break;
          }
          case 27:
          {
-            ptyStr = "Oldies Music";
+            ptyStr = mResources.getString(R.string.Oldies_Music);
             break;
          }
          case 28:
          {
-            ptyStr = "Folk Music";
+            ptyStr = mResources.getString(R.string.Folk_Music);
             break;
          }
          case 29:
          {
-            ptyStr = "Documentary";
+            ptyStr = mResources.getString(R.string.Documentary);
             break;
          }
          case 30:
          {
-            ptyStr = "Emergency Test";
+            ptyStr = mResources.getString(R.string.Emergency_Test);
             break;
          }
          case 31:
          {
-            ptyStr = "Emergency";
+            ptyStr = mResources.getString(R.string.Emergency);
             break;
          }
          default:
