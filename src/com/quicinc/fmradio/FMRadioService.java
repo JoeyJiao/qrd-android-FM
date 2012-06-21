@@ -1270,7 +1270,6 @@ public class FMRadioService extends Service
       //                         getSystemService(Context.NOTIFICATION_SERVICE);
       //nm.notify(FMRADIOSERVICE_STATUS, status);
       //setForeground(true);
-      mFMOn = true;
    }
 
    private void stop() {
@@ -1650,6 +1649,7 @@ public class FMRadioService extends Service
             readInternalAntennaAvailable();
 
             startNotification();
+            mFMOn = true;
             bStatus = true;
          }
          else
