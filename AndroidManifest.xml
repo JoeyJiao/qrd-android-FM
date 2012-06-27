@@ -78,8 +78,9 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-           <activity android:name=".StationListActivity"
-           android:label="@string/app_label_all_channels">
+        <activity android:name=".StationListActivity"
+                  android:label="@string/app_label_all_channels"
+                  android:configChanges="orientation|keyboardHidden|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
