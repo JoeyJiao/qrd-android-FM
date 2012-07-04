@@ -154,4 +154,8 @@
     <string name="Sport">体育</string>
     <string name="Travel">旅行</string>
     <string name="Varied">变奏</string>
+    <string name="station_list_delete_station">删除:<xliff:g id="name">%s</xliff:g></string>
+    <string name="station_list_delete_station_prompt">要删除 <xliff:g id="name">%s</xliff:g> 吗？</string>
+    <string name="sdcard_no_space_cannot_recording">SD卡空间不足,不能录音</string>
+    <string name="recording_stop_no_space">SD卡空间不足，录音停止</string>
 </resources>
