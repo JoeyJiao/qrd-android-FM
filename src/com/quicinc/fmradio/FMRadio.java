@@ -440,7 +440,7 @@ public class FMRadio extends Activity
    }
 
    /**
-    * set frequencies vlaues
+    * set frequencies valaues
     */
    protected void setDisplayvalue(){
        int max = mPrefs.getUpperLimit();
@@ -2376,7 +2376,9 @@ public class FMRadio extends Activity
          if (mRadioTextScroller != null) {
             mRadioTextScroller.startScroll();
          }
-
+         //after android 3.0 , onPrepareOptionMenu  will be first called since activity started,
+         //after fm enabled , call this to refresh menu.
+         invalidateOptionsMenu();
       } else
       {
          if (mRadioTextScroller != null) {
@@ -3611,9 +3613,6 @@ public class FMRadio extends Activity
                 }
                 mRecordDuration = 0;
             }
-            //after android 3.0 , onPrepareOptionMenu  will be first called since activity started,
-            //after service connected , call this to refresh menu.
-            invalidateOptionsMenu();
             return;
          } else
          {
