@@ -131,6 +131,7 @@ public class FMRadioService extends Service
 
    private boolean resumeSpeaker = false;
 
+   private boolean isExiting = false;
    // Messages handled in FM Service
    private static final int FM_STOP =1;
    private static final int RESET_NOTCH_FILTER =2;
@@ -246,6 +247,7 @@ public class FMRadioService extends Service
 
       //unregisterReceiver(mIntentReceiver);
       mWakeLock.release();
+      isExiting = false;
       super.onDestroy();
    }
 
@@ -349,6 +351,7 @@ public class FMRadioService extends Service
                        if ((mHeadsetPlugged == false) && (mReceiver != null) &&
                            (mInternalAntennaAvailable == false) &&
                            (mOverA2DP == false)) {
+                          isExiting = true;
                           mReceiver.disable();
                           mReceiver = null;
                           if(!isFmRecordingOn())
@@ -525,6 +528,7 @@ public class FMRadioService extends Service
                                 if((mReceiver != null) && mReceiver.disable()) {
                                    mReceiver = null;
                                 }
+                                isExiting = true;
                                 fmOff();
                                 if (isOrderedBroadcast()) {
                                     abortBroadcast();
@@ -573,6 +577,10 @@ public class FMRadioService extends Service
             }
             else
             {
+                //if fm is exiting we do not need to turn it on when headset plug in.
+                if(isExiting){
+                    return;
+                }
                 /* headset is plugged back in,
                So turn on FM if:
                - FM is not already ON.
@@ -623,6 +631,7 @@ public class FMRadioService extends Service
    @Override
    public void onStart(Intent intent, int startId) {
       Log.d(LOGTAG, "onStart");
+      isExiting = false;
       mServiceStartId = startId;
       // adding code for audio focus gain.
       AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
