@@ -314,7 +314,7 @@ public class FMRadio extends Activity
       if(mPicker !=null){
           mPicker.setTextSize(mDisplayWidth/TEXTSIZE_PARAMETER_FOR_NUMBER_PICKER);
           mPicker.setDensity(outMetrics.densityDpi);
-        mPicker.setOnValueChangedListener(new OnValueChangeListener(){
+          mPicker.setOnValueChangedListener(new OnValueChangeListener(){
             @Override
             public void onValueChange(HorizontalNumberPicker picker,
                     int oldVal, int newVal) {
@@ -535,17 +535,6 @@ public class FMRadio extends Activity
       catch (RemoteException e)
       {
          e.printStackTrace();
-      }
-      if(isSleepTimerActive()) {
-          Log.d(LOGTAG,"isSleepTimerActive is true");
-          try {
-            if (null != mService) {
-                mService.cancelDelayedStop(FMRadioService.STOP_SERVICE);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        initiateSleepThread();
       }
       if(isRecordTimerActive()) {
           Log.d(LOGTAG,"isRecordTimerActive is true");
@@ -2372,6 +2361,17 @@ public class FMRadio extends Activity
          //after android 3.0 , onPrepareOptionMenu  will be first called since activity started,
          //after fm enabled , call this to refresh menu.
          invalidateOptionsMenu();
+         //to ensure mService is connected.
+         if(isSleepTimerActive()) {
+             try {
+               if (null != mService) {
+                   mService.cancelDelayedStop(FMRadioService.STOP_SERVICE);
+               }
+           } catch (Exception e) {
+               e.printStackTrace();
+           }
+           initiateSleepThread();
+         }
       } else
       {
          if (mRadioTextScroller != null) {
@@ -2894,7 +2894,8 @@ public class FMRadio extends Activity
 
    private boolean isSleepTimerActive() {
       boolean active = false;
-      if (mSleepAtPhoneTime > 0)
+      //if now > mSleepAtPhoneTime, it must be invalid.
+      if (mSleepAtPhoneTime > 0 && mSleepAtPhoneTime > SystemClock.elapsedRealtime())
       {
          active = true;
       }

@@ -32,6 +32,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -51,6 +52,7 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.RemoteException;
+import android.os.SystemClock;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -113,6 +115,7 @@ public class FMRadioService extends Service
    private boolean mSpeakerPhoneOn = false;
    private int mCallStatus = 0;
    private BroadcastReceiver mScreenOnOffReceiver = null;
+   private BroadcastReceiver mSleepReceiver = null;
    final Handler mHandler = new Handler();
    private boolean misAnalogModeSupported = false;
    private boolean misAnalogPathEnabled = false;
@@ -148,10 +151,12 @@ public class FMRadioService extends Service
    private boolean mAppShutdown = false;
    private boolean mSingleRecordingInstanceSupported = false;
    private AudioManager mAudioManager;
+   private AlarmManager mAlarmMgr;
+   private PendingIntent mSleepIntent;
+   private static final String INTENT_FM_SLEEP = "com.quicinc.fmradio.sleepfm";
 
    private static final String IOBUSY_UNVOTE = "com.android.server.CpuGovernorService.action.IOBUSY_UNVOTE";
    private PhoneStateListener[] mPhoneStateListeners;
-
    public FMRadioService() {
    }
 
@@ -183,6 +188,7 @@ public class FMRadioService extends Service
       // registering media button receiver seperately as we need to set
       // different priority for receiving media events
       registerFmMediaButtonReceiver();
+      registerSleepListener();
       if ( false == SystemProperties.getBoolean("ro.fm.mulinst.recording.support",true)) {
            mSingleRecordingInstanceSupported = true;
       }
@@ -195,6 +201,7 @@ public class FMRadioService extends Service
       Message msg = mDelayedStopHandler.obtainMessage();
       msg.what = FM_STOP;
       mDelayedStopHandler.sendMessageDelayed(msg, IDLE_DELAY);
+      mAlarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
    }
    @Override
    public void onDestroy() {
@@ -1290,6 +1297,24 @@ public class FMRadioService extends Service
             iFilter.addAction(Intent.ACTION_SCREEN_ON);
             iFilter.addAction(Intent.ACTION_SCREEN_OFF);
             registerReceiver(mScreenOnOffReceiver, iFilter);
+        }
+    }
+
+    public void registerSleepListener() {
+        if (mSleepReceiver == null) {
+            mSleepReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    String action = intent.getAction();
+                    if (action.equals(INTENT_FM_SLEEP)){
+                        //Log.d(LOGTAG,"fm sleep received....");
+                        fmOff();
+                    }
+                }
+            };
+            IntentFilter iFilter = new IntentFilter();
+            iFilter.addAction(INTENT_FM_SLEEP);
+            registerReceiver(mSleepReceiver, iFilter);
         }
     }
 
@@ -2751,13 +2776,31 @@ public class FMRadioService extends Service
    }
    //handling the sleep and record stop when FM App not in focus
    private void delayedStop(long duration, int nType) {
-       int whatId = (nType == STOP_SERVICE) ? STOPSERVICE_ONSLEEP: STOPRECORD_ONTIMEOUT ;
-       Message finished = mDelayedStopHandler.obtainMessage(whatId);
-       mDelayedStopHandler.sendMessageDelayed(finished,duration);
+        int whatId = (nType == STOP_SERVICE) ? STOPSERVICE_ONSLEEP : STOPRECORD_ONTIMEOUT;
+        Message finished = mDelayedStopHandler.obtainMessage(whatId);
+        if (nType == STOP_SERVICE) {
+            mAlarmMgr.set(AlarmManager.ELAPSED_REALTIME,
+                    (SystemClock.elapsedRealtime() + duration), getSleepIntent());
+        } else {
+            mDelayedStopHandler.sendMessageDelayed(finished, duration);
+        }
+   }
+   private PendingIntent getSleepIntent(){
+
+       if(null == mSleepIntent){
+           Intent sleepIntent = new Intent();
+           sleepIntent.setAction(INTENT_FM_SLEEP);
+           mSleepIntent = PendingIntent.getBroadcast(this, 0, sleepIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+       }
+       return mSleepIntent;
    }
    private void cancelDelayedStop(int nType) {
-       int whatId = (nType == STOP_SERVICE) ? STOPSERVICE_ONSLEEP: STOPRECORD_ONTIMEOUT ;
-       mDelayedStopHandler.removeMessages(whatId);
+        int whatId = (nType == STOP_SERVICE) ? STOPSERVICE_ONSLEEP : STOPRECORD_ONTIMEOUT;
+        if (nType == STOP_SERVICE) {
+            mAlarmMgr.cancel(getSleepIntent());
+        } else {
+            mDelayedStopHandler.removeMessages(whatId);
+        }
    }
    private void requestFocus() {
       if( (false == mPlaybackInProgress) &&
