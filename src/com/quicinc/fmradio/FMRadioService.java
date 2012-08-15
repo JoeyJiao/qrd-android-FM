@@ -32,6 +32,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -51,7 +52,9 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.RemoteException;
+
 import android.telephony.PhoneStateListener;
+import android.telephony.MSimTelephonyManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.RemoteViews;
@@ -94,6 +97,7 @@ public class FMRadioService extends Service
    private BroadcastReceiver mHeadsetReceiver = null;
    private BroadcastReceiver mSdcardUnmountReceiver = null;
    private BroadcastReceiver mMusicCommandListener = null;
+   private BroadcastReceiver mAirplaneModeChangeListener = null;
    private boolean mOverA2DP = false;
    private BroadcastReceiver mFmMediaButtonListener;
    private IFMRadioServiceCallbacks mCallbacks;
@@ -128,6 +132,10 @@ public class FMRadioService extends Service
    private boolean mStoppedOnFocusLoss = false;
    private File mSampleFile = null;
    long mSampleStart = 0;
+
+   private boolean resumeSpeaker = false;
+
+   private boolean isExiting = false;
    // Messages handled in FM Service
    private static final int FM_STOP =1;
    private static final int RESET_NOTCH_FILTER =2;
@@ -151,7 +159,7 @@ public class FMRadioService extends Service
    private long mStorageSpace;
 
    private static final String IOBUSY_UNVOTE = "com.android.server.CpuGovernorService.action.IOBUSY_UNVOTE";
-
+   private PhoneStateListener[] mPhoneStateListeners;
    public FMRadioService() {
    }
 
@@ -162,8 +170,15 @@ public class FMRadioService extends Service
       mPrefs = new FmSharedPreferences(this);
       mCallbacks = null;
       TelephonyManager tmgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-      tmgr.listen(mPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE |
-                                       PhoneStateListener.LISTEN_DATA_ACTIVITY);
+      //listen to double sims
+//      int phoneCount = TelephonyManager.getDefault().getPhoneCount();
+//      mPhoneStateListeners = new PhoneStateListener[phoneCount];
+//      for (int i = 0; i < phoneCount; i++) {
+//          mPhoneStateListeners[i] = getPhoneStateListener(i);
+//          tmgr.listen(mPhoneStateListeners[i],
+//                  PhoneStateListener.LISTEN_CALL_STATE |
+//                  PhoneStateListener.LISTEN_DATA_ACTIVITY);
+//      }
       PowerManager pm = (PowerManager)getSystemService(Context.POWER_SERVICE);
       mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, this.getClass().getName());
       mWakeLock.setReferenceCounted(false);
@@ -173,6 +188,7 @@ public class FMRadioService extends Service
       registerScreenOnOffListener();
       registerHeadsetListener();
       registerExternalStorageListener();
+      registerAirplaneModeChangeListener();
       // registering media button receiver seperately as we need to set
       // different priority for receiving media events
       registerFmMediaButtonReceiver();
@@ -202,10 +218,6 @@ public class FMRadioService extends Service
       mDelayedStopHandler.removeCallbacksAndMessages(null);
       //release the audio focus listener
       AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-      if (isMuted()) {
-          mMuted = false;
-          audioManager.setStreamMute(AudioManager.STREAM_FM,false);
-      }
       audioManager.abandonAudioFocus(mAudioFocusListener);
       /* Remove the Screen On/off listener */
       if (mScreenOnOffReceiver != null) {
@@ -229,17 +241,23 @@ public class FMRadioService extends Service
           unregisterReceiver(mFmMediaButtonListener);
           mFmMediaButtonListener = null;
       }
-
+      if(mAirplaneModeChangeListener != null){
+          unregisterReceiver(mAirplaneModeChangeListener);
+          mAirplaneModeChangeListener = null;
+      }
       /* Since the service is closing, disable the receiver */
       fmOff();
 
-      TelephonyManager tmgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-      tmgr.listen(mPhoneStateListener, 0);
+//      TelephonyManager tmgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+//        for (int i = 0; i < TelephonyManager.getDefault().getPhoneCount(); i++) {
+//            tmgr.listen(mPhoneStateListeners[i], 0);
+//        }
 
       Log.d(LOGTAG, "onDestroy: unbindFromService completed");
 
       //unregisterReceiver(mIntentReceiver);
       mWakeLock.release();
+      isExiting = false;
       super.onDestroy();
    }
 
@@ -275,6 +293,32 @@ public class FMRadioService extends Service
          }
      }
 
+    /**
+     * Register an intent to listen for airplane mode change.
+     */
+    public void registerAirplaneModeChangeListener(){
+        if(mAirplaneModeChangeListener == null){
+            mAirplaneModeChangeListener = new BroadcastReceiver(){
+
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    // TODO Auto-generated method stub
+                    String action = intent.getAction();
+                    if(action.equals(Intent.ACTION_AIRPLANE_MODE_CHANGED)){
+                        boolean enabled = intent.getBooleanExtra("state", false);
+                        Log.d(LOGTAG,"airplane enable state is:" + enabled);
+                        if(enabled){
+                            //exit FM Radio
+                            fmOff();
+                        }
+                    }
+                }
+            };
+            IntentFilter iFilter = new IntentFilter();
+            iFilter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
+            registerReceiver(mAirplaneModeChangeListener, iFilter);
+        }
+    }
 
      /**
      * Registers an intent to listen for ACTION_HEADSET_PLUG
@@ -301,11 +345,15 @@ public class FMRadioService extends Service
                        if ((mHeadsetPlugged == false) && (mReceiver != null) &&
                            (mInternalAntennaAvailable == false) &&
                            (mOverA2DP == false)) {
+                          isExiting = true;
                           mReceiver.disable();
                           mReceiver = null;
                           if(!isFmRecordingOn())
                              stop();
                        }
+                       if(mHeadsetPlugged == false
+                               && isCallActive())
+                           FMRadioService.this.stopSelf();
                        mHandler.post(mHeadsetPluginHandler);
                     } else if(mA2dpDeviceState.isA2dpStateChange(action) ) {
                         boolean  bA2dpConnected =
@@ -504,23 +552,28 @@ public class FMRadioService extends Service
             if(!isAntennaAvailable())
             {
                 /* Disable FM and let the UI know */
-                fmOff();
-                try
-                {
-                    /* Notify the UI/Activity, only if the service is "bound"
-                  by an activity and if Callbacks are registered
-                     */
-                    if((mServiceInUse) && (mCallbacks != null) )
-                    {
-                        mCallbacks.onDisabled();
+                if (isFmOn()) {
+                    fmOff();
+                    try {
+                        /*
+                         * Notify the UI/Activity, only if the service is
+                         * "bound" by an activity and if Callbacks are
+                         * registered
+                         */
+                        if ((mServiceInUse) && (mCallbacks != null)) {
+                            mCallbacks.onDisabled();
+                        }
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
                     }
-                } catch (RemoteException e)
-                {
-                    e.printStackTrace();
                 }
             }
             else
             {
+                //if fm is exiting we do not need to turn it on when headset plug in.
+                if(isExiting){
+                    return;
+                }
                 /* headset is plugged back in,
                So turn on FM if:
                - FM is not already ON.
@@ -571,6 +624,7 @@ public class FMRadioService extends Service
    @Override
    public void onStart(Intent intent, int startId) {
       Log.d(LOGTAG, "onStart");
+      isExiting = false;
       mServiceStartId = startId;
       // adding code for audio focus gain.
       AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -598,7 +652,7 @@ public class FMRadioService extends Service
          // an in-progress call ends, so don't stop the service now.
          return true;
       }
-      gotoIdleState();
+      stopSelf(mServiceStartId);
       return true;
    }
 
@@ -611,7 +665,7 @@ public class FMRadioService extends Service
            mResumeAfterCall = true;
            return;
        }
-       mResumeAfterCall = false;
+
        if ( true == mPlaybackInProgress ) // no need to resend event
            return;
        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -700,10 +754,10 @@ public class FMRadioService extends Service
             sampleDir = new File("/sdcard/sdcard");
         try {
             mSampleFile = File
-                    .createTempFile("FMRecording", ".3gpp", sampleDir);
+                    .createTempFile("FMRecording", ".aac", sampleDir);
         } catch (IOException e) {
             Log.e(LOGTAG, "Not able to access SD Card");
-            Toast.makeText(this, "Not able to access SD Card", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.error_sdcard_access), Toast.LENGTH_SHORT).show();
             return false;
         }
         if (mRecorder == null) {
@@ -1070,6 +1124,7 @@ public class FMRadioService extends Service
        boolean bTempSpeaker = mSpeakerPhoneOn; //need to restore SpeakerPhone
        boolean bTempMute    = mMuted;// need to restore Mute status
        int bTempCall = mCallStatus;//need to restore call status
+       mResumeAfterCall = true;
        fmOff();
        try
            {
@@ -1083,7 +1138,7 @@ public class FMRadioService extends Service
             {
                 e.printStackTrace();
             }
-           mResumeAfterCall = true;
+           //mResumeAfterCall = true;
            mSpeakerPhoneOn = bTempSpeaker;
            mCallStatus = bTempCall;
            mMuted = bTempMute;
@@ -1109,45 +1164,56 @@ public class FMRadioService extends Service
                    {
                        e.printStackTrace();
                    }
-              }
+                } else if((isAntennaAvailable())
+                         ) {
+                    if (true != fmOn()) {
+                        Log.d(LOGTAG, "fmOn failed.......");
+                    } else {
+                        tune(mPrefs.getTunedFrequency());
+                    }
+                    mResumeAfterCall = false;
+                }
           }
        }//idle
    }
 
     /* Handle Phone Call + FM Concurrency */
-   private PhoneStateListener mPhoneStateListener = new PhoneStateListener() {
-      @Override
-      public void onCallStateChanged(int state, String incomingNumber) {
-          Log.d(LOGTAG, "onCallStateChanged: State - " + state );
-          Log.d(LOGTAG, "onCallStateChanged: incomingNumber - " + incomingNumber );
-          fmActionOnCallState(state );
-      }
+   private PhoneStateListener getPhoneStateListener(int sub) {
+       PhoneStateListener phoneStateListener = new PhoneStateListener(sub) {
+           public void onCallStateChanged(int state, String incomingNumber) {
+               Log.d(LOGTAG,"mSubscription:" + mSubscription);
+               Log.d(LOGTAG, "onCallStateChanged mSubscription: State - " + state);
+               Log.d(LOGTAG, "onCallStateChanged: incomingNumber - "
+                       + incomingNumber);
+               fmActionOnCallState(state);
+           }
+           @Override
+           public void onDataActivity (int direction) {
+               Log.d(LOGTAG, "onDataActivity - " + direction );
+               if (direction == TelephonyManager.DATA_ACTIVITY_NONE ||
+                   direction == TelephonyManager.DATA_ACTIVITY_DORMANT) {
+                      if (mReceiver != null) {
+                            Message msg = mDelayedStopHandler.obtainMessage(RESET_NOTCH_FILTER);
+                            mDelayedStopHandler.sendMessageDelayed(msg, 10000);
+                      }
+              } else {
+                    if (mReceiver != null) {
+                        if( true == mNotchFilterSet )
+                        {
+                            mDelayedStopHandler.removeMessages(RESET_NOTCH_FILTER);
+                        }
+                        else
+                        {
+                            mReceiver.setNotchFilter(true);
+                            mNotchFilterSet = true;
+                        }
+                    }
+              }
+           }
+      };
 
-      @Override
-      public void onDataActivity (int direction) {
-          Log.d(LOGTAG, "onDataActivity - " + direction );
-          if (direction == TelephonyManager.DATA_ACTIVITY_NONE ||
-              direction == TelephonyManager.DATA_ACTIVITY_DORMANT) {
-                 if (mReceiver != null) {
-                       Message msg = mDelayedStopHandler.obtainMessage(RESET_NOTCH_FILTER);
-                       mDelayedStopHandler.sendMessageDelayed(msg, 10000);
-                 }
-         } else {
-               if (mReceiver != null) {
-                   if( true == mNotchFilterSet )
-                   {
-                       mDelayedStopHandler.removeMessages(RESET_NOTCH_FILTER);
-                   }
-                   else
-                   {
-                       mReceiver.setNotchFilter(true);
-                       mNotchFilterSet = true;
-                   }
-               }
-         }
-      }
- };
-
+ return phoneStateListener;
+}
    private Handler mDelayedStopHandler = new Handler() {
       @Override
       public void handleMessage(Message msg) {
@@ -1182,10 +1248,12 @@ public class FMRadioService extends Service
                   case AudioManager.AUDIOFOCUS_LOSS:
                       Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_LOSS");
                       //intentional fall through.
+                      fmOff();
                   case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                       Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_LOSS_TRANSIENT");
                       if (mSpeakerPhoneOn) {
                           mSpeakerPhoneOn = false;
+                          resumeSpeaker = true;
                           if (isAnalogModeSupported()) {
                               setAudioPath(true);
                           }
@@ -1199,8 +1267,15 @@ public class FMRadioService extends Service
                       break;
                   case AudioManager.AUDIOFOCUS_GAIN:
                       Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_GAIN");
-                      if(false == mPlaybackInProgress)
+                      if(false == mPlaybackInProgress){
                           startFM();
+                          if(resumeSpeaker){
+                                 setAudioPath(false);
+                                 AudioSystem.setForceUse(AudioSystem.FOR_MEDIA, AudioSystem.FORCE_SPEAKER);
+                                 mSpeakerPhoneOn = true;
+                                 resumeSpeaker = false;
+                          }
+                      }
                       mStoppedOnFocusLoss = false;
                       break;
                   case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
@@ -1284,17 +1359,17 @@ public class FMRadioService extends Service
       //                         getSystemService(Context.NOTIFICATION_SERVICE);
       //nm.notify(FMRADIOSERVICE_STATUS, status);
       //setForeground(true);
-      mFMOn = true;
    }
 
    private void stop() {
       Log.d(LOGTAG,"in stop");
-      try {
-           if (mFMOn && (mCallbacks != null))
-               mCallbacks. onFinishActivity();
-      } catch (RemoteException e) {
-           e.printStackTrace();
-      }
+      //will exit in fmoff , no need exit here.
+//      try {
+//           if (mFMOn && (mCallbacks != null))
+//               mCallbacks. onFinishActivity();
+//      } catch (RemoteException e) {
+//           e.printStackTrace();
+//      }
       if (!mServiceInUse) {
           Log.d(LOGTAG,"calling unregisterMediaButtonEventReceiver in stop");
           mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -1663,6 +1738,7 @@ public class FMRadioService extends Service
             readInternalAntennaAvailable();
 
             startNotification();
+            mFMOn = true;
             bStatus = true;
          }
          else
@@ -1754,6 +1830,10 @@ public class FMRadioService extends Service
          mReceiver = null;
       }
       stop();
+      if(!mResumeAfterCall){
+          Intent intent = new Intent(FMRadio.ACTION_EXIT_FM);
+          sendBroadcast(intent);
+      }
       return(bStatus);
    }
 
@@ -2526,7 +2606,7 @@ public class FMRadioService extends Service
             mFMRxRDSData = null;
             if(mCallbacks != null)
             {
-               mCallbacks.onTuneStatusChanged();
+               mCallbacks.onTuneStatusChanged(frequency);
             }
             /* Update the frequency in the StatusBar's Notification */
             startNotification();

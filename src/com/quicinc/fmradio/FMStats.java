@@ -981,7 +981,7 @@ public class CfgRfItemSelectedListener implements OnItemSelectedListener {
              Log.d(LOGTAG, "mServiceCallbacks.onRadioReset :");
           }
 
-          public void onTuneStatusChanged()
+          public void onTuneStatusChanged(int frequency)
           {
              Log.d(LOGTAG, "mServiceCallbacks.onTuneStatusChanged :");
              mHandler.post(mTuneComplete);

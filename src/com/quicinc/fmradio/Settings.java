@@ -28,9 +28,14 @@
 
 package com.quicinc.fmradio;
 
+import java.util.Locale;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.Intent;
@@ -69,6 +74,16 @@ public class Settings extends PreferenceActivity implements
         private FmSharedPreferences mPrefs = null;
         private boolean mRxMode = false;
 
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (FMRadio.isHeadsetPlugOut(intent)) {
+                finish();
+            } else if (FMRadio.isFmOff(intent)) {
+                finish();
+            }
+        }
+    };
         @Override
         protected void onCreate(Bundle savedInstanceState) {
                 super.onCreate(savedInstanceState);
@@ -80,6 +95,11 @@ public class Settings extends PreferenceActivity implements
                 if (mPrefs != null) {
                         setPreferenceScreen(createPreferenceHierarchy());
                 }
+
+                IntentFilter filter = new IntentFilter();
+                filter.addAction(Intent.ACTION_HEADSET_PLUG);
+                filter.addAction(FMRadio.ACTION_EXIT_FM);
+                registerReceiver(mReceiver, filter);
         }
 
         private PreferenceScreen createPreferenceHierarchy() {
@@ -228,6 +248,10 @@ public class Settings extends PreferenceActivity implements
                         FMTransmitterActivity.fmConfigure();
                         if (curList != null) {
                            curList.clear();
+                           SharedPreferences sp = getSharedPreferences(FMRadio.SCAN_STATION_PREFS_NAME,0);
+                           SharedPreferences.Editor editor = sp.edit();
+                           editor.clear();
+                           editor.commit();
                         }
                 } else {
                         if (mRxMode) {
@@ -339,25 +363,35 @@ public class Settings extends PreferenceActivity implements
                 return null;
         }
 
-        private void restoreSettingsDefault() {
-                if (mPrefs != null) {
-                        mBandPreference.setValueIndex(0);
-                        if (mRxMode) {
-                                mAudioPreference.setValueIndex(0);
-            if(FMRadio.RECORDING_ENABLE)
-            {
-               mRecordDurPreference.setValueIndex(0);
+    private void restoreSettingsDefault() {
+        if (mPrefs != null) {
+            if (Locale.getDefault().equals(Locale.CHINA)) {
+                mBandPreference
+                        .setValueIndex(FmSharedPreferences.REGIONAL_BAND_CHINA);
+            } else {
+                mBandPreference
+                        .setValueIndex(FmSharedPreferences.REGIONAL_BAND_NORTH_AMERICA);
             }
-                                mAfPref.setChecked(false);
-                                FmSharedPreferences.SetDefaults();
-                        }
-                        else
-                        {
-                                FmSharedPreferences.setCountry(FmSharedPreferences.REGIONAL_BAND_NORTH_AMERICA);
-                        }
-                        mPrefs.Save();
-             }
+            if (mRxMode) {
+                mAudioPreference.setValueIndex(0);
+                if (FMRadio.RECORDING_ENABLE) {
+                    mRecordDurPreference.setValueIndex(0);
+                }
+                mAfPref.setChecked(true);
+                FmSharedPreferences.SetDefaults();
+            } else {
+                if (Locale.getDefault().equals(Locale.CHINA)) {
+                    FmSharedPreferences
+                    .setCountry(FmSharedPreferences.REGIONAL_BAND_CHINA);
+                }else{
+                    FmSharedPreferences
+                    .setCountry(FmSharedPreferences.REGIONAL_BAND_NORTH_AMERICA);
+                }
+
+            }
+            mPrefs.Save();
         }
+    }
 
         @Override
         protected void onResume() {
@@ -383,6 +417,12 @@ public class Settings extends PreferenceActivity implements
                 if (sharedPreferences != null) {
                    sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
                 }
+        }
+
+        @Override
+        protected void onDestroy() {
+            unregisterReceiver(mReceiver);
+            super.onDestroy();
         }
 
 }

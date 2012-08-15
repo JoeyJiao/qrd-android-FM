@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Locale;
 import java.util.Map;
 
 import android.content.Context;
@@ -38,6 +39,7 @@ import android.content.SharedPreferences;
 import android.hardware.fmradio.FmReceiver;
 import android.hardware.fmradio.FmConfig;
 import android.util.Log;
+import android.widget.Toast;
 
 public class FmSharedPreferences
 {
@@ -107,6 +109,7 @@ public class FmSharedPreferences
    private static final String PREF_LAST_TUNED_FREQUENCY = "last_frequency";
    private static final String LAST_RECORD_DURATION = "last_record_duration";
    private static String  LAST_AF_JUMP_VALUE = "last_af_jump_value";
+   private static final String AUDIO_OUTPUT_MODE = "audio_output_mode";
 
    private static Map<String, String> mNameMap = new HashMap<String, String>();
    private static List<PresetList> mListOfPlists = new ArrayList<PresetList>();
@@ -124,7 +127,7 @@ public class FmSharedPreferences
    private static int mTunedFrequency = 98100;
    private static int mFrequencyBand_Stepsize = 200;
 
-   private static int mCountry=0;
+   private static int mCountry = REGIONAL_BAND_NORTH_AMERICA;
    /* true = Stereo and false = "force Mono" even if Station is transmitting a
     * Stereo signal
     */
@@ -395,6 +398,7 @@ public class FmSharedPreferences
       mTunedFrequency = sp.getInt(PREF_LAST_TUNED_FREQUENCY, DEFAULT_NO_FREQUENCY);
       mRecordDuration = sp.getInt(LAST_RECORD_DURATION, RECORD_DUR_INDEX_0_VAL);
       mAFAutoSwitch = sp.getBoolean(LAST_AF_JUMP_VALUE, true);
+      mAudioOutputMode = sp.getBoolean(AUDIO_OUTPUT_MODE, true);
      /* Reset the Lists before reading the preferences */
       mListOfPlists.clear();
 
@@ -440,7 +444,11 @@ public class FmSharedPreferences
       }
 
       /* Load Configuration */
-      setCountry(sp.getInt(FMCONFIG_COUNTRY, 0));
+      if(Locale.getDefault().equals(Locale.CHINA)){
+          setCountry(sp.getInt(FMCONFIG_COUNTRY, REGIONAL_BAND_CHINA));
+      }else{
+         setCountry(sp.getInt(FMCONFIG_COUNTRY, REGIONAL_BAND_NORTH_AMERICA));
+      }
       /* Last list the user was navigating */
       mListIndex = sp.getInt(LAST_LIST_INDEX, 0);
       if(mListIndex >= num_lists)
@@ -497,19 +505,28 @@ public class FmSharedPreferences
       ed.putInt(FMCONFIG_COUNTRY, mCountry);
       ed.putInt(LAST_RECORD_DURATION, mRecordDuration);
       ed.putBoolean(LAST_AF_JUMP_VALUE, mAFAutoSwitch);
+      ed.putBoolean(AUDIO_OUTPUT_MODE, mAudioOutputMode);
       ed.commit();
    }
 
    public static void SetDefaults() {
       mListIndex=0;
       mListOfPlists.clear();
-      setCountry(REGIONAL_BAND_NORTH_AMERICA);
       setRadioBand(0);
       setChSpacing(0);
       setEmphasis(0);
       setRdsStd(0);
-      mFMConfiguration.setLowerLimit(87500);
-      mFMConfiguration.setUpperLimit(107900);
+      //China
+      if(Locale.getDefault().equals(Locale.CHINA)){
+          mFMConfiguration.setLowerLimit(87000);
+          mFMConfiguration.setUpperLimit(107900);
+          setCountry(REGIONAL_BAND_CHINA);
+      //Others set north America.
+      }else{
+          mFMConfiguration.setLowerLimit(87500);
+          mFMConfiguration.setUpperLimit(107900);
+          setCountry(REGIONAL_BAND_NORTH_AMERICA);
+      }
    }
 
    public static void removeStationList(int listIndex) {
@@ -710,6 +727,10 @@ public class FmSharedPreferences
    public static int getLowerLimit()
    {
       return mFMConfiguration.getLowerLimit();
+   }
+
+   public static int getFrequencyStepSize(){
+       return mFrequencyBand_Stepsize;
    }
 
    public static void setLowerLimit(int lowLimit){
