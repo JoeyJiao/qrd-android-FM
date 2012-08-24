@@ -171,14 +171,14 @@ public class FMRadioService extends Service
       mCallbacks = null;
       TelephonyManager tmgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
       //listen to double sims
-//      int phoneCount = TelephonyManager.getDefault().getPhoneCount();
-//      mPhoneStateListeners = new PhoneStateListener[phoneCount];
-//      for (int i = 0; i < phoneCount; i++) {
-//          mPhoneStateListeners[i] = getPhoneStateListener(i);
-//          tmgr.listen(mPhoneStateListeners[i],
-//                  PhoneStateListener.LISTEN_CALL_STATE |
-//                  PhoneStateListener.LISTEN_DATA_ACTIVITY);
-//      }
+      int phoneCount = tmgr.getPhoneCount();
+      mPhoneStateListeners = new PhoneStateListener[phoneCount];
+      for (int i = 0; i < phoneCount; i++) {
+          mPhoneStateListeners[i] = getPhoneStateListener(i);
+          tmgr.listen(mPhoneStateListeners[i],
+                  PhoneStateListener.LISTEN_CALL_STATE |
+                  PhoneStateListener.LISTEN_DATA_ACTIVITY);
+      }
       PowerManager pm = (PowerManager)getSystemService(Context.POWER_SERVICE);
       mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, this.getClass().getName());
       mWakeLock.setReferenceCounted(false);
@@ -248,10 +248,10 @@ public class FMRadioService extends Service
       /* Since the service is closing, disable the receiver */
       fmOff();
 
-//      TelephonyManager tmgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-//        for (int i = 0; i < TelephonyManager.getDefault().getPhoneCount(); i++) {
-//            tmgr.listen(mPhoneStateListeners[i], 0);
-//        }
+      TelephonyManager tmgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        for (int i = 0; i < tmgr.getPhoneCount(); i++) {
+            tmgr.listen(mPhoneStateListeners[i], 0);
+        }
 
       Log.d(LOGTAG, "onDestroy: unbindFromService completed");
 
