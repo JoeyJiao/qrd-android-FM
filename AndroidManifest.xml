@@ -80,7 +80,7 @@
         </activity>
         <activity android:name=".StationListActivity"
                   android:label="@string/app_label_all_channels"
-                  android:configChanges="orientation|keyboardHidden|screenSize">
+                  android:configChanges="orientation|keyboardHidden|screenSize|locale">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
