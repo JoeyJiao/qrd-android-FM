@@ -47,8 +47,10 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.os.Handler.Callback;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -59,6 +61,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -205,11 +208,18 @@ public class StationListActivity extends Activity implements
             bOk.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // TODO Auto-generated method stub
-                    saveStationName(mItemId, editText.getText().toString());
-                    mRenameDialog.dismiss();
+                    String rename = editText.getText().toString();
+                    if (TextUtils.isEmpty(rename)) {
+                        Context context = getApplicationContext();
+                        Toast toast = Toast.makeText(context, getString(R.string.station_name_empty),
+                                Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);
+                        toast.show();
+                    } else {
+                        saveStationName(mItemId,rename);
+                        mRenameDialog.dismiss();
+                    }
                 }
-
             });
             Button bCancel = (Button) mRenameDialog.findViewById(R.id.cancel);
             bCancel.setOnClickListener(new View.OnClickListener() {
