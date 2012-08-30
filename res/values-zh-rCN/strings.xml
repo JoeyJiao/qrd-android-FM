@@ -102,4 +102,6 @@
     <string name="sdcard_no_space_cannot_recording">SD卡空间不足,不能录音</string>
     <string name="recording_stop_no_space">SD卡空间不足，录音停止</string>
     <string name="station_name_empty">电台名字不能为空，请新重输入</string>
+    <!-- the title of rename dialog lack of translation -->
+    <string name="dialog_presetlist_rename_title">"请输入名字"</string>
 </resources>
