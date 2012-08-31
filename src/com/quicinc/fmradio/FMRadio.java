@@ -2947,8 +2947,14 @@ public class FMRadio extends Activity
                {
                   DebugToasts("Stop Recording", Toast.LENGTH_SHORT);
                   stopRecording();
+
+                  /**
+                   * after stopRecording, option menu items of "Start Recording"
+                   * and "Stop Recording" should change their status
+                   */
+                  invalidateOptionsMenu();
                }
-              return;
+               return;
             }
          case RECORDTIMER_UPDATE: {
                Log.d(LOGTAG, "mUIUpdateHandlerHandler - RECORDTIMER_UPDATE");
