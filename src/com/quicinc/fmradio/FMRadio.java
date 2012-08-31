@@ -391,16 +391,8 @@ public class FMRadio extends Activity
          mRadioTextScroller = new ScrollerText(mRadioTextTV);
       }
 
-        mTmgr = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
-        if (mTmgr.getCallState() == TelephonyManager.CALL_STATE_OFFHOOK
-                || mTmgr.getCallState() == TelephonyManager.CALL_STATE_RINGING) {
-            Toast.makeText(FMRadio.this, R.string.cannot_startup_during_call,
-                    Toast.LENGTH_SHORT).show();
-            mStartInCall = true;
-            finish();
-        }else{
-            mStartInCall = false;
-        }
+      checkCallStatus();
+
         //can not start up fm in airplane mode.
        /* if(isAirplaneModeOn()){
             Toast.makeText(FMRadio.this, R.string.cannot_startup_during_airplane,
@@ -557,9 +549,26 @@ public class FMRadio extends Activity
       mPrefs.Save();
    }
 
+
+    //Check the call status and finish FM activity when call is not in idle.
+    private void checkCallStatus() {
+        mTmgr = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+        if (null != mTmgr && mTmgr.getCallState() != TelephonyManager.CALL_STATE_IDLE) {
+            Toast.makeText(FMRadio.this, R.string.cannot_startup_during_call,
+                    Toast.LENGTH_SHORT).show();
+            mStartInCall = true;
+            finish();
+        } else {
+            mStartInCall = false;
+        }
+    }
+
    @Override
    public void onResume() {
       super.onResume();
+
+      checkCallStatus();
+
       if(mPicker !=null){
           setDisplayvalue();
       }
