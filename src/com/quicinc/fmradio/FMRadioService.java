@@ -98,6 +98,8 @@ public class FMRadioService extends Service
    private BroadcastReceiver mSdcardUnmountReceiver = null;
    private BroadcastReceiver mMusicCommandListener = null;
    private BroadcastReceiver mAirplaneModeChangeListener = null;
+   // broadcastReceiver to handle event or system language changed
+   private BroadcastReceiver mLocaleReceiver = null;
    private boolean mOverA2DP = false;
    private BroadcastReceiver mFmMediaButtonListener;
    private IFMRadioServiceCallbacks mCallbacks;
@@ -190,6 +192,8 @@ public class FMRadioService extends Service
       registerHeadsetListener();
       registerExternalStorageListener();
       registerAirplaneModeChangeListener();
+      // Register broadcastReceiver for handling system language changed event
+      registerLocaleChangeListener();
       // registering media button receiver seperately as we need to set
       // different priority for receiving media events
       registerFmMediaButtonReceiver();
@@ -250,6 +254,11 @@ public class FMRadioService extends Service
       if(mAirplaneModeChangeListener != null){
           unregisterReceiver(mAirplaneModeChangeListener);
           mAirplaneModeChangeListener = null;
+      }
+      // Unregister the locale BroadcastReceiver
+      if (mLocaleReceiver != null) {
+          unregisterReceiver(mLocaleReceiver);
+          mLocaleReceiver = null;
       }
       /* Since the service is closing, disable the receiver */
       fmOff();
@@ -325,6 +334,33 @@ public class FMRadioService extends Service
             registerReceiver(mAirplaneModeChangeListener, iFilter);
         }
     }
+
+     /**
+     * Registers an intent to listen for ACTION_LOCALE_CHANGED
+     * notifications. This intent is called to know if the system language changed
+     */
+    public void registerLocaleChangeListener() {
+        if (mLocaleReceiver == null) {
+            mLocaleReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    if (intent != null && intent.getAction().equals(Intent.ACTION_LOCALE_CHANGED)) {
+                        mHandler.post(mLocalChangedHandler);
+                    }
+                }
+            };
+        }
+        IntentFilter iFilter = new IntentFilter();
+        iFilter.addAction(Intent.ACTION_LOCALE_CHANGED);
+        registerReceiver(mLocaleReceiver, iFilter);
+    }
+
+    // Runnable posted to UI thread to update notification contents when system language changed
+    final Runnable mLocalChangedHandler = new Runnable() {
+        public void run() {
+            startNotification();
+        }
+    };
 
      /**
      * Registers an intent to listen for ACTION_HEADSET_PLUG
