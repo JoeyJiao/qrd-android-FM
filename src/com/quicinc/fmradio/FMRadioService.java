@@ -1896,8 +1896,10 @@ public class FMRadioService extends Service
        boolean analogmode = isAnalogModeSupported();
        if (false == speakerOn) {
            if (analogmode) {
+                mute();
                 stopFM();
                 setAudioPath(true);
+                unMute();
            }
            AudioSystem.setForceUse(AudioSystem.FOR_MEDIA, AudioSystem.FORCE_NONE);
            if (analogmode)
