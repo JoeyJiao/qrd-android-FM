@@ -77,6 +77,7 @@
     <string name="settings_revert_defaults_summary">清除所有设置</string>
     <string name="audio_type_stereo">立体声</string>
     <string name="audio_type_mono">单声道</string>
+    <string name="spaceIsLow_content">"USB 存储设备空间不足，请更改录音时长设置，或删除某些录音或者其他文件。</string>
     <string name="alert_dialog_ok">确定</string>
     <string name="alert_dialog_cancel">取消</string>
     <string name="search_dialog_title">搜索电台</string>
