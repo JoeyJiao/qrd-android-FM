@@ -44,6 +44,7 @@
     <string name="menu_sleep">自动关闭</string>
     <string name="menu_sleep_cancel">取消自动关闭</string>
     <string name="menu_scan_start">搜索</string>
+    <string name="menu_scan_stop">停止搜索</string>
     <string name="button_text_stop">停止</string>
     <string name="msg_seeking">搜索 FM 电台</string>
     <string name="msg_scanning">搜索所有 FM 电台</string>
